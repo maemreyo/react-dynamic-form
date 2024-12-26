@@ -36,70 +36,19 @@ function useFormFields(
     return Object.entries(flattenedData).map(([key, value]) => {
       const fieldConfig = config[key] || {};
       const inputType = fieldConfig.type || getInputTypeFromValue(value);
-      const validationConfig = fieldConfig.validation;
-
-      const inputProps: FormField['inputProps'] = {
-        type: inputType,
-        name: key,
-        id: key,
-        placeholder: fieldConfig.placeholder,
-        readOnly:
-          fieldConfig.readOnly !== undefined ? fieldConfig.readOnly : readOnly,
-        disabled: disableForm,
-      };
-
-      const registerProps: any = {};
-      if (validationConfig) {
-        if (validationConfig.required) {
-          registerProps.required =
-            typeof validationConfig.required === 'string'
-              ? validationConfig.required
-              : 'This field is required';
-        }
-        if (validationConfig.minLength) {
-          registerProps.minLength =
-            typeof validationConfig.minLength === 'number'
-              ? {
-                  value: validationConfig.minLength,
-                  message: `Minimum length is ${validationConfig.minLength}`,
-                }
-              : validationConfig.minLength;
-        }
-        if (validationConfig.maxLength) {
-          registerProps.maxLength =
-            typeof validationConfig.maxLength === 'number'
-              ? {
-                  value: validationConfig.maxLength,
-                  message: `Maximum length is ${validationConfig.maxLength}`,
-                }
-              : validationConfig.maxLength;
-        }
-        if (validationConfig.pattern) {
-          registerProps.pattern =
-            validationConfig.pattern instanceof RegExp
-              ? {
-                  value: validationConfig.pattern,
-                  message: 'Invalid format',
-                }
-              : validationConfig.pattern;
-        }
-        if (validationConfig.validate) {
-          registerProps.validate = validationConfig.validate;
-        }
-      }
 
       // TODO: Implement nested object rendering
 
       return {
         label: fieldConfig.label || key,
-        inputProps: { ...inputProps, ...register(key, registerProps) },
         id: key,
+        type: inputType,
         error: formState.errors?.[key] as
           | Merge<FieldError, FieldErrorsImpl>
-          | undefined, // Changed: Ensure correct error type
-      } as FormField; // Added: Cast to FormField
+          | undefined, // Ensure correct error type
+      } as FormField; // Cast to FormField
     });
-  }, [flattenedData, config, register, readOnly, disableForm, formState]);
+  }, [flattenedData, config, readOnly, disableForm, formState]);
 
   return fields;
 }

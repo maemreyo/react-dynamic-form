@@ -41,7 +41,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   theme,
   onFormReady,
   renderSubmitButton,
-  renderInput,
 }) => {
   const mergedFormOptions = useRHFOptions(
     formOptions,
@@ -102,7 +101,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         formClassNameConfig={formClassNameConfig}
         horizontalLabel={horizontalLabel}
         labelWidth={labelWidth}
-        renderInput={renderInput}
         register={form.register}
         formValues={formValues}
         disableAutocomplete={disableAutocomplete}

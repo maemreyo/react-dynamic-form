@@ -92,6 +92,7 @@ export interface FieldConfig {
   copyToClipboard?: boolean;
   tooltip?: string;
   classNameConfig?: FieldClassNameConfig;
+  options?: { value: string; label: string }[];
 }
 
 export interface ValidationConfig {
@@ -111,7 +112,13 @@ export type InputType =
   | 'email'
   | 'password'
   | 'tel'
-  | 'url';
+  | 'url'
+  | 'radio'
+  | 'date'
+  | 'switch'
+  | 'time'
+  | 'datetime-local'
+  | 'combobox';
 
 export type UseFormRegister<TFieldValues extends FieldValues = FieldValues> = (
   name: FieldPath<TFieldValues>,
@@ -131,11 +138,10 @@ export interface InputProps {
 
 export interface FormField {
   label?: string;
-  inputProps: InputProps | null;
   id: string;
+  type: InputType;
   error?: FieldError;
 }
-
 export interface FieldError {
   type: string;
   message?: string;
