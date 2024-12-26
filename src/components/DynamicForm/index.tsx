@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useForm, UseFormReturn } from 'react-hook-form';
+import { useWindowSize } from 'usehooks-ts';
 import * as yup from 'yup';
 import {
   DynamicFormProps,
@@ -72,6 +73,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   theme,
   onFormReady,
 }) => {
+  const { width } = useWindowSize();
+
   const [errorSummary, setErrorSummary] = useState<string[]>([]);
 
   const form = useForm({
@@ -254,6 +257,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       return (
         <ResponsiveGridLayout
           {...mergedGridConfig}
+          width={width}
           layouts={{
             ...mergedGridConfig.layouts,
             lg: mergedGridConfig.layouts?.lg || defaultLayout,
@@ -271,10 +275,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               <div
                 key={id}
                 data-grid={
-                  mergedGridConfig.layout?.[id] || {
+                  mergedGridConfig.layouts?.lg?.find(l => l.i === id) ||
+                  defaultLayout.find(l => l.i === id) || {
                     x: 0,
                     y: 0,
-                    w: fieldConfig.col || 1,
+                    w: fieldConfig.col || 6,
                     h: 1,
                   }
                 }
@@ -309,7 +314,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                       )}
 
                   {showInlineError && error && (
-                    <ErrorMessage>{error.message}</ErrorMessage>
+                    <ErrorMessage>{error}</ErrorMessage>
                   )}
                 </InputWrapper>
               </div>
