@@ -11,8 +11,10 @@ export default {
 
 const Template: StoryFn<typeof DynamicForm> = args => <DynamicForm {...args} />;
 
-export const Default = Template.bind({});
-Default.args = {
+// --- Examples ---
+
+export const BasicForm = Template.bind({});
+BasicForm.args = {
   data: {
     firstName: '',
     lastName: '',
@@ -55,10 +57,11 @@ Default.args = {
   onSubmit: data => alert(JSON.stringify(data)),
   onFormReady: fn(),
 };
+BasicForm.storyName = 'Basic Form';
 
-export const WithValidationSchema = Template.bind({});
-WithValidationSchema.args = {
-  ...Default.args,
+export const FormWithValidationSchema = Template.bind({});
+FormWithValidationSchema.args = {
+  ...BasicForm.args,
   validationSchema: yup.object().shape({
     firstName: yup.string().required('First Name is required'),
     lastName: yup.string(),
@@ -73,49 +76,12 @@ WithValidationSchema.args = {
       .min(18, 'You must be at least 18 years old'),
     agree: yup.boolean().oneOf([true], 'You must agree to continue'),
   }),
-  onFormReady: fn(),
 };
+FormWithValidationSchema.storyName = 'Form with Validation Schema';
 
-export const ReadOnly = Template.bind({});
-ReadOnly.args = {
-  ...Default.args,
-  readOnly: true,
-  onFormReady: fn(),
-};
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Default.args,
-  disableForm: true,
-  onFormReady: fn(),
-};
-
-export const WithGridLayout = Template.bind({});
-WithGridLayout.args = {
-  ...Default.args,
-  enableGrid: true,
-  gridConfig: {
-    className: 'layout',
-    cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-    rowHeight: 50,
-    isDraggable: true,
-    isResizable: true,
-    layout: {
-      lg: [
-        { i: 'firstName', x: 0, y: 0, w: 4, h: 1 },
-        { i: 'lastName', x: 4, y: 0, w: 4, h: 1 },
-        { i: 'email', x: 0, y: 1, w: 8, h: 1 },
-        { i: 'age', x: 8, y: 0, w: 4, h: 1 },
-        { i: 'agree', x: 8, y: 1, w: 4, h: 1 },
-      ],
-    },
-  },
-  onFormReady: fn(),
-};
-
-export const WithCustomInput = Template.bind({});
-WithCustomInput.args = {
-  ...Default.args,
+export const FormWithCustomInput = Template.bind({});
+FormWithCustomInput.args = {
+  ...BasicForm.args,
   renderInput: (field, register) => {
     const { inputProps, id, error } = field;
     if (!inputProps) return null;
@@ -150,103 +116,21 @@ WithCustomInput.args = {
       </>
     );
   },
-  onFormReady: fn(),
 };
+FormWithCustomInput.storyName = 'Form with Custom Input';
 
-export const AdvancedGridLayout = Template.bind({});
-AdvancedGridLayout.args = {
-  data: {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    zip: '',
-    agree: false,
-  },
-  config: {
-    firstName: {
-      label: 'First Name',
-      validation: { required: 'This field is required' },
-    },
-    lastName: {
-      label: 'Last Name',
-      validation: { required: 'This field is required' },
-    },
-    email: {
-      label: 'Email',
-      validation: {
-        required: 'This field is required',
-        pattern: {
-          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-          message: 'Invalid email address',
-        },
-      },
-    },
-    phone: {
-      label: 'Phone',
-      type: 'number',
-    },
-    address: {
-      label: 'Address',
-    },
-    city: {
-      label: 'City',
-    },
-    state: {
-      label: 'State',
-    },
-    zip: {
-      label: 'Zip Code',
-      type: 'number',
-    },
-    agree: {
-      type: 'checkbox',
-      label: 'I agree to the terms and conditions',
-      validation: { required: 'You must agree to continue' },
-    },
-  },
-  enableGrid: true,
-  gridConfig: {
-    className: 'layout',
-    cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-    rowHeight: 50,
-    isDraggable: true,
-    isResizable: true,
-    layouts: {
-      lg: [
-        { i: 'firstName', x: 0, y: 0, w: 3, h: 1 },
-        { i: 'lastName', x: 3, y: 0, w: 3, h: 1 },
-        { i: 'email', x: 6, y: 0, w: 3, h: 1 },
-        { i: 'phone', x: 9, y: 0, w: 3, h: 1 },
-        { i: 'address', x: 0, y: 1, w: 6, h: 1 },
-        { i: 'city', x: 6, y: 1, w: 2, h: 1 },
-        { i: 'state', x: 8, y: 1, w: 2, h: 1 },
-        { i: 'zip', x: 10, y: 1, w: 2, h: 1 },
-        { i: 'agree', x: 0, y: 2, w: 12, h: 1 },
-      ],
-      md: [
-        { i: 'firstName', x: 0, y: 0, w: 4, h: 1 },
-        { i: 'lastName', x: 4, y: 0, w: 4, h: 1 },
-        { i: 'email', x: 0, y: 1, w: 4, h: 1 },
-        { i: 'phone', x: 4, y: 1, w: 4, h: 1 },
-        { i: 'address', x: 0, y: 2, w: 8, h: 1 },
-        { i: 'city', x: 0, y: 3, w: 3, h: 1 },
-        { i: 'state', x: 3, y: 3, w: 3, h: 1 },
-        { i: 'zip', x: 6, y: 3, w: 2, h: 1 },
-        { i: 'agree', x: 0, y: 4, w: 8, h: 1 },
-      ],
-      // Add more layouts for other breakpoints if needed
-    },
-  },
-  onSubmit: data => alert(JSON.stringify(data)),
-  onFormReady: fn(),
+export const FormWithCustomLayout = Template.bind({});
+FormWithCustomLayout.args = {
+  ...BasicForm.args, // Use the same data and config as the Default story
+  layout: 'flex',
+  layoutConfig: { gap: '20px' }, // Custom gap
+  horizontalLabel: true, // Display labels horizontally
+  labelWidth: '150px', // Set a fixed width for labels
 };
+FormWithCustomLayout.storyName = 'Form with Custom Layout';
 
-export const WithNestedObject = Template.bind({});
-WithNestedObject.args = {
+export const FormWithNestedObject = Template.bind({});
+FormWithNestedObject.args = {
   data: {
     name: {
       first: '',
@@ -290,88 +174,57 @@ WithNestedObject.args = {
   onSubmit: data => alert(JSON.stringify(data)),
   onFormReady: fn(),
 };
+FormWithNestedObject.storyName = 'Form with Nested Object';
 
-export const CustomFormLayout = Template.bind({});
-CustomFormLayout.args = {
-  ...Default.args, // Use the same data and config as the Default story
-  layout: 'flex',
-  layoutConfig: { gap: '20px' }, // Custom gap
-  horizontalLabel: true, // Display labels horizontally
-  labelWidth: '150px', // Set a fixed width for labels
-  renderInput: (field, register) => {
-    const { inputProps, id, error } = field;
-    if (!inputProps) return null;
+// --- Props ---
 
-    // Example of customizing a specific input type
-    if (inputProps.type === 'number') {
-      return (
-        <>
-          <input
-            {...inputProps}
-            {...register(inputProps.name as string)}
-            style={{
-              backgroundColor: '#f0f8ff', // Light blue background
-              padding: '8px',
-              border: '1px solid #add8e6', // Light blue border
-              borderRadius: '5px',
-            }}
-          />
-          {error && <span style={{ color: 'red' }}>{error}</span>}
-        </>
-      );
-    }
-
-    // Default rendering for other input types
-    return (
-      <>
-        <input {...inputProps} {...register(inputProps.name as string)} />
-        {error && <span style={{ color: 'red' }}>{error}</span>}
-      </>
-    );
-  },
+export const ReadOnlyProp = Template.bind({});
+ReadOnlyProp.args = {
+  ...BasicForm.args,
+  readOnly: true,
 };
+ReadOnlyProp.storyName = 'readOnly';
 
-export const CustomValidation = Template.bind({});
-CustomValidation.args = {
-  ...Default.args,
-  config: {
-    ...Default.args.config,
-    customField: {
-      label: 'Custom Validation Field',
-      validation: {
-        validate: value => {
-          if (!value.startsWith('custom-')) {
-            return 'Value must start with "custom-"';
-          }
-          return undefined; // No error
-        },
-      },
-    },
-  },
-  data: {
-    ...Default.args.data,
-    customField: '',
-  },
-  onFormReady: fn(),
+export const DisableFormProp = Template.bind({});
+DisableFormProp.args = {
+  ...BasicForm.args,
+  disableForm: true,
 };
+DisableFormProp.storyName = 'disableForm';
 
-export const DisableAutocompleteExample = Template.bind({});
-DisableAutocompleteExample.args = {
-  ...Default.args,
-  disableAutocomplete: true,
-  onFormReady: fn(),
+export const ShowSubmitButtonProp = Template.bind({});
+ShowSubmitButtonProp.args = {
+  ...BasicForm.args,
+  showSubmitButton: false,
 };
+ShowSubmitButtonProp.storyName = 'showSubmitButton = false';
 
-export const ErrorSummaryExample = Template.bind({});
-ErrorSummaryExample.args = {
-  ...Default.args,
+export const ShowErrorSummaryProp = Template.bind({});
+ShowErrorSummaryProp.args = {
+  ...BasicForm.args,
   showErrorSummary: true,
-  onFormReady: fn(),
 };
+ShowErrorSummaryProp.storyName = 'showErrorSummary';
 
-export const WithFlattenObject = Template.bind({});
-WithFlattenObject.args = {
-  ...WithNestedObject.args,
-  isFlatten: true,
-  onFormReady: fn(),
+export const ValidateOnBlurProp = Template.bind({});
+ValidateOnBlurProp.args = {
+  ...BasicForm.args,
+  validateOnBlur: true,
+  validateOnChange: false,
+  validateOnSubmit: false,
 };
+ValidateOnBlurProp.storyName = 'validateOnBlur';
+
+export const DisableAutocompleteProp = Template.bind({});
+DisableAutocompleteProp.args = {
+  ...BasicForm.args,
+  disableAutocomplete: true,
+};
+DisableAutocompleteProp.storyName = 'disableAutocomplete';
+
+export const ResetOnSubmitProp = Template.bind({});
+ResetOnSubmitProp.args = {
+  ...BasicForm.args,
+  resetOnSubmit: true,
+};
+ResetOnSubmitProp.storyName = 'resetOnSubmit';
