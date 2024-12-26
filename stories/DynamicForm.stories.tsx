@@ -228,3 +228,100 @@ ResetOnSubmitProp.args = {
   resetOnSubmit: true,
 };
 ResetOnSubmitProp.storyName = 'resetOnSubmit';
+
+
+// Thêm class cho form container
+export const FormWithCustomContainerClassName = Template.bind({});
+FormWithCustomContainerClassName.args = {
+  ...BasicForm.args,
+  formClassNameConfig: {
+    formContainer: 'custom-form-container',
+  },
+};
+FormWithCustomContainerClassName.storyName =
+  'Form with Custom Form Container Class';
+
+// Thêm class cho input wrapper
+export const FormWithCustomInputWrapperClassName = Template.bind({});
+FormWithCustomInputWrapperClassName.args = {
+  ...BasicForm.args,
+  config: {
+    ...BasicForm.args.config,
+    firstName: {
+      ...BasicForm.args.config.firstName,
+      classNameConfig: {
+        inputWrapper: 'custom-input-wrapper',
+      },
+    },
+  },
+};
+FormWithCustomInputWrapperClassName.storyName =
+  'Form with Custom Input Wrapper Class';
+
+// Thêm class cho label
+export const FormWithCustomLabelClassName = Template.bind({});
+FormWithCustomLabelClassName.args = {
+  ...BasicForm.args,
+  config: {
+    ...BasicForm.args.config,
+    firstName: {
+      ...BasicForm.args.config.firstName,
+      classNameConfig: {
+        label: 'custom-label',
+      },
+    },
+  },
+};
+FormWithCustomLabelClassName.storyName = 'Form with Custom Label Class';
+
+// Thêm class cho input
+export const FormWithCustomInputClassName = Template.bind({});
+FormWithCustomInputClassName.args = {
+  ...BasicForm.args,
+  config: {
+    ...BasicForm.args.config,
+    firstName: {
+      ...BasicForm.args.config.firstName,
+      classNameConfig: {
+        input: 'custom-input',
+      },
+    },
+  },
+};
+FormWithCustomInputClassName.storyName = 'Form with Custom Input Class';
+
+// Thêm class cho error message
+export const FormWithCustomErrorMessageClassName = Template.bind({});
+FormWithCustomErrorMessageClassName.args = {
+  ...BasicForm.args,
+  config: {
+    ...BasicForm.args.config,
+    firstName: {
+      ...BasicForm.args.config.firstName,
+      classNameConfig: {
+        errorMessage: 'custom-error-message',
+      },
+    },
+  },
+};
+FormWithCustomErrorMessageClassName.storyName =
+  'Form with Custom Error Message Class';
+
+// Thêm custom submit button
+export const CustomSubmitButton = Template.bind({});
+CustomSubmitButton.args = {
+  ...BasicForm.args,
+  formClassNameConfig: {
+    button: 'custom-submit-button',
+  },
+  renderSubmitButton: (handleSubmit, isSubmitting) => (
+    <button
+      onClick={() => handleSubmit()}
+      disabled={isSubmitting}
+      className="custom-button"
+    >
+      Custom Submit
+    </button>
+  ),
+};
+CustomSubmitButton.storyName = 'Custom Submit Button';

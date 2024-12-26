@@ -46,6 +46,11 @@ export interface DynamicFormProps {
     field: InputData,
     register: UseFormRegister<any>
   ) => React.ReactNode;
+
+  renderSubmitButton?: (
+    handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>,
+    isSubmitting: boolean
+  ) => React.ReactNode;
   /**
    * Component to render at the top of the form.
    */
@@ -148,6 +153,7 @@ export interface DynamicFormProps {
    * CSS class name for the form container.
    */
   className?: string;
+  formClassNameConfig?: FormClassNameConfig;
   /**
    * Inline styles for the form container.
    */
@@ -160,6 +166,29 @@ export interface DynamicFormProps {
    * Callback function triggered when the form is ready.
    */
   onFormReady?: (form: UseFormReturn<any>) => void;
+  
+}
+
+/**
+ * Configuration for class names of the form container.
+ */
+export interface FormClassNameConfig {
+  formContainer?: string;
+  inputWrapper?: string;
+  label?: string;
+  input?: string;
+  button?: string;
+  errorMessage?: string;
+}
+
+/**
+ * Configuration for class names of a specific form field.
+ */
+export interface FieldClassNameConfig {
+  inputWrapper?: string;
+  label?: string;
+  input?: string;
+  errorMessage?: string;
 }
 
 /**
@@ -184,6 +213,8 @@ export interface FieldConfig {
   showCounter?: boolean;
   copyToClipboard?: boolean;
   tooltip?: string;
+    classNameConfig?: FieldClassNameConfig;
+
 }
 
 /**
@@ -270,3 +301,4 @@ export interface InputGroup {
   id: string;
   inputs: (InputData | InputGroup)[];
 }
+

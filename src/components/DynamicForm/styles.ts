@@ -26,6 +26,28 @@ export const FormContainer = styled.form<{
 `;
 
 /**
+ * Styled label.
+ */
+export const Label = styled.label<{
+  $horizontalLabel?: boolean;
+  $labelWidth?: string | number;
+}>`
+  margin-bottom: ${({ theme, $horizontalLabel }) =>
+    $horizontalLabel ? '0' : theme.space.sm};
+  margin-right: ${({ theme, $horizontalLabel }) =>
+    $horizontalLabel ? theme.space.md : '0'};
+  color: ${({ theme }) => theme.colors.text};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  width: ${({ $labelWidth }) =>
+    $labelWidth
+      ? typeof $labelWidth === 'number'
+        ? `${$labelWidth}px`
+        : $labelWidth
+      : 'auto'};
+  flex-shrink: 0;
+`;
+
+/**
  * Styled input wrapper.
  */
 export const InputWrapper = styled.div<{
@@ -72,12 +94,33 @@ export const InputWrapper = styled.div<{
 `;
 
 /**
- * Styled error message.
+ * Styled input.
  */
-export const ErrorMessage = styled.div`
-  color: ${({ theme }) => theme.colors.error};
-  font-size: ${({ theme }) => theme.fontSizes.small};
-  margin-top: ${({ theme }) => theme.space.xs};
+export const Input = styled.input`
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  padding: 8px;
+  border-radius: 4px;
+  font-size: ${({ theme }) => theme.fontSizes.medium};
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary};
+  }
+
+  &[type='number'] {
+    -moz-appearance: textfield; /* Firefox */
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Chrome, Safari, Edge */
+    margin: 0;
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text};
+    opacity: 0.6;
+  }
 `;
 
 /**
@@ -87,17 +130,31 @@ export const SubmitButton = styled.button`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.light};
   border: none;
-  padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
-  border-radius: ${({ theme }) => theme.radii.md};
+  padding: 10px 15px;
+  border-radius: 4px;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    opacity: 0.9;
+    background-color: ${({ theme }) =>
+      theme.colors.primary &&
+      `#${Math.max(0, parseInt(theme.colors.primary.slice(1), 16) - 0x111111)
+        .toString(16)
+        .padStart(6, '0')}`};
   }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
+`;
+
+/**
+ * Styled error message.
+ */
+export const ErrorMessage = styled.div`
+  color: ${({ theme }) => theme.colors.error};
+  font-size: ${({ theme }) => theme.fontSizes.small};
+  margin-top: ${({ theme }) => theme.space.xs};
 `;

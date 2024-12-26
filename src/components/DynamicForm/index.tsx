@@ -7,6 +7,8 @@ import {
   InputWrapper,
   ErrorMessage,
   SubmitButton,
+  Input,
+  Label,
 } from './styles';
 import { ThemeProvider } from 'styled-components';
 import { defaultTheme } from './theme';
@@ -36,6 +38,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   enableGrid = false, // Deprecated
   gridConfig, // Deprecated
   className,
+  formClassNameConfig,
   style,
   layout = 'flex',
   layoutConfig = { gap: '10px', columns: 2 },
@@ -51,6 +54,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   validateOnSubmit = true,
   theme,
   onFormReady,
+  renderSubmitButton,
 }) => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -71,7 +75,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     defaultValues: data,
   });
 
-  const { register, handleSubmit, formState, reset, setFocus } = form;
+  const { formState, register, handleSubmit, reset, setFocus, watch } = form;
+  const formValues = watch();
 
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
@@ -152,18 +157,33 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
         // Render input
         const { label, inputProps, id, error } = input;
+
         const fieldConfig = config?.[id] || ({} as FieldConfig);
+        const fieldClassNameConfig = fieldConfig.classNameConfig || {};
+        const formClassName = formClassNameConfig || {};
 
         return (
           <InputWrapper
             key={id}
             $horizontalLabel={horizontalLabel}
             $labelWidth={labelWidth}
+            className={
+              fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
+            }
           >
             {label && (
-              <label htmlFor={id} style={fieldConfig.style}>
+              <Label
+                htmlFor={id}
+                $horizontalLabel={horizontalLabel}
+                $labelWidth={labelWidth}
+                className={fieldClassNameConfig.label || formClassName.label}
+              >
                 {label}
-              </label>
+                {/* Dấu * đỏ cho required input */}
+                {fieldConfig.validation?.required && (
+                  <span style={{ color: 'red' }}>*</span>
+                )}
+              </Label>
             )}
             {renderInput
               ? renderInput(input, register)
@@ -173,17 +193,32 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                     ? 'textarea'
                     : inputProps.type === 'checkbox'
                     ? 'input'
-                    : 'input',
+                    : Input,
                   {
+                    className:
+                      fieldClassNameConfig.input || formClassName.input,
                     ...inputProps,
                     ...register(inputProps.name),
                     ...(inputProps.type === 'checkbox'
-                      ? { defaultChecked: inputProps.value }
-                      : {}),
+                      ? {
+                          checked: formValues[inputProps.name] === true,
+                        }
+                      : {
+                          value: formValues[inputProps.name] || '',
+                        }),
                     ...(disableAutocomplete ? { autoComplete: 'off' } : {}),
                   }
                 )}
-            {showInlineError && error && <ErrorMessage>{error}</ErrorMessage>}
+            {showInlineError && error && (
+              <ErrorMessage
+                className={
+                  fieldClassNameConfig.errorMessage ||
+                  formClassName.errorMessage
+                }
+              >
+                {error}
+              </ErrorMessage>
+            )}
           </InputWrapper>
         );
       });
@@ -196,8 +231,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     <ThemeProvider theme={mergedTheme}>
       <FormContainer
         onSubmit={submit}
-        className={className}
-        style={style}
+        className={`${className || ''} ${formClassNameConfig?.formContainer ||
+          ''}`}
         $layout={layout}
         $layoutConfig={layoutConfig}
         $horizontalLabel={horizontalLabel}
@@ -207,11 +242,18 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         {header}
         {mounted && renderFormContent()}
         {footer}
-        {showSubmitButton && (
-          <SubmitButton type="submit" disabled={isSubmitting}>
-            Submit
-          </SubmitButton>
-        )}
+        {showSubmitButton &&
+          (renderSubmitButton ? (
+            renderSubmitButton(submit, isSubmitting)
+          ) : (
+            <SubmitButton
+              type="submit"
+              disabled={isSubmitting}
+              className={formClassNameConfig?.button}
+            >
+              Submit
+            </SubmitButton>
+          ))}
         {showErrorSummary && errorSummary.length > 0 && (
           <div>
             <h3>Error Summary:</h3>
