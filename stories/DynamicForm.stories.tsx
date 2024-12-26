@@ -56,6 +56,102 @@ Default.args = {
   onFormReady: fn(),
 };
 
+export const WithValidationSchema = Template.bind({});
+WithValidationSchema.args = {
+  ...Default.args,
+  validationSchema: yup.object().shape({
+    firstName: yup.string().required('First Name is required'),
+    lastName: yup.string(),
+    email: yup
+      .string()
+      .email('Invalid email')
+      .required('Email is required'),
+    age: yup
+      .number()
+      .typeError('Age must be a number')
+      .required('Age is required')
+      .min(18, 'You must be at least 18 years old'),
+    agree: yup.boolean().oneOf([true], 'You must agree to continue'),
+  }),
+  onFormReady: fn(),
+};
+
+export const ReadOnly = Template.bind({});
+ReadOnly.args = {
+  ...Default.args,
+  readOnly: true,
+  onFormReady: fn(),
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  ...Default.args,
+  disableForm: true,
+  onFormReady: fn(),
+};
+
+export const WithGridLayout = Template.bind({});
+WithGridLayout.args = {
+  ...Default.args,
+  enableGrid: true,
+  gridConfig: {
+    className: 'layout',
+    cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
+    rowHeight: 50,
+    isDraggable: true,
+    isResizable: true,
+    layout: {
+      lg: [
+        { i: 'firstName', x: 0, y: 0, w: 4, h: 1 },
+        { i: 'lastName', x: 4, y: 0, w: 4, h: 1 },
+        { i: 'email', x: 0, y: 1, w: 8, h: 1 },
+        { i: 'age', x: 8, y: 0, w: 4, h: 1 },
+        { i: 'agree', x: 8, y: 1, w: 4, h: 1 },
+      ],
+    },
+  },
+  onFormReady: fn(),
+};
+
+export const WithCustomInput = Template.bind({});
+WithCustomInput.args = {
+  ...Default.args,
+  renderInput: (field, register) => {
+    const { inputProps, id, error } = field;
+    if (!inputProps) return null;
+    if (inputProps.type === 'checkbox') {
+      return (
+        <div>
+          <input
+            type="checkbox"
+            id={id}
+            {...inputProps}
+            {...register(inputProps.name as string)}
+          />
+          <label htmlFor={id}>{inputProps.label}</label>
+          {error && <span>{error}</span>}
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <input
+          {...inputProps}
+          {...register(inputProps.name as string)}
+          style={{
+            backgroundColor: 'lightyellow',
+            padding: '5px',
+            border: '1px solid blue',
+            borderRadius: '3px',
+          }}
+        />
+        {error && <span>{error}</span>}
+      </>
+    );
+  },
+  onFormReady: fn(),
+};
 
 export const AdvancedGridLayout = Template.bind({});
 AdvancedGridLayout.args = {
@@ -119,7 +215,7 @@ AdvancedGridLayout.args = {
     rowHeight: 50,
     isDraggable: true,
     isResizable: true,
-    layout: {
+    layouts: {
       lg: [
         { i: 'firstName', x: 0, y: 0, w: 3, h: 1 },
         { i: 'lastName', x: 3, y: 0, w: 3, h: 1 },
@@ -195,7 +291,6 @@ WithNestedObject.args = {
   onFormReady: fn(),
 };
 
-
 export const CustomFormLayout = Template.bind({});
 CustomFormLayout.args = {
   ...Default.args, // Use the same data and config as the Default story
@@ -221,7 +316,7 @@ CustomFormLayout.args = {
               borderRadius: '5px',
             }}
           />
-          {error && <span style={{ color: 'red' }}>{error.message}</span>}
+          {error && <span style={{ color: 'red' }}>{error}</span>}
         </>
       );
     }
@@ -230,12 +325,11 @@ CustomFormLayout.args = {
     return (
       <>
         <input {...inputProps} {...register(inputProps.name as string)} />
-        {error && <span style={{ color: 'red' }}>{error.message}</span>}
+        {error && <span style={{ color: 'red' }}>{error}</span>}
       </>
     );
   },
 };
-
 
 export const CustomValidation = Template.bind({});
 CustomValidation.args = {
@@ -272,110 +366,12 @@ export const ErrorSummaryExample = Template.bind({});
 ErrorSummaryExample.args = {
   ...Default.args,
   showErrorSummary: true,
-  footer: (
-    <div>
-      <h3>Error Summary:</h3>
-      <ul>
-        {/* You'd need to access and map through formState.errors here */}
-      </ul>
-    </div>
-  ),
   onFormReady: fn(),
 };
 
-export const WithValidationSchema = Template.bind({});
-WithValidationSchema.args = {
-  ...Default.args,
-  validationSchema: yup.object().shape({
-    firstName: yup.string().required('First Name is required'),
-    lastName: yup.string(),
-    email: yup
-      .string()
-      .email('Invalid email')
-      .required('Email is required'),
-    age: yup
-      .number()
-      .typeError('Age must be a number')
-      .required('Age is required')
-      .min(18, 'You must be at least 18 years old'),
-    agree: yup.boolean().oneOf([true], 'You must agree to continue'),
-  }),
-  onFormReady: fn(),
-};
-
-export const ReadOnly = Template.bind({});
-ReadOnly.args = {
-  ...Default.args,
-  readOnly: true,
-  onFormReady: fn(),
-};
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Default.args,
-  disableForm: true,
-  onFormReady: fn(),
-};
-
-export const WithGridLayout = Template.bind({});
-WithGridLayout.args = {
-  ...Default.args,
-  enableGrid: true,
-  gridConfig: {
-    className: 'layout',
-    cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-    rowHeight: 50,
-    isDraggable: true,
-    isResizable: true,
-    layout: {
-      lg: [
-        { i: 'firstName', x: 0, y: 0, w: 4, h: 1 },
-        { i: 'lastName', x: 4, y: 0, w: 4, h: 1 },
-        { i: 'email', x: 0, y: 1, w: 8, h: 1 },
-        { i: 'age', x: 8, y: 0, w: 4, h: 1 },
-        { i: 'agree', x: 8, y: 1, w: 4, h: 1 },
-      ],
-    },
-  },
-  onFormReady: fn(),
-};
-
-export const WithCustomInput = Template.bind({});
-WithCustomInput.args = {
-  ...Default.args,
-  renderInput: (field, register) => {
-    const { inputProps, id, error } = field;
-    if (!inputProps) return null;
-    if (inputProps.type === 'checkbox') {
-      return (
-        <div>
-          <input
-            type="checkbox"
-            id={id}
-            {...inputProps}
-            {...register(inputProps.name as string)}
-          />
-          <label htmlFor={id}>{inputProps.label}</label>
-          {error && <span>{error.message}</span>}
-        </div>
-      );
-    }
-
-    return (
-      <>
-        <input
-          {...inputProps}
-          {...register(inputProps.name as string)}
-          style={{
-            backgroundColor: 'lightyellow',
-            padding: '5px',
-            border: '1px solid blue',
-            borderRadius: '3px',
-          }}
-        />
-        {error && <span>{error.message}</span>}
-      </>
-    );
-  },
+export const WithFlattenObject = Template.bind({});
+WithFlattenObject.args = {
+  ...WithNestedObject.args,
+  isFlatten: true,
   onFormReady: fn(),
 };

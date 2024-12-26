@@ -1,17 +1,14 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { useForm, UseFormReturn } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useWindowSize } from 'usehooks-ts';
-import * as yup from 'yup';
 import {
   DynamicFormProps,
-  FormConfig,
   FieldConfig,
-  InputType,
   InputData,
+  InputGroup
 } from './types';
 import {
   generateInputsFromObject,
-  mapInputType,
   generateDefaultLayout,
   debounce,
   saveToLocalStorage,
@@ -72,6 +69,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   validateOnSubmit = true,
   theme,
   onFormReady,
+  isFlatten = false,
 }) => {
   const { width } = useWindowSize();
 
@@ -205,9 +203,18 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       register,
       readOnly,
       disableForm,
-      form.formState
+      form.formState,
+      isFlatten
     );
-  }, [data, config, register, readOnly, disableForm, form.formState]);
+  }, [
+    data,
+    config,
+    register,
+    readOnly,
+    disableForm,
+    form.formState,
+    isFlatten,
+  ]);
 
   const debouncedOnChange = useMemo(() => {
     return debounceOnChange > 0
@@ -253,6 +260,58 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   });
 
   const renderFormContent = () => {
+    const renderInputs = (inputs: (InputData | InputGroup)[]) => {
+      return inputs.map(input => {
+        if (!input) return null;
+
+        // Nếu là group thì render group
+        if ('inputs' in input) {
+          return (
+            <div key={input.id}>
+              <h3>{input.label}</h3>
+              {renderInputs(input.inputs)}
+            </div>
+          );
+        }
+
+        // Nếu không phải group thì render input
+        const { label, inputProps, id, error } = input;
+        const fieldConfig = config?.[id] || ({} as FieldConfig);
+
+        return (
+          <InputWrapper
+            key={id}
+            horizontalLabel={horizontalLabel}
+            labelWidth={labelWidth}
+          >
+            {label && (
+              <label htmlFor={id} style={fieldConfig.style}>
+                {label}
+              </label>
+            )}
+            {renderInput
+              ? renderInput(input, register)
+              : inputProps &&
+                React.createElement(
+                  inputProps.type === 'textarea'
+                    ? 'textarea'
+                    : inputProps.type === 'checkbox'
+                    ? 'input'
+                    : 'input',
+                  {
+                    ...inputProps,
+                    ...(inputProps.type === 'checkbox'
+                      ? { checked: inputProps.value }
+                      : {}),
+                    ...(disableAutocomplete ? { autoComplete: 'off' } : {}),
+                  }
+                )}
+            {showInlineError && error && <ErrorMessage>{error}</ErrorMessage>}
+          </InputWrapper>
+        );
+      });
+    };
+
     if (isGridEnabled && ResponsiveGridLayout) {
       return (
         <ResponsiveGridLayout

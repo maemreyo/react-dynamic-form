@@ -54,6 +54,7 @@ export interface DynamicFormProps {
   style?: React.CSSProperties;
   theme?: any;
   onFormReady?: (form: UseFormReturn<any>) => void;
+  isFlatten?: boolean
 }
 
 export interface FormConfig {
@@ -123,4 +124,9 @@ export interface InputData {
   inputProps: InputProps | null;
   id: string;
     error?: string;
+}
+export interface InputGroup {
+  label: string;
+  id: string;
+  inputs: (InputData | InputGroup)[];
 }
