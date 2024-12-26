@@ -5,7 +5,11 @@ import {
   RegisterOptions,
 } from 'react-hook-form';
 import { Schema } from 'yup';
-import { ResponsiveProps } from 'react-grid-layout';
+import { ResponsiveProps as OriginalResponsiveProps, Layout } from 'react-grid-layout';
+
+interface MyResponsiveProps extends OriginalResponsiveProps {
+  layouts?: { [key: string]: Layout[] };
+}
 
 export type LayoutType = 'flex' | 'grid';
 
@@ -33,7 +37,7 @@ export interface DynamicFormProps {
   focusFirstError?: boolean;
   enableReinitialize?: boolean;
   enableGrid?: boolean;
-  gridConfig?: ResponsiveProps;
+  gridConfig?: MyResponsiveProps;
   layout?: LayoutType;
   layoutConfig?: any;
   horizontalLabel?: boolean;
@@ -112,13 +116,11 @@ export interface InputProps {
   readOnly?: boolean;
   disabled?: boolean;
   label?: string;
+  value?: any;
 }
 export interface InputData {
   label?: string;
   inputProps: InputProps | null;
   id: string;
-  error?: {
-    message: string;
-    type: string;
-  };
+    error?: string;
 }

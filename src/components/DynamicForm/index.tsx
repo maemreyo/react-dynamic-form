@@ -201,9 +201,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       config,
       register,
       readOnly,
-      disableForm
+      disableForm,
+      form.formState
     );
-  }, [data, config, register, readOnly, disableForm]);
+  }, [data, config, register, readOnly, disableForm, form.formState]);
 
   const debouncedOnChange = useMemo(() => {
     return debounceOnChange > 0

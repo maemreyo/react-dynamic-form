@@ -42,7 +42,8 @@ export function generateInputsFromObject(
   config: Record<string, FieldConfig> | undefined,
   register: UseFormRegister<any>,
   readOnly: boolean | undefined,
-  disableForm: boolean | undefined
+  disableForm: boolean | undefined,
+  formState: any
 ): InputData[] {
   const inputs: InputData[] = [];
   for (const key in data) {
@@ -113,7 +114,7 @@ export function generateInputsFromObject(
           ? { ...inputProps, ...register(key, registerProps) }
           : inputProps,
         id: key,
-        error: register(key, registerProps)?.error,
+        error: formState?.errors?.[key]?.message, // Sửa cách lấy error
       });
     }
   }
@@ -126,7 +127,7 @@ export const generateDefaultLayout = (data: Record<string, any>): Layout[] => {
   let y = 0;
   const colWidth = 4; // Default column width
 
-  Object.keys(data).forEach((key) => {
+  Object.keys(data).forEach(key => {
     layout.push({
       i: key,
       x: x,
@@ -147,7 +148,7 @@ export const generateDefaultLayout = (data: Record<string, any>): Layout[] => {
 
 export const debounce = (func: Function, wait: number) => {
   let timeout: NodeJS.Timeout | null;
-  return function (...args: any[]) {
+  return function(...args: any[]) {
     const later = () => {
       timeout = null;
       func(...args);
