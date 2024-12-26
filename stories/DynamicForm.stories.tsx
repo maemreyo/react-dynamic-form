@@ -55,9 +55,10 @@ BasicForm.args = {
     },
   },
   onSubmit: data => alert(JSON.stringify(data)),
-  onFormReady: fn(),
+  onFormReady: fn(), // Keep fn() here for other stories
 };
 BasicForm.storyName = 'Basic Form';
+
 
 export const FormWithValidationSchema = Template.bind({});
 FormWithValidationSchema.args = {
@@ -132,46 +133,70 @@ FormWithCustomLayout.storyName = 'Form with Custom Layout';
 export const FormWithNestedObject = Template.bind({});
 FormWithNestedObject.args = {
   data: {
-    name: {
-      first: '',
-      last: '',
-    },
-    contact: {
-      email: '',
-      phone: {
-        home: '',
-        work: '',
-      },
+    firstName: 'John',
+    lastName: 'Doe',
+    address: {
+      // Nested object
+      street: '123 Main St',
+      city: 'Anytown',
+      state: 'CA',
+      zip: '90210',
     },
   },
   config: {
-    'name.first': {
+    firstName: {
       label: 'First Name',
-      validation: { required: 'This field is required' },
-    },
-    'name.last': {
-      label: 'Last Name',
-    },
-    'contact.email': {
-      label: 'Email',
+      type: 'text',
       validation: {
         required: 'This field is required',
-        pattern: {
-          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-          message: 'Invalid email address',
+      },
+    },
+    lastName: {
+      label: 'Last Name',
+      type: 'text',
+      validation: {
+        required: 'This field is required',
+      },
+    },
+    address: {
+      // Nested form
+      type: 'nested',
+      fields: {
+        street: {
+          label: 'Street',
+          type: 'text',
+          validation: {
+            required: 'This field is required',
+          },
+        },
+        city: {
+          label: 'City',
+          type: 'text',
+          validation: {
+            required: 'This field is required',
+          },
+        },
+        state: {
+          label: 'State',
+          type: 'text',
+          validation: {
+            required: 'This field is required',
+          },
+        },
+        zip: {
+          label: 'Zip',
+          type: 'text',
+          validation: {
+            required: 'This field is required',
+            pattern: {
+              value: /^\d{5}$/,
+              message: 'Invalid zip code',
+            },
+          },
         },
       },
     },
-    'contact.phone.home': {
-      label: 'Home Phone',
-      type: 'number',
-    },
-    'contact.phone.work': {
-      label: 'Work Phone',
-      type: 'number',
-    },
   },
-  onSubmit: data => alert(JSON.stringify(data)),
   onFormReady: fn(),
 };
 FormWithNestedObject.storyName = 'Form with Nested Object';
@@ -228,7 +253,6 @@ ResetOnSubmitProp.args = {
   resetOnSubmit: true,
 };
 ResetOnSubmitProp.storyName = 'resetOnSubmit';
-
 
 // Thêm class cho form container
 export const FormWithCustomContainerClassName = Template.bind({});
