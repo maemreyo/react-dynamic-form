@@ -1,29 +1,13 @@
-import { DefaultTheme } from 'styled-components';
-
-export const defaultTheme: DefaultTheme = {
+// theme.ts
+export const defaultTheme = {
   colors: {
-    primary: '#007bff',
-    secondary: '#6c757d',
-    success: '#28a745',
-    danger: '#dc3545',
-    warning: '#ffc107',
-    info: '#17a2b8',
-    light: '#f8f9fa',
-    dark: '#343a40',
-    text: '#212529',
-    background: '#ffffff',
-    border: '#ced4da',
-    error: '#dc3545',
-  },
-  fontSizes: {
-    small: '12px',
-    medium: '14px',
-    large: '16px',
-  },
-  fontWeights: {
-    light: 300,
-    regular: 400,
-    bold: 700,
+    primary: '#007bff', // Example primary color
+    secondary: '#6c757d', // Example secondary color
+    background: '#f8f9fa', // Example background color
+    text: '#212529', // Example text color
+    border: '#ced4da', // Example border color
+    error: '#dc3545', // Example error color
+    light: '#f8f9fa', // Example light color
   },
   space: {
     xs: '4px',
@@ -31,6 +15,15 @@ export const defaultTheme: DefaultTheme = {
     md: '16px',
     lg: '24px',
     xl: '32px',
+  },
+  fontSizes: {
+    small: '12px',
+    medium: '14px',
+    large: '16px',
+  },
+  fontWeights: {
+    normal: '400',
+    bold: '700',
   },
   radii: {
     sm: '2px',

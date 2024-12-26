@@ -14,4 +14,4 @@ export const Thing: FC<Props> = ({ children }) => {
   return <div>{children || `the snozzberries taste like snozzberries`}</div>;
 };
 
-export { default as DynamicForm } from './components/DynamicForm';
+export { default as DynamicForm } from './components/DynamicFormBU';

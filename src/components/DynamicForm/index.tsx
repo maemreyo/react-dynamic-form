@@ -1,31 +1,20 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { DynamicFormProps, FieldConfig, InputData, InputGroup } from './types';
-import { generateInputsFromObject } from './utils';
-import {
-  FormContainer,
-  InputWrapper,
-  ErrorMessage,
-  SubmitButton,
-  Input,
-  Label,
-} from './styles';
-import { ThemeProvider } from 'styled-components';
-import { defaultTheme } from './theme';
-import useFormOptions from './hooks/useFormOptions';
-import useAutoSave from './hooks/useAutoSave';
-import useErrorSummary from './hooks/useErrorSummary';
-import useDebounce from './hooks/useDebounce';
-import useLocalStorage from './hooks/useLocalStorage';
+// index.tsx
+import React from 'react';
+import { DynamicFormProps, FieldError } from './types';
+import useFormFields from './hooks/useFormFields';
+import useFormController from './hooks/useFormController';
+import useRHFOptions from './hooks/useRHFOptions';
+import FormLayout from './components/FormLayout';
+import FormContent from './components/FormContent';
+import FormFooter from './components/FormFooter';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   data,
-  config,
+  config = {},
   onChange,
   onSubmit,
   formOptions,
   validationSchema,
-  renderInput,
   header,
   footer,
   readOnly = false,
@@ -34,11 +23,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   autoSave = null,
   resetOnSubmit = false,
   focusFirstError = false,
-  enableReinitialize = false, // Deprecated
-  enableGrid = false, // Deprecated
-  gridConfig, // Deprecated
   className,
-  formClassNameConfig,
+  formClassNameConfig = {},
   style,
   layout = 'flex',
   layoutConfig = { gap: '10px', columns: 2 },
@@ -55,14 +41,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   theme,
   onFormReady,
   renderSubmitButton,
+  renderInput,
 }) => {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Use custom hook for form options
-  const mergedFormOptions = useFormOptions(
+  const mergedFormOptions = useRHFOptions(
     formOptions,
     validationSchema,
     validateOnSubmit,
@@ -70,202 +51,76 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     validateOnBlur
   );
 
-  const form = useForm({
-    ...mergedFormOptions,
-    defaultValues: data,
+  const form = useFormController({
+    data,
+    mergedFormOptions,
+    autoSave,
+    enableLocalStorage,
+    resetOnSubmit,
+    focusFirstError,
+    debounceOnChange,
+    onChange,
+    onFormReady,
   });
 
-  const { formState, register, handleSubmit, reset, setFocus, watch } = form;
+  const { formState, watch } = form;
   const formValues = watch();
 
-  const { errors, isSubmitting, isSubmitSuccessful } = formState;
+  const fields = useFormFields(
+    data,
+    config,
+    form.register,
+    readOnly,
+    disableForm,
+    formState
+  );
 
-  // Use custom hook for auto-save
-  useAutoSave(autoSave, form);
-
-  // Use custom hook for error summary
-  const errorSummary = useErrorSummary(showErrorSummary, form);
-
-  // Use custom hook for debounce
-  const debouncedOnChange = useDebounce(onChange, debounceOnChange);
-
-  // Use custom hook for localStorage
-  useLocalStorage(enableLocalStorage, form, data);
-
-  // Handle reset on submit
-  useEffect(() => {
-    if (resetOnSubmit && isSubmitSuccessful) {
-      reset();
-    }
-  }, [resetOnSubmit, isSubmitSuccessful, reset]);
-
-  // Handle focus first error
-  useEffect(() => {
-    if (focusFirstError) {
-      const firstErrorKey = Object.keys(errors)[0];
-      if (firstErrorKey) {
-        setFocus(firstErrorKey);
+  const handleSubmit = () => {
+    form.handleSubmit(data => {
+      if (onSubmit) {
+        onSubmit(data);
       }
-    }
-  }, [errors, focusFirstError, setFocus]);
-
-  const mergedTheme = useMemo(() => {
-    return theme ? { ...defaultTheme, ...theme } : defaultTheme;
-  }, [theme]);
-
-  // TODO: Implement react-grid-layout
-  // const isGridEnabled = enableGrid && isReactGridLayoutInstalled;
-  const isGridEnabled = false; // Disable grid layout for now
-
-  const inputs = useMemo(() => {
-    return generateInputsFromObject(
-      data,
-      config,
-      register,
-      readOnly,
-      disableForm,
-      formState
-    );
-  }, [data, config, register, readOnly, disableForm, formState]);
-
-  useEffect(() => {
-    if (onFormReady) {
-      onFormReady(form);
-    }
-  }, [form, onFormReady]);
-
-  const submit = handleSubmit(data => {
-    if (onSubmit) {
-      onSubmit(data);
-    }
-  });
-
-  const renderFormContent = () => {
-    const renderInputs = (inputs: (InputData | InputGroup)[]) => {
-      return inputs.map(input => {
-        if (!input) return null;
-
-        // TODO: Implement nested object rendering
-        if ('inputs' in input) {
-          return (
-            <div key={input.id}>
-              <h3>{input.label}</h3>
-              {renderInputs(input.inputs)}
-            </div>
-          );
-        }
-
-        // Render input
-        const { label, inputProps, id, error } = input;
-
-        const fieldConfig = config?.[id] || ({} as FieldConfig);
-        const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-        const formClassName = formClassNameConfig || {};
-
-        return (
-          <InputWrapper
-            key={id}
-            $horizontalLabel={horizontalLabel}
-            $labelWidth={labelWidth}
-            className={
-              fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-            }
-          >
-            {label && (
-              <Label
-                htmlFor={id}
-                $horizontalLabel={horizontalLabel}
-                $labelWidth={labelWidth}
-                className={fieldClassNameConfig.label || formClassName.label}
-              >
-                {label}
-                {/* Dấu * đỏ cho required input */}
-                {fieldConfig.validation?.required && (
-                  <span style={{ color: 'red' }}>*</span>
-                )}
-              </Label>
-            )}
-            {renderInput
-              ? renderInput(input, register)
-              : inputProps &&
-                React.createElement(
-                  inputProps.type === 'textarea'
-                    ? 'textarea'
-                    : inputProps.type === 'checkbox'
-                    ? 'input'
-                    : Input,
-                  {
-                    className:
-                      fieldClassNameConfig.input || formClassName.input,
-                    ...inputProps,
-                    ...register(inputProps.name),
-                    ...(inputProps.type === 'checkbox'
-                      ? {
-                          checked: formValues[inputProps.name] === true,
-                        }
-                      : {
-                          value: formValues[inputProps.name] || '',
-                        }),
-                    ...(disableAutocomplete ? { autoComplete: 'off' } : {}),
-                  }
-                )}
-            {showInlineError && error && (
-              <ErrorMessage
-                className={
-                  fieldClassNameConfig.errorMessage ||
-                  formClassName.errorMessage
-                }
-              >
-                {error}
-              </ErrorMessage>
-            )}
-          </InputWrapper>
-        );
-      });
-    };
-
-    return <>{renderInputs(inputs)}</>;
+    })();
   };
 
   return (
-    <ThemeProvider theme={mergedTheme}>
-      <FormContainer
-        onSubmit={submit}
-        className={`${className || ''} ${formClassNameConfig?.formContainer ||
-          ''}`}
-        $layout={layout}
-        $layoutConfig={layoutConfig}
-        $horizontalLabel={horizontalLabel}
-        data-layoutconfig={JSON.stringify(layoutConfig)}
-        data-horizontallabel={horizontalLabel ? 'true' : 'false'}
-      >
-        {header}
-        {mounted && renderFormContent()}
-        {footer}
-        {showSubmitButton &&
-          (renderSubmitButton ? (
-            renderSubmitButton(submit, isSubmitting)
-          ) : (
-            <SubmitButton
-              type="submit"
-              disabled={isSubmitting}
-              className={formClassNameConfig?.button}
-            >
-              Submit
-            </SubmitButton>
-          ))}
-        {showErrorSummary && errorSummary.length > 0 && (
-          <div>
-            <h3>Error Summary:</h3>
-            <ul>
-              {errorSummary.map((error, index) => (
-                <li key={index}>{error}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </FormContainer>
-    </ThemeProvider>
+    // @ts-ignore
+    <FormLayout
+      onSubmit={handleSubmit}
+      className={className}
+      formClassNameConfig={formClassNameConfig}
+      style={style}
+      layout={layout}
+      layoutConfig={layoutConfig}
+      horizontalLabel={horizontalLabel}
+      theme={theme}
+    >
+      {header}
+      <FormContent
+        fields={fields}
+        config={config}
+        formClassNameConfig={formClassNameConfig}
+        horizontalLabel={horizontalLabel}
+        labelWidth={labelWidth}
+        renderInput={renderInput}
+        register={form.register}
+        formValues={formValues}
+        disableAutocomplete={disableAutocomplete}
+        showInlineError={showInlineError}
+      />
+      <FormFooter
+        footer={footer}
+        showSubmitButton={showSubmitButton}
+        renderSubmitButton={renderSubmitButton}
+        isSubmitting={formState.isSubmitting}
+        showErrorSummary={showErrorSummary}
+        errors={Object.keys(formState.errors).reduce((acc, key) => {
+          acc[key] = formState.errors[key] as FieldError;
+          return acc;
+        }, {} as Record<string, FieldError>)}
+        formClassNameConfig={formClassNameConfig}
+      />
+    </FormLayout>
   );
 };
 

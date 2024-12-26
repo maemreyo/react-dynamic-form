@@ -1,44 +1,13 @@
-// styles.ts
 import styled, { css } from 'styled-components';
-import { LayoutType } from './types';
-
-/**
- * Base styles for form elements.
- */
-const baseFormElementStyles = css`
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 8px;
-  border-radius: 4px;
-  font-size: ${({ theme }) => theme.fontSizes.medium};
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary};
-  }
-
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.text};
-    opacity: 0.6;
-  }
-`;
-
-/**
- * Props for the FormContainer component.
- */
-export interface FormContainerProps {
-  $layout: LayoutType;
-  $layoutConfig?: any;
-  $horizontalLabel?: boolean;
-  formClassNameConfig?: {
-    formContainer?: string;
-  };
-  style?: React.CSSProperties;
-}
 
 /**
  * Styled form container.
  */
-export const FormContainer = styled.form<FormContainerProps>`
+export const FormContainer = styled.form<{
+  $layout: 'flex' | 'grid';
+  $layoutConfig?: any;
+  $horizontalLabel?: boolean;
+}>`
   display: ${({ $layout }) => ($layout === 'grid' ? 'grid' : 'flex')};
   flex-direction: ${({ $layout, $horizontalLabel }) =>
     $layout === 'grid' || $horizontalLabel ? 'row' : 'column'};
@@ -57,17 +26,12 @@ export const FormContainer = styled.form<FormContainerProps>`
 `;
 
 /**
- * Props for the Label component.
+ * Styled label.
  */
-export interface LabelProps {
+export const Label = styled.label<{
   $horizontalLabel?: boolean;
   $labelWidth?: string | number;
-}
-
-/**
- * Common styles for labels.
- */
-const labelCommonStyles = css<LabelProps>`
+}>`
   margin-bottom: ${({ theme, $horizontalLabel }) =>
     $horizontalLabel ? '0' : theme.space.sm};
   margin-right: ${({ theme, $horizontalLabel }) =>
@@ -84,46 +48,64 @@ const labelCommonStyles = css<LabelProps>`
 `;
 
 /**
- * Styled label.
- */
-export const Label = styled.label<LabelProps>`
-  ${labelCommonStyles}
-`;
-
-/**
- * Props for the InputWrapper component.
- */
-export interface InputWrapperProps {
-  $horizontalLabel?: boolean;
-  $labelWidth?: string | number;
-}
-
-/**
  * Styled input wrapper.
  */
-export const InputWrapper = styled.div<InputWrapperProps>`
+export const InputWrapper = styled.div<{
+  $horizontalLabel?: boolean;
+  $labelWidth?: string | number;
+}>`
   display: flex;
+  align-items: center;
   margin-bottom: ${({ theme }) => theme.space.md};
-  align-items: ${({ $horizontalLabel }) =>
-    $horizontalLabel ? 'center' : 'flex-start'};
-  flex-direction: ${({ $horizontalLabel }) =>
-    $horizontalLabel ? 'row' : 'column'};
 
   label {
-    ${labelCommonStyles}
+    margin-bottom: ${({ theme, $horizontalLabel }) =>
+      $horizontalLabel ? '0' : theme.space.sm};
+    margin-right: ${({ theme, $horizontalLabel }) =>
+      $horizontalLabel ? theme.space.md : '0'};
+    color: ${({ theme }) => theme.colors.text};
+    font-weight: ${({ theme }) => theme.fontWeights.bold};
+    width: ${({ $labelWidth }) =>
+      $labelWidth
+        ? typeof $labelWidth === 'number'
+          ? `${$labelWidth}px`
+          : $labelWidth
+        : 'auto'};
+    flex-shrink: 0;
   }
 
-  > :first-child {
-    margin-right: ${({ $horizontalLabel }) =>
-      $horizontalLabel ? '0.5em' : '0'};
-  }
+  ${({ $horizontalLabel }) =>
+    $horizontalLabel &&
+    css`
+      flex-direction: row;
+      align-items: center;
+
+      > :first-child {
+        margin-right: 0.5em;
+      }
+    `}
+
+  ${({ $horizontalLabel }) =>
+    !$horizontalLabel &&
+    css`
+      flex-direction: column;
+      align-items: flex-start;
+    `}
 `;
 
 /**
  * Styled input.
  */
 export const Input = styled.input`
-  ${baseFormElementStyles}
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  padding: 8px;
+  border-radius: 4px;
+  font-size: ${({ theme }) => theme.fontSizes.medium};
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary};
+  }
 
   &[type='number'] {
     -moz-appearance: textfield; /* Firefox */
@@ -133,6 +115,11 @@ export const Input = styled.input`
   &::-webkit-inner-spin-button {
     -webkit-appearance: none; /* Chrome, Safari, Edge */
     margin: 0;
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text};
+    opacity: 0.6;
   }
 `;
 
