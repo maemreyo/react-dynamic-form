@@ -1,19 +1,19 @@
 import styled, { css } from 'styled-components';
 
 export const FormContainer = styled.form<{
-  layout: 'flex' | 'grid';
-  layoutConfig?: any;
-  horizontalLabel?: boolean;
+  $layout: 'flex' | 'grid';
+  $layoutConfig?: any;
+  $horizontalLabel?: boolean;
 }>`
-  display: ${({ layout }) => (layout === 'grid' ? 'grid' : 'flex')};
-  flex-direction: ${({ layout, horizontalLabel }) =>
-    layout === 'grid' || horizontalLabel ? 'row' : 'column'};
-  gap: ${({ layoutConfig, theme }) => layoutConfig?.gap || theme.space.md};
+  display: ${({ $layout }) => ($layout === 'grid' ? 'grid' : 'flex')};
+  flex-direction: ${({ $layout, $horizontalLabel }) =>
+    $layout === 'grid' || $horizontalLabel ? 'row' : 'column'};
+  gap: ${({ $layoutConfig, theme }) => $layoutConfig?.gap || theme.space.md};
 
-  ${({ layout, layoutConfig }) =>
-    layout === 'grid' &&
+  ${({ $layout, $layoutConfig }) =>
+    $layout === 'grid' &&
     css`
-      grid-template-columns: repeat(${layoutConfig?.columns || 12}, 1fr);
+      grid-template-columns: repeat(${$layoutConfig?.columns || 12}, 1fr);
     `}
 
   padding: ${({ theme }) => theme.space.lg};
@@ -23,31 +23,31 @@ export const FormContainer = styled.form<{
 `;
 
 export const InputWrapper = styled.div<{
-  horizontalLabel?: boolean;
-  labelWidth?: string | number;
+  $horizontalLabel?: boolean;
+  $labelWidth?: string | number;
 }>`
   display: flex;
   align-items: center;
   margin-bottom: ${({ theme }) => theme.space.md};
 
   label {
-    margin-bottom: ${({ theme, horizontalLabel }) =>
-      horizontalLabel ? '0' : theme.space.sm};
-    margin-right: ${({ theme, horizontalLabel }) =>
-      horizontalLabel ? theme.space.md : '0'};
+    margin-bottom: ${({ theme, $horizontalLabel }) =>
+      $horizontalLabel ? '0' : theme.space.sm};
+    margin-right: ${({ theme, $horizontalLabel }) =>
+      $horizontalLabel ? theme.space.md : '0'};
     color: ${({ theme }) => theme.colors.text};
     font-weight: ${({ theme }) => theme.fontWeights.bold};
-    width: ${({ labelWidth }) =>
-      labelWidth
-        ? typeof labelWidth === 'number'
-          ? `${labelWidth}px`
-          : labelWidth
+    width: ${({ $labelWidth }) =>
+      $labelWidth
+        ? typeof $labelWidth === 'number'
+          ? `${$labelWidth}px`
+          : $labelWidth
         : 'auto'};
     flex-shrink: 0;
   }
 
-  ${({ horizontalLabel }) =>
-    horizontalLabel &&
+  ${({ $horizontalLabel }) =>
+    $horizontalLabel &&
     css`
       flex-direction: row;
       align-items: center;
@@ -57,8 +57,8 @@ export const InputWrapper = styled.div<{
       }
     `}
 
-  ${({ horizontalLabel }) =>
-    !horizontalLabel &&
+  ${({ $horizontalLabel }) =>
+    !$horizontalLabel &&
     css`
       flex-direction: column;
       align-items: flex-start;
