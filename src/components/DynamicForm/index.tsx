@@ -77,6 +77,14 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   const form = useForm({
     ...formOptions,
     defaultValues: data,
+    mode: validateOnSubmit
+      ? 'onSubmit'
+      : validateOnChange
+      ? 'onChange'
+      : validateOnBlur
+      ? 'onBlur'
+      : 'onSubmit',
+    criteriaMode: 'all',
     resolver: validationSchema
       ? data => {
           try {
