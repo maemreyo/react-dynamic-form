@@ -1,5 +1,8 @@
 import styled, { css } from 'styled-components';
 
+/**
+ * Styled form container.
+ */
 export const FormContainer = styled.form<{
   $layout: 'flex' | 'grid';
   $layoutConfig?: any;
@@ -22,6 +25,9 @@ export const FormContainer = styled.form<{
   border-radius: ${({ theme }) => theme.radii.md};
 `;
 
+/**
+ * Styled input wrapper.
+ */
 export const InputWrapper = styled.div<{
   $horizontalLabel?: boolean;
   $labelWidth?: string | number;
@@ -65,12 +71,18 @@ export const InputWrapper = styled.div<{
     `}
 `;
 
+/**
+ * Styled error message.
+ */
 export const ErrorMessage = styled.div`
   color: ${({ theme }) => theme.colors.error};
   font-size: ${({ theme }) => theme.fontSizes.small};
   margin-top: ${({ theme }) => theme.space.xs};
 `;
 
+/**
+ * Styled submit button.
+ */
 export const SubmitButton = styled.button`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.light};

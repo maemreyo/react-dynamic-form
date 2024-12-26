@@ -1,14 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useWindowSize } from 'usehooks-ts';
 import { DynamicFormProps, FieldConfig, InputData, InputGroup } from './types';
-import {
-  generateInputsFromObject,
-  generateDefaultLayout,
-  debounce,
-  saveToLocalStorage,
-  loadFromLocalStorage,
-} from './utils';
+import { generateInputsFromObject } from './utils';
 import {
   FormContainer,
   InputWrapper,
@@ -17,17 +10,11 @@ import {
 } from './styles';
 import { ThemeProvider } from 'styled-components';
 import { defaultTheme } from './theme';
-
-let ResponsiveGridLayout: undefined | any = undefined;
-let isReactGridLayoutInstalled = false;
-try {
-  ResponsiveGridLayout = require('react-grid-layout').Responsive;
-  isReactGridLayoutInstalled = true;
-} catch (e) {
-  console.warn(
-    'react-grid-layout is not installed. Grid layout will not be available. Please install it if you want to use grid features: npm install react-grid-layout'
-  );
-}
+import useFormOptions from './hooks/useFormOptions';
+import useAutoSave from './hooks/useAutoSave';
+import useErrorSummary from './hooks/useErrorSummary';
+import useDebounce from './hooks/useDebounce';
+import useLocalStorage from './hooks/useLocalStorage';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   data,
@@ -45,9 +32,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   autoSave = null,
   resetOnSubmit = false,
   focusFirstError = false,
-  enableReinitialize = false,
-  enableGrid = false,
-  gridConfig,
+  enableReinitialize = false, // Deprecated
+  enableGrid = false, // Deprecated
+  gridConfig, // Deprecated
   className,
   style,
   layout = 'flex',
@@ -64,88 +51,41 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   validateOnSubmit = true,
   theme,
   onFormReady,
-  isFlatten = false,
 }) => {
-  const { width } = useWindowSize();
-
-  const [errorSummary, setErrorSummary] = useState<string[]>([]);
-
-  const form = useForm({
-    ...formOptions,
-    defaultValues: data,
-    mode: validateOnSubmit
-      ? 'onSubmit'
-      : validateOnChange
-      ? 'onChange'
-      : validateOnBlur
-      ? 'onBlur'
-      : 'onSubmit',
-    criteriaMode: 'all',
-    resolver: validationSchema
-      ? data => {
-          try {
-            validationSchema.validateSync(data, { abortEarly: false });
-            return { values: data, errors: {} };
-          } catch (errors) {
-            return {
-              values: {},
-              errors: errors.inner.reduce(
-                (allErrors: any, currentError: any) => ({
-                  ...allErrors,
-                  [currentError.path]: {
-                    type: currentError.type ?? 'validation',
-                    message: currentError.message,
-                  },
-                }),
-                {}
-              ),
-            };
-          }
-        }
-      : undefined,
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
-    reset,
-    getValues,
-    setFocus,
-    watch,
-  } = form;
-
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (showErrorSummary && Object.keys(errors).length > 0) {
-      const summary = Object.entries(errors).map(([, error]) => error?.message);
-      setErrorSummary(summary as string[]);
-    } else {
-      setErrorSummary([]);
-    }
-  }, [errors, showErrorSummary]);
+  // Use custom hook for form options
+  const mergedFormOptions = useFormOptions(
+    formOptions,
+    validationSchema,
+    validateOnSubmit,
+    validateOnChange,
+    validateOnBlur
+  );
 
-  // Handle auto-save
-  useEffect(() => {
-    let saveInterval: NodeJS.Timeout;
+  const form = useForm({
+    ...mergedFormOptions,
+    defaultValues: data,
+  });
 
-    if (autoSave) {
-      saveInterval = setInterval(() => {
-        const values = getValues();
-        autoSave.save(values);
-      }, autoSave.interval);
-    }
+  const { register, handleSubmit, formState, reset, setFocus } = form;
 
-    return () => {
-      if (saveInterval) {
-        clearInterval(saveInterval);
-      }
-    };
-  }, [autoSave, getValues]);
+  const { errors, isSubmitting, isSubmitSuccessful } = formState;
+
+  // Use custom hook for auto-save
+  useAutoSave(autoSave, form);
+
+  // Use custom hook for error summary
+  const errorSummary = useErrorSummary(showErrorSummary, form);
+
+  // Use custom hook for debounce
+  const debouncedOnChange = useDebounce(onChange, debounceOnChange);
+
+  // Use custom hook for localStorage
+  useLocalStorage(enableLocalStorage, form, data);
 
   // Handle reset on submit
   useEffect(() => {
@@ -168,28 +108,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     return theme ? { ...defaultTheme, ...theme } : defaultTheme;
   }, [theme]);
 
-  const defaultGridConfig = useMemo(() => {
-    return {
-      className: 'layout',
-      cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-      rowHeight: 50,
-      isDraggable: true,
-      isResizable: true,
-    };
-  }, []);
-
-  const mergedGridConfig = useMemo(() => {
-    if (enableGrid && gridConfig) {
-      return { ...defaultGridConfig, ...gridConfig };
-    }
-    return defaultGridConfig;
-  }, [enableGrid, gridConfig, defaultGridConfig]);
-
-  const isGridEnabled = enableGrid && isReactGridLayoutInstalled;
-
-  const defaultLayout = useMemo(() => {
-    return generateDefaultLayout(data);
-  }, [data]);
+  // TODO: Implement react-grid-layout
+  // const isGridEnabled = enableGrid && isReactGridLayoutInstalled;
+  const isGridEnabled = false; // Disable grid layout for now
 
   const inputs = useMemo(() => {
     return generateInputsFromObject(
@@ -198,49 +119,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       register,
       readOnly,
       disableForm,
-      form.formState,
-      isFlatten
+      formState
     );
-  }, [
-    data,
-    config,
-    register,
-    readOnly,
-    disableForm,
-    form.formState,
-    isFlatten,
-  ]);
-
-  const debouncedOnChange = useMemo(() => {
-    return debounceOnChange > 0
-      ? debounce(onChange || (() => {}), debounceOnChange)
-      : onChange;
-  }, [onChange, debounceOnChange]);
-
-  useEffect(() => {
-    const subscription = watch(value => {
-      if (debouncedOnChange) {
-        debouncedOnChange(value);
-      }
-
-      if (enableLocalStorage) {
-        saveToLocalStorage('dynamic-form-data', value);
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, debouncedOnChange, enableLocalStorage]);
-
-  useEffect(() => {
-    if (enableReinitialize) {
-      if (enableLocalStorage) {
-        const storedData = loadFromLocalStorage('dynamic-form-data');
-        reset(storedData || data);
-      } else {
-        reset(data);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, reset]);
+  }, [data, config, register, readOnly, disableForm, formState]);
 
   useEffect(() => {
     if (onFormReady) {
@@ -259,7 +140,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       return inputs.map(input => {
         if (!input) return null;
 
-        // Nếu là group thì render group
+        // TODO: Implement nested object rendering
         if ('inputs' in input) {
           return (
             <div key={input.id}>
@@ -269,7 +150,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           );
         }
 
-        // Nếu không phải group thì render input
+        // Render input
         const { label, inputProps, id, error } = input;
         const fieldConfig = config?.[id] || ({} as FieldConfig);
 
@@ -296,9 +177,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                   {
                     ...inputProps,
                     ...register(inputProps.name),
-                    // ...(inputProps.type === 'checkbox'
-                    //   ? { checked: form.formState[inputProps.name] }
-                    //   : {}),
+                    ...(inputProps.type === 'checkbox'
+                      ? { defaultChecked: inputProps.value }
+                      : {}),
                     ...(disableAutocomplete ? { autoComplete: 'off' } : {}),
                   }
                 )}
@@ -308,123 +189,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       });
     };
 
-    if (isGridEnabled && ResponsiveGridLayout) {
-      return (
-        <ResponsiveGridLayout
-          {...mergedGridConfig}
-          width={width}
-          layouts={{
-            ...mergedGridConfig.layouts,
-            lg: mergedGridConfig.layouts?.lg || defaultLayout,
-          }}
-        >
-          {inputs.map(input => {
-            const { label, inputProps, id, error } = input;
-            const fieldConfig = config?.[id] || ({} as FieldConfig);
-
-            if (!inputProps) {
-              return null;
-            }
-
-            return (
-              <div
-                key={id}
-                data-grid={
-                  mergedGridConfig.layouts?.lg?.find(l => l.i === id) ||
-                  defaultLayout.find(l => l.i === id) || {
-                    x: 0,
-                    y: 0,
-                    w: fieldConfig.col || 6,
-                    h: 1,
-                  }
-                }
-              >
-                <InputWrapper
-                  horizontalLabel={horizontalLabel}
-                  labelWidth={labelWidth}
-                >
-                  {label && (
-                    <label htmlFor={id} style={fieldConfig.style}>
-                      {label}
-                    </label>
-                  )}
-                  {renderInput
-                    ? renderInput(input, register)
-                    : inputProps &&
-                      React.createElement(
-                        inputProps.type === 'textarea'
-                          ? 'textarea'
-                          : inputProps.type === 'checkbox'
-                          ? 'input'
-                          : 'input',
-                        {
-                          ...inputProps,
-                          ...(inputProps.type === 'checkbox'
-                            ? { checked: inputProps.value }
-                            : {}),
-                          ...(disableAutocomplete
-                            ? { autoComplete: 'off' }
-                            : {}),
-                        }
-                      )}
-
-                  {showInlineError && error && (
-                    <ErrorMessage>{error}</ErrorMessage>
-                  )}
-                </InputWrapper>
-              </div>
-            );
-          })}
-        </ResponsiveGridLayout>
-      );
-    } else {
-      return (
-        <>
-          {inputs.map(input => {
-            const { label, inputProps, id, error } = input;
-            const fieldConfig = config?.[id] || ({} as FieldConfig);
-
-            if (!inputProps) {
-              return null;
-            }
-
-            return (
-              <InputWrapper
-                key={id}
-                horizontalLabel={horizontalLabel}
-                labelWidth={labelWidth}
-              >
-                {label && (
-                  <label htmlFor={id} style={fieldConfig.style}>
-                    {label}
-                  </label>
-                )}
-                {renderInput
-                  ? renderInput(input, register)
-                  : inputProps &&
-                    React.createElement(
-                      inputProps.type === 'textarea'
-                        ? 'textarea'
-                        : inputProps.type === 'checkbox'
-                        ? 'input'
-                        : 'input',
-                      {
-                        ...inputProps,
-                        ...(inputProps.type === 'checkbox'
-                          ? { checked: inputProps.value }
-                          : {}),
-                        ...(disableAutocomplete ? { autoComplete: 'off' } : {}),
-                      }
-                    )}
-                {showInlineError && error && (
-                  <ErrorMessage>{error.message}</ErrorMessage>
-                )}
-              </InputWrapper>
-            );
-          })}
-        </>
-      );
-    }
+    return <>{renderInputs(inputs)}</>;
   };
 
   return (

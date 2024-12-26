@@ -1,7 +1,12 @@
-import { FieldConfig, InputData, InputGroup, InputType, ValidationConfig } from './types';
+import { FieldConfig, InputType, InputData, InputGroup } from './types';
 import { UseFormRegister } from 'react-hook-form';
-import { Layout } from 'react-grid-layout';
 
+/**
+ * Maps a value to an InputType.
+ *
+ * @param value - The value to map.
+ * @returns The corresponding InputType.
+ */
 export const mapInputType = (value: any): InputType => {
   if (typeof value === 'string') {
     return 'text';
@@ -13,188 +18,19 @@ export const mapInputType = (value: any): InputType => {
     return 'checkbox';
   }
   if (Array.isArray(value)) {
-    return 'select'; // Hoặc một loại input khác cho array
+    return 'select'; // TODO: Handle array input type
   }
   return 'text'; // Default
 };
 
-export function generateInputsFromObject(
-  data: Record<string, any>,
-  config: Record<string, FieldConfig> | undefined,
-  register: UseFormRegister<any>,
-  readOnly: boolean | undefined,
-  disableForm: boolean | undefined,
-  formState: any,
-  isFlatten: boolean
-): (InputData | InputGroup)[] {
-  if (isFlatten) {
-    return generateInputsFromObject(
-      flattenObject(data),
-      config,
-      register,
-      readOnly,
-      disableForm,
-      formState,
-      false
-    );
-  }
-  const inputs: (InputData | InputGroup)[] = [];
-
-  for (const key in data) {
-    if (data.hasOwnProperty(key)) {
-      const value = data[key];
-      const fieldConfig = config?.[key] || ({} as FieldConfig);
-
-      if (typeof value === 'object' && !Array.isArray(value)) {
-        // Xử lý nested object
-        const nestedInputs = processNestedObject(
-          value,
-          config,
-          register,
-          key,
-          readOnly,
-          disableForm,
-          formState,
-          isFlatten
-        );
-        inputs.push({
-          label: fieldConfig.label || key,
-          id: key,
-          inputs: nestedInputs,
-        });
-      } else {
-        // Xử lý input bình thường
-        const inputType: InputType = fieldConfig.type || mapInputType(value);
-        const validationConfig = fieldConfig.validation;
-        const inputProps: any = {
-          type: inputType,
-          name: key,
-          id: key,
-          placeholder: fieldConfig.placeholder,
-          readOnly:
-            fieldConfig.readOnly !== undefined
-              ? fieldConfig.readOnly
-              : readOnly,
-          disabled: disableForm,
-          label: fieldConfig.label,
-          value: value,
-        };
-        const registerProps: any = {};
-        if (validationConfig) {
-          // ... (validation config code)
-        }
-
-        // Handle readOnly for custom components
-        if (fieldConfig.component) {
-          inputProps.readOnly =
-            fieldConfig.readOnly !== undefined
-              ? fieldConfig.readOnly
-              : readOnly;
-        }
-
-        inputs.push({
-          label: fieldConfig.label || key,
-          inputProps: fieldConfig.component
-            ? { ...inputProps, ...register(key, registerProps) }
-            : inputProps,
-          id: key,
-          error: formState?.errors?.[key]?.message,
-        });
-      }
-    }
-  }
-  return inputs;
-}
-
-function processNestedObject(
-  data: Record<string, any>,
-  config: Record<string, FieldConfig> | undefined,
-  register: UseFormRegister<any>,
-  parentKey: string,
-  readOnly: boolean | undefined,
-  disableForm: boolean | undefined,
-  formState: any,
-  isFlatten: boolean
-): (InputData | InputGroup)[] {
-  if (isFlatten) {
-    return generateInputsFromObject(
-      flattenObject(data),
-      config,
-      register,
-      readOnly,
-      disableForm,
-      formState,
-      false
-    );
-  }
-  const inputs: (InputData | InputGroup)[] = [];
-
-  for (const key in data) {
-    if (data.hasOwnProperty(key)) {
-      const value = data[key];
-      const fieldConfig =
-        config?.[`${parentKey}.${key}`] || ({} as FieldConfig);
-
-      if (typeof value === 'object' && !Array.isArray(value)) {
-        // Tiếp tục đệ quy nếu là object
-        const nestedInputs = processNestedObject(
-          value,
-          config,
-          register, // <-- Pass register here
-          `${parentKey}.${key}`,
-          readOnly,
-          disableForm,
-          formState,
-          isFlatten
-        );
-        inputs.push({
-          label: fieldConfig.label || key,
-          id: `${parentKey}.${key}`,
-          inputs: nestedInputs,
-        });
-      } else {
-        // Xử lý input bình thường
-        const inputType: InputType = fieldConfig.type || mapInputType(value);
-        const validationConfig = fieldConfig.validation;
-        const inputProps: any = {
-          type: inputType,
-          name: `${parentKey}.${key}`, // Cập nhật name cho nested field
-          id: `${parentKey}.${key}`,
-          placeholder: fieldConfig.placeholder,
-          readOnly:
-            fieldConfig.readOnly !== undefined
-              ? fieldConfig.readOnly
-              : readOnly,
-          disabled: disableForm,
-          label: fieldConfig.label,
-          value: value,
-        };
-        const registerProps: any = {};
-        if (validationConfig) {
-          // ... (validation config code)
-        }
-
-        inputs.push({
-          label: fieldConfig.label || key,
-          inputProps: fieldConfig.component
-            ? {
-                ...inputProps,
-                ...register(`${parentKey}.${key}`, registerProps),
-              }
-            : {
-                ...inputProps,
-                ...register(`${parentKey}.${key}`, registerProps),
-              },
-          id: `${parentKey}.${key}`,
-          error: formState?.errors?.[`${parentKey}.${key}`]?.message,
-        });
-      }
-    }
-  }
-
-  return inputs;
-}
-
+/**
+ * Flattens a nested object into a single-level object.
+ *
+ * @param obj - The object to flatten.
+ * @param parentKey - The parent key (used for recursion).
+ * @param result - The resulting flattened object.
+ * @returns The flattened object.
+ */
 export const flattenObject = (
   obj: Record<string, any>,
   parentKey = '',
@@ -213,31 +49,113 @@ export const flattenObject = (
   return result;
 };
 
-export const generateDefaultLayout = (data: Record<string, any>): Layout[] => {
-  const layout: Layout[] = [];
-  let x = 0;
-  let y = 0;
-  const colWidth = 4; // Default column width
+/**
+ * Generates an array of InputData or InputGroup objects from a data object.
+ *
+ * @param data - The data object.
+ * @param config - The form configuration.
+ * @param register - The `react-hook-form` register function.
+ * @param readOnly - Whether the form is in read-only mode.
+ * @param disableForm - Whether the form is disabled.
+ * @param formState - The `react-hook-form` form state.
+ * @returns An array of InputData or InputGroup objects.
+ */
+export function generateInputsFromObject(
+  data: Record<string, any>,
+  config: Record<string, FieldConfig> | undefined,
+  register: UseFormRegister<any>,
+  readOnly: boolean | undefined,
+  disableForm: boolean | undefined,
+  formState: any
+): (InputData | InputGroup)[] {
+  // TODO: Implement nested object rendering
+  // Always flatten object data
+  const flattenedData = flattenObject(data);
 
-  Object.keys(data).forEach(key => {
-    layout.push({
-      i: key,
-      x: x,
-      y: y,
-      w: colWidth,
-      h: 1,
-    });
+  const inputs: (InputData | InputGroup)[] = [];
+  for (const key in flattenedData) {
+    if (flattenedData.hasOwnProperty(key)) {
+      const value = flattenedData[key];
+      const fieldConfig = config?.[key] || ({} as FieldConfig);
+      const inputType: InputType = fieldConfig.type || mapInputType(value);
+      const validationConfig = fieldConfig.validation;
+      const inputProps: any = {
+        type: inputType,
+        name: key,
+        id: key,
+        placeholder: fieldConfig.placeholder,
+        readOnly:
+          fieldConfig.readOnly !== undefined ? fieldConfig.readOnly : readOnly,
+        disabled: disableForm,
+        label: fieldConfig.label,
+        value: value,
+      };
+      const registerProps: any = {};
+      if (validationConfig) {
+        if (validationConfig.required) {
+          registerProps.required =
+            typeof validationConfig.required === 'string'
+              ? validationConfig.required
+              : 'This field is required';
+        }
+        if (validationConfig.minLength) {
+          registerProps.minLength =
+            typeof validationConfig.minLength === 'number'
+              ? {
+                  value: validationConfig.minLength,
+                  message: `Minimum length is ${validationConfig.minLength}`,
+                }
+              : validationConfig.minLength;
+        }
+        if (validationConfig.maxLength) {
+          registerProps.maxLength =
+            typeof validationConfig.maxLength === 'number'
+              ? {
+                  value: validationConfig.maxLength,
+                  message: `Maximum length is ${validationConfig.maxLength}`,
+                }
+              : validationConfig.maxLength;
+        }
+        if (validationConfig.pattern) {
+          registerProps.pattern =
+            validationConfig.pattern instanceof RegExp
+              ? {
+                  value: validationConfig.pattern,
+                  message: 'Invalid format',
+                }
+              : validationConfig.pattern;
+        }
+        if (validationConfig.validate) {
+          registerProps.validate = validationConfig.validate;
+        }
+      }
 
-    x += colWidth;
-    if (x >= 12) {
-      x = 0;
-      y++;
+      // Handle readOnly for custom components
+      if (fieldConfig.component) {
+        inputProps.readOnly =
+          fieldConfig.readOnly !== undefined ? fieldConfig.readOnly : readOnly;
+      }
+
+      inputs.push({
+        label: fieldConfig.label || key,
+        inputProps: fieldConfig.component
+          ? { ...inputProps, ...register(key, registerProps) }
+          : { ...inputProps, ...register(key, registerProps) },
+        id: key,
+        error: formState?.errors?.[key]?.message,
+      });
     }
-  });
+  }
+  return inputs;
+}
 
-  return layout;
-};
-
+/**
+ * Debounces a function.
+ *
+ * @param func - The function to debounce.
+ * @param wait - The debounce time in milliseconds.
+ * @returns The debounced function.
+ */
 export const debounce = (func: Function, wait: number) => {
   let timeout: NodeJS.Timeout | null;
   return function(...args: any[]) {
@@ -250,11 +168,22 @@ export const debounce = (func: Function, wait: number) => {
   };
 };
 
-// LocalStorage functions (if enableLocalStorage is true)
+/**
+ * Saves data to localStorage.
+ *
+ * @param key - The key to store the data under.
+ * @param data - The data to store.
+ */
 export const saveToLocalStorage = (key: string, data: any) => {
   localStorage.setItem(key, JSON.stringify(data));
 };
 
+/**
+ * Loads data from localStorage.
+ *
+ * @param key - The key to load the data from.
+ * @returns The loaded data, or null if no data is found.
+ */
 export const loadFromLocalStorage = (key: string): any | null => {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : null;
