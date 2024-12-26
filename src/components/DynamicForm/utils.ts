@@ -140,7 +140,7 @@ function processNestedObject(
         const nestedInputs = processNestedObject(
           value,
           config,
-          register,
+          register, // <-- Pass register here
           `${parentKey}.${key}`,
           readOnly,
           disableForm,
@@ -181,7 +181,10 @@ function processNestedObject(
                 ...inputProps,
                 ...register(`${parentKey}.${key}`, registerProps),
               }
-            : inputProps,
+            : {
+                ...inputProps,
+                ...register(`${parentKey}.${key}`, registerProps),
+              },
           id: `${parentKey}.${key}`,
           error: formState?.errors?.[`${parentKey}.${key}`]?.message,
         });

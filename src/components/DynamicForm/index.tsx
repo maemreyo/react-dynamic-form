@@ -1,12 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useWindowSize } from 'usehooks-ts';
-import {
-  DynamicFormProps,
-  FieldConfig,
-  InputData,
-  InputGroup
-} from './types';
+import { DynamicFormProps, FieldConfig, InputData, InputGroup } from './types';
 import {
   generateInputsFromObject,
   generateDefaultLayout,
@@ -281,8 +276,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         return (
           <InputWrapper
             key={id}
-            horizontalLabel={horizontalLabel}
-            labelWidth={labelWidth}
+            $horizontalLabel={horizontalLabel}
+            $labelWidth={labelWidth}
           >
             {label && (
               <label htmlFor={id} style={fieldConfig.style}>
@@ -300,9 +295,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                     : 'input',
                   {
                     ...inputProps,
-                    ...(inputProps.type === 'checkbox'
-                      ? { checked: inputProps.value }
-                      : {}),
+                    ...register(inputProps.name),
+                    // ...(inputProps.type === 'checkbox'
+                    //   ? { checked: form.formState[inputProps.name] }
+                    //   : {}),
                     ...(disableAutocomplete ? { autoComplete: 'off' } : {}),
                   }
                 )}
@@ -437,9 +433,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         onSubmit={submit}
         className={className}
         style={style}
-        layout={layout}
-        layoutConfig={layoutConfig}
-        horizontalLabel={horizontalLabel}
+        $layout={layout}
+        $layoutConfig={layoutConfig}
+        $horizontalLabel={horizontalLabel}
+        data-layoutconfig={JSON.stringify(layoutConfig)}
+        data-horizontallabel={horizontalLabel ? 'true' : 'false'}
       >
         {header}
         {mounted && renderFormContent()}
