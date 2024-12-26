@@ -72,15 +72,17 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   theme,
   onFormReady,
 }) => {
+  const [errorSummary, setErrorSummary] = useState<string[]>([]);
+
   const form = useForm({
     ...formOptions,
     defaultValues: data,
     resolver: validationSchema
-      ? (data) => {
+      ? data => {
           try {
             validationSchema.validateSync(data, { abortEarly: false });
             return { values: data, errors: {} };
-          } catch (errors: any) {
+          } catch (errors) {
             return {
               values: {},
               errors: errors.inner.reduce(
@@ -113,6 +115,15 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (showErrorSummary && Object.keys(errors).length > 0) {
+      const summary = Object.entries(errors).map(([, error]) => error?.message);
+      setErrorSummary(summary as string[]);
+    } else {
+      setErrorSummary([]);
+    }
+  }, [errors, showErrorSummary]);
 
   // Handle auto-save
   useEffect(() => {
@@ -193,7 +204,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   }, [onChange, debounceOnChange]);
 
   useEffect(() => {
-    const subscription = watch((value) => {
+    const subscription = watch(value => {
       if (debouncedOnChange) {
         debouncedOnChange(value);
       }
@@ -223,7 +234,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     }
   }, [form, onFormReady]);
 
-  const submit = handleSubmit((data) => {
+  const submit = handleSubmit(data => {
     if (onSubmit) {
       onSubmit(data);
     }
@@ -239,7 +250,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             lg: mergedGridConfig.layouts?.lg || defaultLayout,
           }}
         >
-          {inputs.map((input) => {
+          {inputs.map(input => {
             const { label, inputProps, id, error } = input;
             const fieldConfig = config?.[id] || ({} as FieldConfig);
 
@@ -300,7 +311,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     } else {
       return (
         <>
-          {inputs.map((input) => {
+          {inputs.map(input => {
             const { label, inputProps, id, error } = input;
             const fieldConfig = config?.[id] || ({} as FieldConfig);
 
@@ -364,6 +375,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           <SubmitButton type="submit" disabled={isSubmitting}>
             Submit
           </SubmitButton>
+        )}
+        {showErrorSummary && errorSummary.length > 0 && (
+          <div>
+            <h3>Error Summary:</h3>
+            <ul>
+              {errorSummary.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </div>
         )}
       </FormContainer>
     </ThemeProvider>
