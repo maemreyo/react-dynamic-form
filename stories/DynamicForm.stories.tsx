@@ -276,6 +276,7 @@ FormWithRepeater.args = {
     },
   },
   onSubmit: data => alert(JSON.stringify(data)),
+  onFormReady: fn(),
 };
 FormWithRepeater.storyName = 'Form with Repeater';
 
