@@ -1,5 +1,4 @@
-// src/features/core/components/FormContent.tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FormField, FormConfig, FormClassNameConfig } from '../types';
 import {
   TextInput,
@@ -14,7 +13,8 @@ import {
   DateTimePicker,
   ComboBox,
 } from '../../inputs';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
+import ConditionalFields from '../../conditional/components/ConditionalFields';
 
 interface FormContentProps {
   fields: FormField[];
@@ -97,7 +97,6 @@ const renderInputComponent = (
 };
 
 const FormContent: React.FC<FormContentProps> = ({
-  fields,
   config,
   formClassNameConfig,
   horizontalLabel,
@@ -105,30 +104,105 @@ const FormContent: React.FC<FormContentProps> = ({
   disableAutocomplete,
   showInlineError,
 }) => {
-  const { register } = useFormContext();
+  const { control, register, unregister } = useFormContext();
+
+  const conditionalFieldsConfig = useMemo(
+    () =>
+      Object.keys(config)
+        .filter(
+          fieldId =>
+            config[fieldId].conditional &&
+            typeof config[fieldId].conditional?.when === 'string'
+        )
+        .map(fieldId => ({
+          when: config[fieldId].conditional!.when, // Now 'when' is guaranteed to be a string
+          is: config[fieldId].conditional!.is,
+          fields: config[fieldId].conditional!.fields || [],
+        })),
+    [config]
+  );
+
+  const watchedValues = useWatch({
+    control,
+    name: conditionalFieldsConfig.map(condition => condition.when),
+  });
+
+  const fieldsToRender = useMemo(() => {
+    const shouldRenderField = (fieldId: string): boolean => {
+      // Check if the field is part of any conditional logic
+      const isConditionalField = conditionalFieldsConfig.some(condition =>
+        condition.fields.includes(fieldId)
+      );
+
+      // If it's a conditional field, check if the condition is met
+      if (isConditionalField) {
+        return conditionalFieldsConfig.some(condition => {
+          const conditionIndex = conditionalFieldsConfig.indexOf(condition);
+          const watchedValue = watchedValues[conditionIndex];
+          return (
+            condition.fields.includes(fieldId) && watchedValue === condition.is
+          );
+        });
+      }
+
+      // If it's not a conditional field, render it
+      return true;
+    };
+
+    return Object.keys(config).filter(shouldRenderField);
+  }, [config, conditionalFieldsConfig, watchedValues]);
 
   useEffect(() => {
-    fields.forEach(field => {
-      const fieldConfig = config[field.id] || {};
-      register(field.id, fieldConfig.validation);
+    fieldsToRender.forEach(fieldId => {
+      const fieldConfig = config[fieldId] || {};
+      register(fieldId, fieldConfig.validation);
     });
-  }, [fields, register, config]);
+
+    // Unregister fields that are not rendered
+    const allFields = Object.keys(config);
+    allFields.forEach(fieldId => {
+      if (!fieldsToRender.includes(fieldId)) {
+        unregister(fieldId);
+      }
+    });
+  }, [config, register, unregister, fieldsToRender]);
 
   return (
     <>
-      {fields.map(field => (
-        <React.Fragment key={field.id}>
-          {renderInputComponent(
-            field,
-            config,
-            formClassNameConfig,
-            disableAutocomplete,
-            showInlineError,
-            horizontalLabel,
-            labelWidth
-          )}
-        </React.Fragment>
-      ))}
+      {fieldsToRender.map(fieldId => {
+        const fieldConfig = config[fieldId] || {};
+        const field: FormField = {
+          id: fieldId,
+          type: fieldConfig.type || 'text', // Default to 'text' if type is not specified
+          label: fieldConfig.label,
+          error: undefined, // Assuming error handling is done elsewhere
+        };
+
+        return (
+          <React.Fragment key={field.id}>
+            {renderInputComponent(
+              field,
+              config,
+              formClassNameConfig,
+              disableAutocomplete,
+              showInlineError,
+              horizontalLabel,
+              labelWidth
+            )}
+          </React.Fragment>
+        );
+      })}
+
+      <ConditionalFields
+        conditions={conditionalFieldsConfig}
+        config={config}
+        formClassNameConfig={formClassNameConfig}
+        disableAutocomplete={disableAutocomplete}
+        showInlineError={showInlineError}
+        horizontalLabel={horizontalLabel}
+        labelWidth={labelWidth}
+        fieldsToRender={fieldsToRender}
+      />
     </>
   );
 };

@@ -12,7 +12,6 @@ import {
   InputWrapperProps,
   LabelProps,
 } from '../../styles';
-
 export type LayoutType = 'flex' | 'grid';
 
 export interface DynamicFormProps {
@@ -90,6 +89,11 @@ export interface FieldConfig {
   tooltip?: string;
   classNameConfig?: FieldClassNameConfig;
   options?: { value: string; label: string }[];
+  conditional?: {
+    when: string;
+    is: any;
+    fields: string[];
+  };
   fields?: FormConfig;
 }
 

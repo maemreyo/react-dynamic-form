@@ -78,6 +78,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
   return (
     <FormProvider {...form}>
+      {/* @ts-ignore */}
       <FormLayout
         onSubmit={handleSubmit}
         className={className}

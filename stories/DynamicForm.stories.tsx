@@ -158,6 +158,58 @@ FormWithNestedObject.args = {
 };
 FormWithNestedObject.storyName = 'Form with Nested Object';
 
+export const FormWithConditionalFields = Template.bind({});
+FormWithConditionalFields.args = {
+  data: {
+    country: '',
+    state: '',
+    subscribe: false,
+    newsletterType: '',
+  },
+  config: {
+    country: {
+      label: 'Country',
+      type: 'select',
+      options: [
+        { value: '', label: 'Select Country' },
+        { value: 'US', label: 'United States' },
+        { value: 'CA', label: 'Canada' },
+      ],
+      validation: { required: 'This field is required' },
+    },
+    state: {
+      label: 'State',
+      type: 'text',
+      conditional: {
+        when: 'country',
+        is: 'US',
+        fields: ['state'],
+      },
+      validation: { required: 'This field is required' },
+    },
+    subscribe: {
+      label: 'Subscribe to newsletter?',
+      type: 'checkbox',
+    },
+    newsletterType: {
+      label: 'Newsletter Type',
+      type: 'select',
+      options: [
+        { value: '', label: 'Select Type' },
+        { value: 'daily', label: 'Daily' },
+        { value: 'weekly', label: 'Weekly' },
+      ],
+      conditional: {
+        when: 'subscribe',
+        is: true,
+        fields: ['newsletterType'],
+      },
+      validation: { required: 'This field is required' },
+    },
+  },
+};
+FormWithConditionalFields.storyName = 'Form with Conditional Fields';
+
 // --- Props ---
 
 export const ReadOnlyProp = Template.bind({});
