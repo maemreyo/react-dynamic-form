@@ -30,6 +30,8 @@ const FormContent: React.FC<FormContentProps> = ({
   disableAutocomplete,
   showInlineError,
 }) => {
+  console.log('[FormContent] fields', fields);
+  console.log('[FormContent] fieldsToRender', fieldsToRender);
   const { register, unregister } = useFormContext();
 
   useEffect(() => {

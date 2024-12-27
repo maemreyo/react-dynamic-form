@@ -1,3 +1,5 @@
+// types.ts
+// src/features/core/types.ts
 import {
   UseFormProps,
   UseFormReturn,
@@ -12,6 +14,12 @@ import {
   InputWrapperProps,
   LabelProps,
 } from '../../styles';
+import {
+  AddButtonComponent,
+  AddButtonProps,
+  RemoveButtonComponent,
+  RemoveButtonProps,
+} from '../repeater';
 export type LayoutType = 'flex' | 'grid';
 
 export interface DynamicFormProps {
@@ -75,42 +83,103 @@ export interface FormConfig {
   [key: string]: FieldConfig;
 }
 
-export interface FieldConfig {
-  type?: InputType;
+export type FieldConfig =
+  | InputFieldConfig
+  | SelectFieldConfig
+  | CheckboxFieldConfig
+  | RadioFieldConfig
+  | TextAreaFieldConfig
+  | SwitchFieldConfig
+  | DateFieldConfig
+  | TimeFieldConfig
+  | DateTimeFieldConfig
+  | ComboBoxFieldConfig
+  | RepeaterFieldConfig;
+
+interface BaseFieldConfig {
   label?: string;
   placeholder?: string;
   validation?: ValidationConfig;
   component?: React.ComponentType<any>;
   style?: React.CSSProperties;
   readOnly?: boolean;
-  clearable?: boolean;
-  showCounter?: boolean;
-  copyToClipboard?: boolean;
-  tooltip?: string;
   classNameConfig?: FieldClassNameConfig;
-  options?: { value: string; label: string }[];
   conditional?: Condition;
   fields?: FormConfig;
 }
 
+export interface InputFieldConfig extends BaseFieldConfig {
+  type:
+    | 'text'
+    | 'number'
+    | 'email'
+    | 'password'
+    | 'tel'
+    | 'url'
+    | 'textarea'
+    | 'combobox';
+  clearable?: boolean;
+  showCounter?: boolean;
+  copyToClipboard?: boolean;
+  tooltip?: string;
+}
+
+export interface SelectFieldConfig extends BaseFieldConfig {
+  type: 'select';
+  options: { value: string; label: string }[];
+}
+
+export interface CheckboxFieldConfig extends BaseFieldConfig {
+  type: 'checkbox';
+}
+
+export interface RadioFieldConfig extends BaseFieldConfig {
+  type: 'radio';
+  options: { value: string; label: string }[];
+}
+
+export interface TextAreaFieldConfig extends BaseFieldConfig {
+  type: 'textarea';
+  clearable?: boolean;
+  showCounter?: boolean;
+  tooltip?: string;
+}
+
+export interface SwitchFieldConfig extends BaseFieldConfig {
+  type: 'switch';
+}
+
+export interface DateFieldConfig extends BaseFieldConfig {
+  type: 'date';
+}
+
+export interface TimeFieldConfig extends BaseFieldConfig {
+  type: 'time';
+}
+
+export interface DateTimeFieldConfig extends BaseFieldConfig {
+  type: 'datetime-local';
+}
+
+export interface ComboBoxFieldConfig extends BaseFieldConfig {
+  type: 'combobox';
+  options: { value: string; label: string }[];
+}
+
+export interface RepeaterFieldConfig extends BaseFieldConfig {
+  type: 'repeater';
+  addButtonLabel?: string;
+  removeButtonLabel?: string;
+  addButtonComponent?: AddButtonComponent;
+  removeButtonComponent?: RemoveButtonComponent;
+  minItems?: number;
+  maxItems?: number;
+  fields: FormConfig;
+}
+
 export type ValidationConfig = Record<string, any>;
 
-export type InputType =
-  | 'text'
-  | 'number'
-  | 'checkbox'
-  | 'select'
-  | 'textarea'
-  | 'email'
-  | 'password'
-  | 'tel'
-  | 'url'
-  | 'radio'
-  | 'date'
-  | 'switch'
-  | 'time'
-  | 'datetime-local'
-  | 'combobox';
+export type InputType = NonNullable<FieldConfig['type']>;
 
 export type UseFormRegister<TFieldValues extends FieldValues = FieldValues> = (
   name: FieldPath<TFieldValues>,

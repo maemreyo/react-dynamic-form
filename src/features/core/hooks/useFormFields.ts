@@ -24,7 +24,7 @@ function useFormFields(
   conditionalFieldsConfig: Condition[];
 } {
   const flattenedConfig = useMemo(() => flattenConfig(config), [config]);
-
+  console.log('[useFormFields] flattenedConfig', flattenedConfig);
   const conditionalFieldsConfig = useMemo(
     () =>
       Object.keys(config)

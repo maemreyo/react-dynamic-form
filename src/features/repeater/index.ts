@@ -1,2 +1,4 @@
+// index.ts
 // src/features/repeater/index.ts
-// Sẽ được triển khai sau
+export { default as Repeater } from './components/Repeater';
+export * from './types';

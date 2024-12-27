@@ -1,5 +1,12 @@
+// InputRenderer.tsx
+// src/features/inputs/components/InputRenderer.tsx
 import React from 'react';
-import { FormField, FormConfig, FormClassNameConfig } from '../../core/types';
+import {
+  FormField,
+  FormConfig,
+  FormClassNameConfig,
+  RepeaterFieldConfig,
+} from '../../core/types';
 import {
   TextInput,
   CheckboxInput,
@@ -13,6 +20,7 @@ import {
   DateTimePicker,
   ComboBox,
 } from '.';
+import { Repeater } from '../../repeater';
 
 interface InputRendererProps {
   field: FormField;
@@ -33,6 +41,7 @@ const renderInputComponent = ({
   horizontalLabel,
   labelWidth,
 }: InputRendererProps) => {
+  console.log('[renderInputComponent] field', field);
   const { id, type, error } = field;
   const fieldConfig = config[id] || {};
 
@@ -45,6 +54,16 @@ const renderInputComponent = ({
     labelWidth,
     error,
   };
+
+  if (type === 'repeater') {
+    return (
+      <Repeater
+        id={id}
+        fieldConfig={fieldConfig as RepeaterFieldConfig}
+        formClassNameConfig={formClassNameConfig}
+      />
+    );
+  }
 
   switch (type) {
     case 'text':

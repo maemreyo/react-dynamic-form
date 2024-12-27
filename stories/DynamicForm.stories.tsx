@@ -247,12 +247,97 @@ FormWithConditionalFields.storyName = 'Form with Conditional Fields';
 export const FormWithRepeater = Template.bind({});
 FormWithRepeater.args = {
   data: {
-    items: [
-      { name: 'Item 1', quantity: 1 },
-      { name: 'Item 2', quantity: 2 },
-    ],
+    country: '',
+    state: '',
+    age: 0,
+    subscribe: false,
+    newsletterType: '',
+    password: '',
+    items: [{ name: '', quantity: 0 }],
   },
   config: {
+    country: {
+      label: 'Country',
+      type: 'select',
+      options: [
+        { value: '', label: 'Select Country' },
+        { value: 'US', label: 'United States' },
+        { value: 'CA', label: 'Canada' },
+      ],
+      validation: { required: 'This field is required' },
+    },
+    state: {
+      label: 'State',
+      type: 'text',
+      conditional: {
+        when: 'country',
+        operator: 'is',
+        value: 'US',
+        fields: ['state'],
+      },
+    },
+    age: {
+      label: 'Age',
+      type: 'number',
+      // validation: {
+      //   min: {
+      //     value: 0,
+      //     message: '???',
+      //   },
+      // },
+    },
+    drivingLicense: {
+      label: 'Driving License',
+      type: 'text',
+      conditional: {
+        when: 'age',
+        operator: 'greaterThanOrEqual',
+        value: 18,
+        fields: ['drivingLicense'],
+      },
+    },
+    subscribe: {
+      label: 'Subscribe to newsletter?',
+      type: 'checkbox',
+    },
+    newsletterType: {
+      label: 'Newsletter Type',
+      type: 'select',
+      options: [
+        { value: '', label: 'Select Type' },
+        { value: 'daily', label: 'Daily' },
+        { value: 'weekly', label: 'Weekly' },
+      ],
+      conditional: {
+        when: 'subscribe',
+        operator: 'is',
+        value: true,
+        fields: ['newsletterType'],
+      },
+    },
+    password: {
+      label: 'Password',
+      type: 'text',
+      validation: {
+        required: true,
+        minLength: 8,
+        validate: (value: string) => {
+          if (!/[A-Z]/.test(value)) {
+            return 'Password must contain at least one uppercase letter';
+          }
+          if (!/[a-z]/.test(value)) {
+            return 'Password must contain at least one lowercase letter';
+          }
+          if (!/[0-9]/.test(value)) {
+            return 'Password must contain at least one number';
+          }
+          if (!/[^A-Za-z0-9]/.test(value)) {
+            return 'Password must contain at least one special character';
+          }
+          return undefined;
+        },
+      },
+    },
     items: {
       type: 'repeater',
       label: 'Items',
