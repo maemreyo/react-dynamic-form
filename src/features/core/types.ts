@@ -89,11 +89,7 @@ export interface FieldConfig {
   tooltip?: string;
   classNameConfig?: FieldClassNameConfig;
   options?: { value: string; label: string }[];
-  conditional?: {
-    when: string;
-    is: any;
-    fields: string[];
-  };
+  conditional?: Condition;
   fields?: FormConfig;
 }
 
@@ -144,3 +140,34 @@ export interface FieldError {
 export type FormValues = Record<string, any>;
 
 export { FormContainerProps, InputWrapperProps, LabelProps };
+
+/**
+ * Represents a comparison operator used in conditional rendering.
+ */
+export type ComparisonOperator =
+  | 'is'
+  | 'isNot'
+  | 'greaterThan'
+  | 'lessThan'
+  | 'greaterThanOrEqual'
+  | 'lessThanOrEqual'
+  | 'contains'
+  | 'startsWith'
+  | 'endsWith'
+  | 'custom';
+
+/**
+ * Represents a function that takes a value and returns a boolean indicating whether the condition is met.
+ */
+export type ComparatorFunction = (value: any) => boolean;
+
+/**
+ * Represents a condition for conditional rendering.
+ */
+export interface Condition {
+  when: string;
+  operator: ComparisonOperator;
+  value?: any;
+  comparator?: ComparatorFunction;
+  fields: string[];
+}

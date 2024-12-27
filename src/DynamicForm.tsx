@@ -64,9 +64,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     onFormReady,
   });
 
-  const { formState, watch, control } = form; // Destructure control
-
-  const fields = useFormFields(data, config, formState);
+  const { formState } = form;
 
   const handleSubmit = () => {
     form.handleSubmit(data => {
@@ -97,7 +95,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           labelWidth={labelWidth}
           disableAutocomplete={disableAutocomplete}
           showInlineError={showInlineError}
-          fields={fields}
         />
         <FormFooter
           footer={footer}

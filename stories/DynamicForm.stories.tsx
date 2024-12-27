@@ -163,6 +163,7 @@ FormWithConditionalFields.args = {
   data: {
     country: '',
     state: '',
+    age: 0,
     subscribe: false,
     newsletterType: '',
   },
@@ -182,10 +183,24 @@ FormWithConditionalFields.args = {
       type: 'text',
       conditional: {
         when: 'country',
-        is: 'US',
+        operator: 'is',
+        value: 'US',
         fields: ['state'],
       },
-      validation: { required: 'This field is required' },
+    },
+    age: {
+      label: 'Age',
+      type: 'number',
+    },
+    drivingLicense: {
+      label: 'Driving License',
+      type: 'text',
+      conditional: {
+        when: 'age',
+        operator: 'greaterThanOrEqual',
+        value: 18,
+        fields: ['drivingLicense'],
+      },
     },
     subscribe: {
       label: 'Subscribe to newsletter?',
@@ -201,10 +216,20 @@ FormWithConditionalFields.args = {
       ],
       conditional: {
         when: 'subscribe',
-        is: true,
+        operator: 'is',
+        value: true,
         fields: ['newsletterType'],
       },
-      validation: { required: 'This field is required' },
+    },
+    firstName: {
+      label: 'First Name',
+      type: 'text',
+      conditional: {
+        when: 'age',
+        operator: 'custom',
+        comparator: (value: any) => value > 25,
+        fields: ['firstName'],
+      },
     },
   },
 };

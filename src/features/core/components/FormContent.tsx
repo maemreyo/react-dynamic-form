@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo } from 'react';
-import { FormField, FormConfig, FormClassNameConfig } from '../types';
+import {
+  FormField,
+  FormConfig,
+  FormClassNameConfig,
+  Condition,
+} from '../types';
 import {
   TextInput,
   CheckboxInput,
@@ -102,7 +107,7 @@ const FormContent: React.FC<FormContentProps> = ({
   disableAutocomplete,
   showInlineError,
 }) => {
-  const { control } = useFormContext();
+  const { control, register, unregister } = useFormContext();
 
   const conditionalFieldsConfig = useMemo(
     () =>
@@ -114,7 +119,9 @@ const FormContent: React.FC<FormContentProps> = ({
         )
         .map(fieldId => ({
           when: config[fieldId].conditional!.when,
-          is: config[fieldId].conditional!.is,
+          operator: config[fieldId].conditional!.operator || 'is',
+          value: config[fieldId].conditional?.value,
+          comparator: config[fieldId].conditional?.comparator,
           fields: config[fieldId].conditional!.fields || [],
         })),
     [config]
@@ -135,9 +142,56 @@ const FormContent: React.FC<FormContentProps> = ({
         return conditionalFieldsConfig.some(condition => {
           const conditionIndex = conditionalFieldsConfig.indexOf(condition);
           const watchedValue = watchedValues[conditionIndex];
-          return (
-            condition.fields.includes(fieldId) && watchedValue === condition.is
-          );
+          let conditionMet = false;
+
+          switch (condition.operator) {
+            case 'is':
+              conditionMet = watchedValue === condition.value;
+              break;
+            case 'isNot':
+              conditionMet = watchedValue !== condition.value;
+              break;
+            case 'greaterThan':
+              conditionMet = watchedValue > condition.value;
+              break;
+            case 'lessThan':
+              conditionMet = watchedValue < condition.value;
+              break;
+            case 'greaterThanOrEqual':
+              conditionMet = watchedValue >= condition.value;
+              break;
+            case 'lessThanOrEqual':
+              conditionMet = watchedValue <= condition.value;
+              break;
+            case 'contains':
+              conditionMet =
+                typeof watchedValue === 'string' &&
+                typeof condition.value === 'string' &&
+                watchedValue.includes(condition.value);
+              break;
+            case 'startsWith':
+              conditionMet =
+                typeof watchedValue === 'string' &&
+                typeof condition.value === 'string' &&
+                watchedValue.startsWith(condition.value);
+              break;
+            case 'endsWith':
+              conditionMet =
+                typeof watchedValue === 'string' &&
+                typeof condition.value === 'string' &&
+                watchedValue.endsWith(condition.value);
+              break;
+            case 'custom':
+              conditionMet = condition.comparator
+                ? condition.comparator(watchedValue)
+                : false;
+              break;
+            default:
+              console.warn(`Unknown operator: ${condition.operator}`);
+              conditionMet = false;
+          }
+
+          return condition.fields.includes(fieldId) && conditionMet;
         });
       }
 
@@ -176,11 +230,6 @@ const FormContent: React.FC<FormContentProps> = ({
       <ConditionalFields
         conditions={conditionalFieldsConfig}
         config={config}
-        formClassNameConfig={formClassNameConfig}
-        disableAutocomplete={disableAutocomplete}
-        showInlineError={showInlineError}
-        horizontalLabel={horizontalLabel}
-        labelWidth={labelWidth}
       />
     </>
   );
