@@ -1,126 +1,49 @@
 // DynamicForm.tsx
 // src/DynamicForm.tsx
 import React from 'react';
-import {
-  FormLayout,
-  FormContent,
-  FormFooter,
-  useFormController,
-  useFormFields,
-  useRHFOptions,
-  DynamicFormProps,
-} from './features/core';
-import { FormProvider } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { DynamicFormProps } from './features/core';
+import DynamicFormContent from './DynamicFormContent';
+import { createValidationSchema } from './features/validation';
+import { useRHFOptions } from './features/core';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   data,
   config = {},
-  onChange,
   onSubmit,
   formOptions,
-  header,
-  footer,
-  readOnly = false,
-  disableForm = false,
-  showSubmitButton = true,
-  autoSave = null,
-  resetOnSubmit = false,
-  focusFirstError = false,
-  className,
-  formClassNameConfig = {},
-  style,
-  layout = 'flex',
-  layoutConfig = { gap: '10px', columns: 2 },
-  horizontalLabel = false,
-  labelWidth,
-  enableLocalStorage = false,
-  debounceOnChange = 0,
-  disableAutocomplete = false,
-  showInlineError = true,
-  showErrorSummary = false,
-  validateOnBlur = false,
-  validateOnChange = true,
-  validateOnSubmit = true,
-  theme,
+  validationSchema,
   onFormReady,
-  renderSubmitButton,
+  ...rest
 }) => {
+  const schema = createValidationSchema(config)!;
+  const resolver = validationSchema
+    ? yupResolver(validationSchema)
+    : yupResolver(schema);
+
   const mergedFormOptions = useRHFOptions(
     config,
-    formOptions,
-    validateOnSubmit,
-    validateOnChange,
-    validateOnBlur
+    { ...formOptions, resolver: resolver },
+    true,
+    true,
+    false
   );
 
-  const form = useFormController({
-    data,
-    mergedFormOptions,
-    autoSave,
-    enableLocalStorage,
-    resetOnSubmit,
-    focusFirstError,
-    debounceOnChange,
-    onChange,
-    onFormReady,
+  const form = useForm({
+    ...mergedFormOptions,
+    defaultValues: data,
   });
-
-  const { formState, control } = form;
-
-  const {
-    fields,
-    fieldsToRender,
-    conditionalFieldsConfig,
-    flattenedConfig,
-  } = useFormFields(data, config, formState, control); // Destructure flattenedConfig
-
-  const handleSubmit = () => {
-    form.handleSubmit(data => {
-      if (onSubmit) {
-        onSubmit(data);
-      }
-    })();
-  };
 
   return (
     <FormProvider {...form}>
-      {/* @ts-ignore */}
-      <FormLayout
-        onSubmit={handleSubmit}
-        className={className}
-        formClassNameConfig={formClassNameConfig}
-        style={style}
-        layout={layout}
-        layoutConfig={layoutConfig}
-        horizontalLabel={horizontalLabel}
-        theme={theme}
-      >
-        {header}
-        <FormContent
-          fieldsToRender={fieldsToRender}
-          fields={fields}
-          config={config}
-          formClassNameConfig={formClassNameConfig}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          disableAutocomplete={disableAutocomplete}
-          showInlineError={showInlineError}
-          conditionalFieldsConfig={conditionalFieldsConfig}
-          flattenedConfig={flattenedConfig} // Pass flattenedConfig to FormContent
-        />
-        <FormFooter
-          footer={footer}
-          formClassNameConfig={formClassNameConfig}
-          showSubmitButton={showSubmitButton}
-          renderSubmitButton={renderSubmitButton}
-          isSubmitting={formState.isSubmitting}
-          showErrorSummary={showErrorSummary}
-          errors={Object.keys(formState.errors).reduce((acc, key) => {
-            acc[key] = formState.errors[key] as any;
-            return acc;
-          }, {} as Record<string, any>)}
-        />
-      </FormLayout>
+      <DynamicFormContent
+        data={data}
+        config={config}
+        onSubmit={onSubmit}
+        onFormReady={onFormReady}
+        {...rest}
+      />
     </FormProvider>
   );
 };
