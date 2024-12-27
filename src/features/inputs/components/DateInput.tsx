@@ -6,7 +6,7 @@ import { useFormContext, useController } from 'react-hook-form';
 interface DateInputProps {
   id: string;
   fieldConfig: FieldConfig;
-  formClassNameConfig: FormClassNameConfig;
+  formClassNameConfig?: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;

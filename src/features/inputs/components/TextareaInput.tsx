@@ -25,7 +25,7 @@ const StyledTextarea = styled.textarea`
 interface TextareaInputProps {
   id: string;
   fieldConfig: FieldConfig;
-  formClassNameConfig: FormClassNameConfig;
+  formClassNameConfig?: FormClassNameConfig;
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
   horizontalLabel?: boolean;

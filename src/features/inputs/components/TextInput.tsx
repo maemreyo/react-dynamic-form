@@ -6,7 +6,7 @@ import { useFormContext, useController } from 'react-hook-form';
 interface TextInputProps {
   id: string;
   fieldConfig: FieldConfig;
-  formClassNameConfig: FormClassNameConfig;
+  formClassNameConfig?: FormClassNameConfig;
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
   horizontalLabel?: boolean;

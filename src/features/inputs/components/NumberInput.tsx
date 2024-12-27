@@ -47,7 +47,7 @@ const SpinButton = styled.button`
 interface NumberInputProps {
   id: string;
   fieldConfig: FieldConfig;
-  formClassNameConfig: FormClassNameConfig;
+  formClassNameConfig?: FormClassNameConfig;
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
   horizontalLabel?: boolean;

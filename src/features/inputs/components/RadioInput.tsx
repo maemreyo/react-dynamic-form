@@ -49,7 +49,7 @@ const RadioInputStyled = styled.input`
 interface RadioInputProps {
   id: string;
   fieldConfig: FieldConfig;
-  formClassNameConfig: FormClassNameConfig;
+  formClassNameConfig?: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;

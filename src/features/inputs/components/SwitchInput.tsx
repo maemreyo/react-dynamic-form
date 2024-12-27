@@ -56,7 +56,7 @@ const Slider = styled.span`
 interface SwitchInputProps {
   id: string;
   fieldConfig: FieldConfig;
-  formClassNameConfig: FormClassNameConfig;
+  formClassNameConfig?: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;

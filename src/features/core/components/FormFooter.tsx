@@ -14,7 +14,7 @@ interface FormFooterProps {
   isSubmitting: boolean;
   showErrorSummary: boolean;
   errors: Record<string, FieldError>;
-  formClassNameConfig: FormClassNameConfig;
+  formClassNameConfig?: FormClassNameConfig;
 }
 
 const FormFooter: React.FC<FormFooterProps> = ({
