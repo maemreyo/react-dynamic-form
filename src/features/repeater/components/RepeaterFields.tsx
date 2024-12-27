@@ -24,18 +24,18 @@ const RepeaterFields: React.FC<RepeaterFieldsProps> = ({
     <>
       {Object.entries(flattenedFieldsConfig).map(([fieldId, config]) => {
         const field: FormField = {
-          label: config.label,
+          label: fieldConfig.fields?.[fieldId]?.label,
           id: `${repeaterId}.${index}.${fieldId}`,
           type: config.type || 'text',
           error: formState.errors?.[repeaterId]?.[index]?.[fieldId] as any,
         };
+
         return (
           <React.Fragment key={field.id}>
             {renderInputComponent({
               field,
               config: {
-                ...flattenedFieldsConfig,
-                //[`${repeaterId}.${index}.${fieldId}`]: config, // remove this line
+                [field.id]: fieldConfig.fields?.[fieldId]!,
               },
               formClassNameConfig,
             })}
