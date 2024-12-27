@@ -244,6 +244,40 @@ FormWithConditionalFields.args = {
 FormWithConditionalFields.storyName = 'Form with Conditional Fields';
 
 
+export const FormWithRepeater = Template.bind({});
+FormWithRepeater.args = {
+  data: {
+    items: [
+      { name: 'Item 1', quantity: 1 },
+      { name: 'Item 2', quantity: 2 },
+    ],
+  },
+  config: {
+    items: {
+      type: 'repeater',
+      label: 'Items',
+      addButtonLabel: 'Add Item',
+      removeButtonLabel: 'Remove',
+      fields: {
+        name: {
+          label: 'Name',
+          type: 'text',
+          validation: { required: 'This field is required' },
+        },
+        quantity: {
+          label: 'Quantity',
+          type: 'number',
+          validation: {
+            required: 'This field is required',
+            min: { value: 1, message: 'Quantity must be at least 1' },
+          },
+        },
+      },
+    },
+  },
+  onSubmit: data => alert(JSON.stringify(data)),
+};
+FormWithRepeater.storyName = 'Form with Repeater';
 
 // --- Props ---
 
