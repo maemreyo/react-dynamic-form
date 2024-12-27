@@ -93,15 +93,7 @@ export interface FieldConfig {
   fields?: FormConfig;
 }
 
-export interface ValidationConfig {
-  required?: boolean | string;
-  minLength?: number | { value: number; message: string };
-  maxLength?: number | { value: number; message: string };
-  pattern?: RegExp | { value: RegExp; message: string };
-  validate?: (value: any) => string | undefined | Promise<string | undefined>;
-  min?: string | number;
-  max?: string | number;
-}
+export type ValidationConfig = Record<string, any>;
 
 export type InputType =
   | 'text'

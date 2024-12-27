@@ -1,2 +1,3 @@
 // src/features/validation/index.ts
-// Sẽ được triển khai sau
+export * from './validationSchema';
+export * from './customValidators';

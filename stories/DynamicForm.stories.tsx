@@ -53,7 +53,7 @@ BasicForm.args = {
       validation: { required: 'You must agree to continue' },
     },
   },
-  onSubmit: data => alert(JSON.stringify(data)),
+  onSubmit: data => {},
   onFormReady: fn(), // Keep fn() here for other stories
 };
 BasicForm.storyName = 'Basic Form';
@@ -61,20 +61,6 @@ BasicForm.storyName = 'Basic Form';
 export const FormWithValidationSchema = Template.bind({});
 FormWithValidationSchema.args = {
   ...BasicForm.args,
-  validationSchema: yup.object().shape({
-    firstName: yup.string().required('First Name is required'),
-    lastName: yup.string(),
-    email: yup
-      .string()
-      .email('Invalid email')
-      .required('Email is required'),
-    age: yup
-      .number()
-      .typeError('Age must be a number')
-      .required('Age is required')
-      .min(18, 'You must be at least 18 years old'),
-    agree: yup.boolean().oneOf([true], 'You must agree to continue'),
-  }),
 };
 FormWithValidationSchema.storyName = 'Form with Validation Schema';
 
@@ -87,6 +73,7 @@ FormWithCustomLayout.args = {
   labelWidth: '150px', // Set a fixed width for labels
 };
 FormWithCustomLayout.storyName = 'Form with Custom Layout';
+
 export const FormWithNestedObject = Template.bind({});
 FormWithNestedObject.args = {
   data: {
@@ -166,6 +153,7 @@ FormWithConditionalFields.args = {
     age: 0,
     subscribe: false,
     newsletterType: '',
+    password: '',
   },
   config: {
     country: {
@@ -191,6 +179,12 @@ FormWithConditionalFields.args = {
     age: {
       label: 'Age',
       type: 'number',
+      validation: {
+        min: {
+          value: 0,
+          message: '',
+        },
+      },
     },
     drivingLicense: {
       label: 'Driving License',
@@ -221,19 +215,35 @@ FormWithConditionalFields.args = {
         fields: ['newsletterType'],
       },
     },
-    firstName: {
-      label: 'First Name',
+    password: {
+      label: 'Password',
       type: 'text',
-      conditional: {
-        when: 'age',
-        operator: 'custom',
-        comparator: (value: any) => value > 25,
-        fields: ['firstName'],
+      validation: {
+        required: true,
+        minLength: 8,
+        validate: (value: string) => {
+          if (!/[A-Z]/.test(value)) {
+            return 'Password must contain at least one uppercase letter';
+          }
+          if (!/[a-z]/.test(value)) {
+            return 'Password must contain at least one lowercase letter';
+          }
+          if (!/[0-9]/.test(value)) {
+            return 'Password must contain at least one number';
+          }
+          if (!/[^A-Za-z0-9]/.test(value)) {
+            return 'Password must contain at least one special character';
+          }
+          return undefined;
+        },
       },
     },
   },
+  onFormReady: fn(),
 };
 FormWithConditionalFields.storyName = 'Form with Conditional Fields';
+
+
 
 // --- Props ---
 

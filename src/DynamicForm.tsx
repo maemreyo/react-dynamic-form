@@ -16,7 +16,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   onChange,
   onSubmit,
   formOptions,
-  validationSchema,
   header,
   footer,
   readOnly = false,
@@ -45,8 +44,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   renderSubmitButton,
 }) => {
   const mergedFormOptions = useRHFOptions(
+    config,
     formOptions,
-    validationSchema,
     validateOnSubmit,
     validateOnChange,
     validateOnBlur
