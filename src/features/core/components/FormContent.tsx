@@ -1,12 +1,16 @@
+// FormContent.tsx
+// src/features/core/components/FormContent.tsx
 import React, { useEffect } from 'react';
 import {
   FormField,
   FormConfig,
   FormClassNameConfig,
   Condition,
+  RepeaterFieldConfig,
 } from '../types';
 import { useFormContext } from 'react-hook-form';
 import renderInputComponent from '../../inputs/components/InputRenderer';
+import Repeater from '../../repeater/components/Repeater';
 
 interface FormContentProps {
   fields: FormField[];
@@ -18,6 +22,7 @@ interface FormContentProps {
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
   conditionalFieldsConfig: Condition[];
+  flattenedConfig: FormConfig;
 }
 
 const FormContent: React.FC<FormContentProps> = ({
@@ -29,38 +34,53 @@ const FormContent: React.FC<FormContentProps> = ({
   labelWidth,
   disableAutocomplete,
   showInlineError,
+  conditionalFieldsConfig,
+  flattenedConfig,
 }) => {
-  console.log('[FormContent] fields', fields);
-  console.log('[FormContent] fieldsToRender', fieldsToRender);
   const { register, unregister } = useFormContext();
-
   useEffect(() => {
     fields.forEach(field => {
-      const fieldConfig = config[field.id] || {};
-      if (fieldsToRender.includes(field.id)) {
-        register(field.id, fieldConfig.validation);
-      } else {
-        unregister(field.id);
+      /**
+       * Only register/unregister non-repeater fields in FormContent
+       */
+      const fieldConfig = flattenedConfig[field.id] || {};
+      if (fieldConfig.type !== 'repeater') {
+        if (fieldsToRender.includes(field.id)) {
+          register(field.id, fieldConfig.validation);
+        } else {
+          unregister(field.id);
+        }
       }
     });
-  }, [register, unregister, config]);
+  }, [register, unregister, flattenedConfig]);
 
   return (
     <>
       {fields
-        .filter(field => fieldsToRender.includes(field.id))
+        .filter(field => {
+          return fieldsToRender.includes(field.id);
+        })
         .map(field => {
+          const fieldConfig = flattenedConfig[field.id] || {};
           return (
             <React.Fragment key={field.id}>
-              {renderInputComponent({
-                field,
-                config,
-                formClassNameConfig,
-                disableAutocomplete,
-                showInlineError,
-                horizontalLabel,
-                labelWidth,
-              })}
+              {fieldConfig.type === 'repeater' ? (
+                <Repeater
+                  id={field.id}
+                  fieldConfig={fieldConfig as RepeaterFieldConfig}
+                  formClassNameConfig={formClassNameConfig}
+                />
+              ) : (
+                renderInputComponent({
+                  field,
+                  config: flattenedConfig, // use flattened config here
+                  formClassNameConfig,
+                  disableAutocomplete,
+                  showInlineError,
+                  horizontalLabel,
+                  labelWidth,
+                })
+              )}
             </React.Fragment>
           );
         })}

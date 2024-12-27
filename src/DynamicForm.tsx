@@ -1,3 +1,5 @@
+// DynamicForm.tsx
+// src/DynamicForm.tsx
 import React from 'react';
 import {
   FormLayout,
@@ -65,12 +67,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
   const { formState, control } = form;
 
-  const { fields, fieldsToRender, conditionalFieldsConfig } = useFormFields(
-    data,
-    config,
-    formState,
-    control
-  );
+  const {
+    fields,
+    fieldsToRender,
+    conditionalFieldsConfig,
+    flattenedConfig,
+  } = useFormFields(data, config, formState, control); // Destructure flattenedConfig
 
   const handleSubmit = () => {
     form.handleSubmit(data => {
@@ -104,6 +106,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           disableAutocomplete={disableAutocomplete}
           showInlineError={showInlineError}
           conditionalFieldsConfig={conditionalFieldsConfig}
+          flattenedConfig={flattenedConfig} // Pass flattenedConfig to FormContent
         />
         <FormFooter
           footer={footer}

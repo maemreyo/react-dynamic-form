@@ -1,3 +1,5 @@
+// useFormFields.ts
+// src/features/core/hooks/useFormFields.ts
 import { useMemo } from 'react';
 import { FormField, FormConfig, FieldError, Condition } from '../types';
 import { getInputTypeFromValue } from '../../inputs/utils';
@@ -22,9 +24,10 @@ function useFormFields(
   fields: FormField[];
   fieldsToRender: string[];
   conditionalFieldsConfig: Condition[];
+  flattenedConfig: FormConfig; // Add flattenedConfig to props
 } {
   const flattenedConfig = useMemo(() => flattenConfig(config), [config]);
-  console.log('[useFormFields] flattenedConfig', flattenedConfig);
+
   const conditionalFieldsConfig = useMemo(
     () =>
       Object.keys(config)
@@ -49,72 +52,97 @@ function useFormFields(
   });
 
   const fieldsToRender = useMemo(() => {
-    const shouldRenderField = (fieldId: string): boolean => {
-      const isConditionalField = conditionalFieldsConfig.some(condition =>
-        condition.fields.includes(fieldId)
-      );
+    const getFieldsToRenderRecursively = (
+      currentConfig: FormConfig,
+      parentFieldId?: string
+    ): string[] => {
+      let result: string[] = [];
 
-      if (isConditionalField) {
-        return conditionalFieldsConfig.some(condition => {
-          const conditionIndex = conditionalFieldsConfig.indexOf(condition);
-          const watchedValue = watchedValues[conditionIndex];
-          let conditionMet = false;
+      for (const fieldId in currentConfig) {
+        const fullFieldId = parentFieldId
+          ? `${parentFieldId}.${fieldId}`
+          : fieldId;
+        const fieldConfig = currentConfig[fieldId];
 
-          switch (condition.operator) {
-            case 'is':
-              conditionMet = watchedValue === condition.value;
-              break;
-            case 'isNot':
-              conditionMet = watchedValue !== condition.value;
-              break;
-            case 'greaterThan':
-              conditionMet = watchedValue > condition.value;
-              break;
-            case 'lessThan':
-              conditionMet = watchedValue < condition.value;
-              break;
-            case 'greaterThanOrEqual':
-              conditionMet = watchedValue >= condition.value;
-              break;
-            case 'lessThanOrEqual':
-              conditionMet = watchedValue <= condition.value;
-              break;
-            case 'contains':
-              conditionMet =
-                typeof watchedValue === 'string' &&
-                typeof condition.value === 'string' &&
-                watchedValue.includes(condition.value);
-              break;
-            case 'startsWith':
-              conditionMet =
-                typeof watchedValue === 'string' &&
-                typeof condition.value === 'string' &&
-                watchedValue.startsWith(condition.value);
-              break;
-            case 'endsWith':
-              conditionMet =
-                typeof watchedValue === 'string' &&
-                typeof condition.value === 'string' &&
-                watchedValue.endsWith(condition.value);
-              break;
-            case 'custom':
-              conditionMet = condition.comparator
-                ? condition.comparator(watchedValue)
-                : false;
-              break;
-            default:
-              console.warn(`Unknown operator: ${condition.operator}`);
-              conditionMet = false;
+        const shouldRenderField = (fieldId: string): boolean => {
+          const isConditionalField = conditionalFieldsConfig.some(condition =>
+            condition.fields.includes(fieldId)
+          );
+
+          if (isConditionalField) {
+            return conditionalFieldsConfig.some(condition => {
+              const conditionIndex = conditionalFieldsConfig.indexOf(condition);
+              const watchedValue = watchedValues[conditionIndex];
+              let conditionMet = false;
+
+              switch (condition.operator) {
+                case 'is':
+                  conditionMet = watchedValue === condition.value;
+                  break;
+                case 'isNot':
+                  conditionMet = watchedValue !== condition.value;
+                  break;
+                case 'greaterThan':
+                  conditionMet = watchedValue > condition.value;
+                  break;
+                case 'lessThan':
+                  conditionMet = watchedValue < condition.value;
+                  break;
+                case 'greaterThanOrEqual':
+                  conditionMet = watchedValue >= condition.value;
+                  break;
+                case 'lessThanOrEqual':
+                  conditionMet = watchedValue <= condition.value;
+                  break;
+                case 'contains':
+                  conditionMet =
+                    typeof watchedValue === 'string' &&
+                    typeof condition.value === 'string' &&
+                    watchedValue.includes(condition.value);
+                  break;
+                case 'startsWith':
+                  conditionMet =
+                    typeof watchedValue === 'string' &&
+                    typeof condition.value === 'string' &&
+                    watchedValue.startsWith(condition.value);
+                  break;
+                case 'endsWith':
+                  conditionMet =
+                    typeof watchedValue === 'string' &&
+                    typeof condition.value === 'string' &&
+                    watchedValue.endsWith(condition.value);
+                  break;
+                case 'custom':
+                  conditionMet = condition.comparator
+                    ? condition.comparator(watchedValue)
+                    : false;
+                  break;
+                default:
+                  console.warn(`Unknown operator: ${condition.operator}`);
+                  conditionMet = false;
+              }
+
+              return condition.fields.includes(fieldId) && conditionMet;
+            });
           }
 
-          return condition.fields.includes(fieldId) && conditionMet;
-        });
+          return true;
+        };
+
+        if (shouldRenderField(fieldId)) {
+          result.push(fullFieldId);
+        }
+
+        if (fieldConfig.type === 'repeater' && fieldConfig.fields) {
+          // Don't add nested fields here, only add the repeater field
+          // result = result.concat(repeaterFieldIds); // Remove this line
+        }
       }
 
-      return true;
+      return result;
     };
 
-    return Object.keys(config).filter(shouldRenderField);
+    return getFieldsToRenderRecursively(config);
   }, [config, conditionalFieldsConfig, watchedValues]);
 
   const fields = useMemo(() => {
@@ -128,9 +156,9 @@ function useFormFields(
         error: formState.errors?.[key] as FieldError | undefined,
       };
     });
-  }, [flattenedConfig, formState, data]);
+  }, [formState, data]);
 
-  return { fields, fieldsToRender, conditionalFieldsConfig };
+  return { fields, fieldsToRender, conditionalFieldsConfig, flattenedConfig };
 }
 
 export default useFormFields;

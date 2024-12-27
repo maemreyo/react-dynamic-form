@@ -35,7 +35,7 @@ const RepeaterFields: React.FC<RepeaterFieldsProps> = ({
               field,
               config: {
                 ...flattenedFieldsConfig,
-                [`${repeaterId}.${index}.${fieldId}`]: config,
+                //[`${repeaterId}.${index}.${fieldId}`]: config, // remove this line
               },
               formClassNameConfig,
             })}
