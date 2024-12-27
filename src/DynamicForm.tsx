@@ -4,6 +4,7 @@ import {
   FormContent,
   FormFooter,
   useFormController,
+  useFormFields,
   useRHFOptions,
   DynamicFormProps,
 } from './features/core';
@@ -63,7 +64,14 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     onFormReady,
   });
 
-  const { formState } = form;
+  const { formState, control } = form;
+
+  const { fields, fieldsToRender, conditionalFieldsConfig } = useFormFields(
+    data,
+    config,
+    formState,
+    control
+  );
 
   const handleSubmit = () => {
     form.handleSubmit(data => {
@@ -88,12 +96,15 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       >
         {header}
         <FormContent
+          fieldsToRender={fieldsToRender}
+          fields={fields}
           config={config}
           formClassNameConfig={formClassNameConfig}
           horizontalLabel={horizontalLabel}
           labelWidth={labelWidth}
           disableAutocomplete={disableAutocomplete}
           showInlineError={showInlineError}
+          conditionalFieldsConfig={conditionalFieldsConfig}
         />
         <FormFooter
           footer={footer}
