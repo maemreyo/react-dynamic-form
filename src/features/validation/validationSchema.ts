@@ -13,7 +13,7 @@ import { getValidationRules } from './customValidators';
  */
 export const createValidationSchema = (config: FormConfig) => {
   const shape: { [key: string]: any } = {};
-
+    console.log('config', config);
   for (const fieldId in config) {
     const fieldConfig = config[fieldId];
     const { validation, type } = fieldConfig;

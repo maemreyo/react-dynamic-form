@@ -32,10 +32,15 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     return theme ? { ...defaultTheme, ...theme } : defaultTheme;
   }, [theme]);
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onSubmit(event);
+  };
+
   return (
     <ThemeProvider theme={mergedTheme}>
       <FormContainer
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         className={`${className || ''} ${formClassNameConfig?.formContainer ||
           ''}`}
         $layout={layout}

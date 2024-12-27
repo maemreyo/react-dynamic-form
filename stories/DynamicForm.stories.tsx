@@ -179,12 +179,12 @@ FormWithConditionalFields.args = {
     age: {
       label: 'Age',
       type: 'number',
-      validation: {
-        min: {
-          value: 0,
-          message: '',
-        },
-      },
+      // validation: {
+      //   min: {
+      //     value: 0,
+      //     message: '???',
+      //   },
+      // },
     },
     drivingLicense: {
       label: 'Driving License',

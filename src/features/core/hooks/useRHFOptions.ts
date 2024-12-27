@@ -26,7 +26,7 @@ const useRHFOptions = (
   return useMemo(() => {
     const schema = createValidationSchema(config)!;
     const resolver = yupResolver(schema);
-
+    console.log('schema', schema);
     return {
       ...formOptions,
       mode: validateOnSubmit
