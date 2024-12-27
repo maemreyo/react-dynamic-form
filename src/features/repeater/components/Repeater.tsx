@@ -71,12 +71,6 @@ const Repeater: React.FC<RepeaterProps> = ({
     registerNestedFields(fields.length);
   };
 
-/*************  ✨ Codeium Command ⭐  *************/
-  /**
-   * Handle remove button click event.
-   * @param index Index of the field to remove
-   */
-/******  4f6f5edf-23c9-4c5d-ba84-e8151223b2cc  *******/
   const handleRemove = (index: number) => {
     unregisterNestedFields(index);
     remove(index);
