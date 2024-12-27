@@ -1,11 +1,14 @@
 // styles.ts
 // src/features/repeater/styles.ts
 import styled from 'styled-components';
-import { AddButtonProps, RemoveButtonProps } from './types';
 
-export const AddButton = styled.button.attrs(props => ({
+export const AddButton = styled.button.attrs({
   type: 'button',
-}))<AddButtonProps>`
+})<{
+  $repeaterId: string;
+  $fieldConfig: any;
+  $formClassNameConfig?: any;
+}>`
   background-color: ${({ theme }) => theme.colors.success};
   color: ${({ theme }) => theme.colors.light};
   border: none;
@@ -31,9 +34,14 @@ export const AddButton = styled.button.attrs(props => ({
   }
 `;
 
-export const RemoveButton = styled.button.attrs(props => ({
+export const RemoveButton = styled.button.attrs({
   type: 'button',
-}))<RemoveButtonProps>`
+})<{
+  $index: number;
+  $repeaterId: string;
+  $fieldConfig: any;
+  $formClassNameConfig?: any;
+}>`
   background-color: ${({ theme }) => theme.colors.error};
   color: ${({ theme }) => theme.colors.light};
   border: none;

@@ -347,6 +347,7 @@ FormWithRepeater.args = {
         name: {
           label: 'Name',
           type: 'text',
+          required: true,
           validation: { required: 'This field is required' },
         },
         quantity: {

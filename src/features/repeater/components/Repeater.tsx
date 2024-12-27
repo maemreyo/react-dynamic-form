@@ -2,11 +2,8 @@
 // src/features/repeater/components/Repeater.tsx
 import React, { useMemo, useEffect, useRef } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { RepeaterProps, AddButtonProps, RemoveButtonProps } from '../types';
-import {
-  AddButton as DefaultAddButton,
-  RemoveButton as DefaultRemoveButton,
-} from '../styles';
+import { RepeaterProps } from '../types';
+import { AddButton, RemoveButton } from '../styles';
 import RepeaterFields from './RepeaterFields';
 import { flattenConfig } from '../../core/utils';
 
@@ -26,9 +23,6 @@ const Repeater: React.FC<RepeaterProps> = ({
     () => flattenConfig(fieldConfig.fields || {}),
     [fieldConfig.fields]
   );
-
-  const AddButton = fieldConfig.addButtonComponent || DefaultAddButton;
-  const RemoveButton = fieldConfig.removeButtonComponent || DefaultRemoveButton;
 
   const registerNestedFields = (index: number) => {
     Object.keys(flattenedFieldsConfig).forEach(fieldId => {
@@ -62,17 +56,11 @@ const Repeater: React.FC<RepeaterProps> = ({
     };
   }, [fields, flattenedFieldsConfig, id, register, unregister]);
 
-  const handleAppend = (value: any) => {
-    append(value);
-    /**
-     * The new index will be fields.length
-     * because append happens before this callback
-     */
-    registerNestedFields(fields.length);
+  const handleAppend = () => {
+    append({});
   };
 
   const handleRemove = (index: number) => {
-    unregisterNestedFields(index);
     remove(index);
   };
 
@@ -88,22 +76,26 @@ const Repeater: React.FC<RepeaterProps> = ({
             formClassNameConfig={formClassNameConfig}
           />
           <RemoveButton
-            index={index}
-            onRemove={handleRemove}
-            repeaterId={id}
-            fieldConfig={fieldConfig}
-            formClassNameConfig={formClassNameConfig}
+            $index={index}
+            $repeaterId={id}
+            $fieldConfig={fieldConfig}
+            $formClassNameConfig={formClassNameConfig}
+            onClick={() => handleRemove(index)}
             disabled={fields.length <= (fieldConfig.minItems || 0)}
-          />
+          >
+            {fieldConfig.removeButtonLabel || 'Remove'}
+          </RemoveButton>
         </div>
       ))}
       <AddButton
-        onAppend={handleAppend}
-        repeaterId={id}
-        fieldConfig={fieldConfig}
-        formClassNameConfig={formClassNameConfig}
+        $repeaterId={id}
+        $fieldConfig={fieldConfig}
+        $formClassNameConfig={formClassNameConfig}
+        onClick={handleAppend}
         disabled={fields.length >= (fieldConfig.maxItems || Infinity)}
-      />
+      >
+        {fieldConfig.addButtonLabel || 'Add'}
+      </AddButton>
     </div>
   );
 };
