@@ -14,4 +14,8 @@ export const Thing: FC<Props> = ({ children }) => {
   return <div>{children || `the snozzberries taste like snozzberries`}</div>;
 };
 
-export { default as DynamicForm } from './components/DynamicForm';
+// src/index.tsx
+export * from './features/core';
+export * from './features/inputs';
+export * from './components';
+export { default as DynamicForm } from './DynamicForm';
