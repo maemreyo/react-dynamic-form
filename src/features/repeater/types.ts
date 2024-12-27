@@ -5,16 +5,9 @@ import {
   FormClassNameConfig,
   RepeaterFieldConfig,
 } from '../core/types';
-import { FormState } from 'react-hook-form';
 
 export type AddButtonComponent = React.FC<AddButtonProps>;
 export type RemoveButtonComponent = React.FC<RemoveButtonProps>;
-
-export interface RepeaterProps {
-  id: string;
-  fieldConfig: RepeaterFieldConfig;
-  formClassNameConfig?: FormClassNameConfig;
-}
 
 export interface AddButtonProps {
   onAppend: (value: any) => void;
@@ -33,9 +26,16 @@ export interface RemoveButtonProps {
   disabled?: boolean;
 }
 
+export interface RepeaterProps {
+  id: string;
+  fieldConfig: RepeaterFieldConfig;
+  formClassNameConfig?: FormClassNameConfig;
+}
+
 export interface RepeaterFieldsProps {
   index: number;
   repeaterId: string;
+  fieldId: string;
   flattenedFieldsConfig: Record<string, FieldConfig>;
   fieldConfig: RepeaterFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
