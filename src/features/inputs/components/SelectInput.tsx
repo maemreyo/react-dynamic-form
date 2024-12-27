@@ -2,6 +2,7 @@ import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import styled from 'styled-components';
+import { useFormContext, useController } from 'react-hook-form';
 
 const StyledSelect = styled.select`
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -26,11 +27,9 @@ interface SelectInputProps {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig: FormClassNameConfig;
-  formValues: Record<string, any>;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
-  registerResult: any;
   error?: FieldError;
 }
 
@@ -38,16 +37,20 @@ const SelectInput: React.FC<SelectInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
-  formValues,
   showInlineError,
   horizontalLabel,
   labelWidth,
-  registerResult,
   error,
 }) => {
   const { label, options } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
+  const { control } = useFormContext();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+  });
 
   return (
     <InputWrapper
@@ -71,10 +74,9 @@ const SelectInput: React.FC<SelectInputProps> = ({
         </Label>
       )}
       <StyledSelect
-        {...registerResult}
+        {...field}
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
-        value={formValues[id] || ''}
       >
         {options?.map(option => (
           <option key={option.value} value={option.value}>

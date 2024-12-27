@@ -2,6 +2,7 @@ import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import styled from 'styled-components';
+import { useFormContext, useController } from 'react-hook-form';
 
 const RadioGroup = styled.div`
   display: flex;
@@ -49,11 +50,9 @@ interface RadioInputProps {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig: FormClassNameConfig;
-  formValues: Record<string, any>;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
-  registerResult: any;
   error?: FieldError;
 }
 
@@ -61,16 +60,20 @@ const RadioInput: React.FC<RadioInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
-  formValues,
   showInlineError,
   horizontalLabel,
   labelWidth,
-  registerResult,
   error,
 }) => {
   const { label, options } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
+  const { control } = useFormContext();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+  });
 
   return (
     <InputWrapper
@@ -96,12 +99,10 @@ const RadioInput: React.FC<RadioInputProps> = ({
         {options?.map(option => (
           <RadioLabel key={option.value} htmlFor={`${id}-${option.value}`}>
             <RadioInputStyled
-              {...registerResult}
+              {...field}
               type="radio"
               id={`${id}-${option.value}`}
               name={id}
-              value={option.value}
-              checked={formValues[id] === option.value}
             />
             {option.label}
           </RadioLabel>

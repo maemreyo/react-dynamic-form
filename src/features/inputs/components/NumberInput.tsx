@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import styled from 'styled-components';
+import { useFormContext, useController } from 'react-hook-form';
 
 const NumberInputContainer = styled.div`
   display: flex;
@@ -47,12 +48,10 @@ interface NumberInputProps {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig: FormClassNameConfig;
-  formValues: Record<string, any>;
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
-  registerResult: any;
   error?: FieldError;
 }
 
@@ -60,24 +59,26 @@ const NumberInput: React.FC<NumberInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
-  formValues,
   disableAutocomplete,
   showInlineError,
   horizontalLabel,
   labelWidth,
-  registerResult,
   error,
 }) => {
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
-  const [internalValue, setInternalValue] = useState<number>(
-    formValues[id] || 0
-  );
+  const { control } = useFormContext();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+  });
+  const [internalValue, setInternalValue] = useState<number>(+field.value || 0);
 
   const clampValue = useCallback(
     (value: number) => {
-      const { min, max } = registerResult;
+      const { min, max } = fieldConfig.validation || {};
       let clampedValue = value;
       if (min !== undefined && value < +min) {
         clampedValue = +min;
@@ -87,23 +88,23 @@ const NumberInput: React.FC<NumberInputProps> = ({
       }
       return clampedValue;
     },
-    [registerResult]
+    [fieldConfig.validation]
   );
 
   useEffect(() => {
-    setInternalValue(formValues[id] || 0);
-  }, [formValues, id]);
+    setInternalValue(+field.value || 0);
+  }, [field.value]);
 
   const handleIncrement = () => {
     const newValue = clampValue(internalValue + 1);
     setInternalValue(newValue);
-    registerResult.onChange({ target: { value: newValue, name: id } } as any);
+    field.onChange(newValue);
   };
 
   const handleDecrement = () => {
     const newValue = clampValue(internalValue - 1);
     setInternalValue(newValue);
-    registerResult.onChange({ target: { value: newValue, name: id } } as any);
+    field.onChange(newValue);
   };
 
   return (
@@ -132,36 +133,35 @@ const NumberInput: React.FC<NumberInputProps> = ({
           type="button"
           onClick={handleDecrement}
           disabled={
-            registerResult.min !== undefined &&
-            internalValue <= +registerResult.min
+            fieldConfig.validation?.min !== undefined &&
+            internalValue <= +fieldConfig.validation.min
           }
         >
           -
         </SpinButton>
         <Input
-          {...registerResult}
+          {...field}
           className={fieldClassNameConfig.input || formClassName.input}
           type="number"
           id={id}
-          value={internalValue}
           onChange={e => {
+            field.onChange(e);
             setInternalValue(+e.target.value);
           }}
           onBlur={e => {
+            field.onBlur();
             const clampedValue = clampValue(+e.target.value);
             setInternalValue(clampedValue);
-            registerResult.onChange({
-              target: { value: clampedValue, name: id },
-            } as any);
           }}
+          value={internalValue}
           autoComplete={disableAutocomplete ? 'off' : undefined}
         />
         <SpinButton
           type="button"
           onClick={handleIncrement}
           disabled={
-            registerResult.max !== undefined &&
-            internalValue >= +registerResult.max
+            fieldConfig.validation?.max !== undefined &&
+            internalValue >= +fieldConfig.validation.max
           }
         >
           +

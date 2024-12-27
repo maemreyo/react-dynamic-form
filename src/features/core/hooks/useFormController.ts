@@ -1,4 +1,3 @@
-// hooks/useFormController.ts
 import { useEffect } from 'react';
 import { useForm, UseFormReturn, UseFormProps } from 'react-hook-form';
 import { debounce, loadFromLocalStorage, saveToLocalStorage } from '../utils';
@@ -41,9 +40,7 @@ const useFormController = (
 
   const form = useForm({
     ...mergedFormOptions,
-    defaultValues: enableLocalStorage
-      ? loadFromLocalStorage('form-data') || data
-      : data,
+    defaultValues: data,
   });
 
   const { formState, reset, setFocus, watch, handleSubmit } = form;

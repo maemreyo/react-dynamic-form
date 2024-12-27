@@ -2,6 +2,7 @@ import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import styled from 'styled-components';
+import { useFormContext, useController } from 'react-hook-form';
 
 const StyledTextarea = styled.textarea`
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -25,12 +26,10 @@ interface TextareaInputProps {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig: FormClassNameConfig;
-  formValues: Record<string, any>;
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
-  registerResult: any;
   error?: FieldError;
 }
 
@@ -38,17 +37,21 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
-  formValues,
   disableAutocomplete,
   showInlineError,
   horizontalLabel,
   labelWidth,
-  registerResult,
   error,
 }) => {
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
+  const { control } = useFormContext();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+  });
 
   return (
     <InputWrapper
@@ -72,10 +75,9 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
         </Label>
       )}
       <StyledTextarea
-        {...registerResult}
+        {...field}
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
-        value={formValues[id] || ''}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
       {showInlineError && error && (

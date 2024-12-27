@@ -90,6 +90,7 @@ export interface FieldConfig {
   tooltip?: string;
   classNameConfig?: FieldClassNameConfig;
   options?: { value: string; label: string }[];
+  fields?: FormConfig;
 }
 
 export interface ValidationConfig {

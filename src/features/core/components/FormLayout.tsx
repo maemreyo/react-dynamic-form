@@ -1,4 +1,3 @@
-// src/features/core/components/FormLayout.tsx
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { FormContainer, FormContainerProps } from '../../../styles';

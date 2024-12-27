@@ -1,14 +1,8 @@
-// src/features/core/hooks/useFormFields.ts
 import { useMemo } from 'react';
-import {
-  FormField,
-  FormConfig,
-  UseFormRegister,
-  FieldError,
-} from '../types';
-import { flattenObject } from '../utils';
+import { FormField, FormConfig, FieldError } from '../types';
 import { getInputTypeFromValue } from '../../inputs/utils';
-import { FormState } from 'react-hook-form';
+import { FormState, useFormContext } from 'react-hook-form';
+import { flattenConfig } from '../utils';
 
 /**
  * Custom hook to generate form fields from data and config.
@@ -24,26 +18,22 @@ import { FormState } from 'react-hook-form';
 function useFormFields(
   data: Record<string, any>,
   config: FormConfig,
-  register: UseFormRegister<any>,
-  readOnly: boolean,
-  disableForm: boolean,
   formState: FormState<any>
 ): FormField[] {
-  const flattenedData = useMemo(() => flattenObject(data), [data]);
+  const flattenedConfig = useMemo(() => flattenConfig(config), [config]);
 
   const fields = useMemo(() => {
-    return Object.entries(flattenedData).map(([key, value]) => {
-      const fieldConfig = config[key] || {};
-      const inputType = fieldConfig.type || getInputTypeFromValue(value);
+    return Object.entries(flattenedConfig).map(([key, fieldConfig]) => {
+      const inputType = fieldConfig.type || getInputTypeFromValue(data[key]);
 
       return {
-        label: fieldConfig.label || key,
+        label: fieldConfig.label,
         id: key,
         type: inputType,
         error: formState.errors?.[key] as FieldError | undefined,
       };
     });
-  }, [flattenedData, config, readOnly, disableForm, formState]);
+  }, [flattenedConfig, formState, data]);
 
   return fields;
 }

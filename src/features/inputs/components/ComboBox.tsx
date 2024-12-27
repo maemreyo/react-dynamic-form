@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import styled from 'styled-components';
+import { useFormContext, useController } from 'react-hook-form';
 
 const ComboBoxContainer = styled.div`
   position: relative;
@@ -42,11 +43,9 @@ interface ComboBoxProps {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig: FormClassNameConfig;
-  formValues: Record<string, any>;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
-  registerResult: any;
   error?: FieldError;
 }
 
@@ -54,25 +53,28 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
-  formValues,
   showInlineError,
   horizontalLabel,
   labelWidth,
-  registerResult,
   error,
 }) => {
   const { label, options } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
   const [isOpen, setIsOpen] = useState(false);
-  const [inputValue, setInputValue] = useState(formValues[id] || '');
+  const [inputValue, setInputValue] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const { control } = useFormContext();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+  });
 
   useEffect(() => {
-    setInputValue(formValues[id] || '');
-  }, [formValues, id]);
+    setInputValue(field.value || '');
+  }, [field.value]);
 
   const filteredOptions = options
     ? options.filter(option =>
@@ -83,7 +85,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
     setInputValue(val);
-    registerResult.onChange(event);
+    field.onChange(event); // Update form state
     if (!isOpen && val) {
       setIsOpen(true);
     } else if (isOpen && !val) {
@@ -93,7 +95,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
 
   const handleOptionClick = (value: string) => {
     setInputValue(value);
-    registerResult.onChange({ target: { value, name: id } } as any);
+    field.onChange(value); // Update form state
     setIsOpen(false);
   };
 
@@ -137,9 +139,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       if (highlightedIndex >= 0) {
         const selectedValue = filteredOptions[highlightedIndex].value;
         setInputValue(selectedValue);
-        registerResult.onChange({
-          target: { value: selectedValue, name: id },
-        } as any);
+        field.onChange(selectedValue); // Update form state
         setIsOpen(false);
       }
     } else if (event.key === 'Escape') {
@@ -182,7 +182,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       )}
       <ComboBoxContainer ref={containerRef}>
         <Input
-          {...registerResult}
+          {...field}
           className={fieldClassNameConfig.input || formClassName.input}
           id={id}
           value={inputValue}
@@ -190,7 +190,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           onClick={toggleDropdown}
           onKeyDown={handleKeyDown}
           autoComplete="off"
-          ref={inputRef}
         />
         {isOpen && (
           <DropdownList>

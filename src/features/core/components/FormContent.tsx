@@ -1,11 +1,6 @@
 // src/features/core/components/FormContent.tsx
-import React from 'react';
-import {
-  FormField,
-  FormConfig,
-  FormClassNameConfig,
-  UseFormRegister,
-} from '../types';
+import React, { useEffect } from 'react';
+import { FormField, FormConfig, FormClassNameConfig } from '../types';
 import {
   TextInput,
   CheckboxInput,
@@ -19,6 +14,7 @@ import {
   DateTimePicker,
   ComboBox,
 } from '../../inputs';
+import { useFormContext } from 'react-hook-form';
 
 interface FormContentProps {
   fields: FormField[];
@@ -26,8 +22,6 @@ interface FormContentProps {
   formClassNameConfig: FormClassNameConfig;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
-  register: UseFormRegister<any>;
-  formValues: Record<string, any>;
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
 }
@@ -36,16 +30,24 @@ const renderInputComponent = (
   field: FormField,
   config: FormConfig,
   formClassNameConfig: FormClassNameConfig,
-  formValues: Record<string, any>,
   disableAutocomplete: boolean | undefined,
   showInlineError: boolean | undefined,
   horizontalLabel: boolean | undefined,
-  labelWidth: string | number | undefined,
-  register: UseFormRegister<any>
+  labelWidth: string | number | undefined
 ) => {
   const { id, type, error } = field;
   const fieldConfig = config[id] || {};
-  const registerResult = register(id, fieldConfig.validation);
+
+  // Create an object with common props
+  const commonInputProps = {
+    id,
+    fieldConfig,
+    formClassNameConfig,
+    showInlineError,
+    horizontalLabel,
+    labelWidth,
+    error,
+  };
 
   switch (type) {
     case 'text':
@@ -55,160 +57,40 @@ const renderInputComponent = (
     case 'url':
       return (
         <TextInput
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
+          {...commonInputProps} // Spread common props
           disableAutocomplete={disableAutocomplete}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
         />
       );
     case 'checkbox':
-      return (
-        <CheckboxInput
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
-        />
-      );
+      return <CheckboxInput {...commonInputProps} />; // Spread common props
     case 'textarea':
       return (
         <TextareaInput
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
+          {...commonInputProps} // Spread common props
           disableAutocomplete={disableAutocomplete}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
         />
       );
     case 'select':
-      return (
-        <SelectInput
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
-        />
-      );
+      return <SelectInput {...commonInputProps} />; // Spread common props
     case 'radio':
-      return (
-        <RadioInput
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
-        />
-      );
+      return <RadioInput {...commonInputProps} />; // Spread common props
     case 'date':
-      return (
-        <DateInput
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
-        />
-      );
+      return <DateInput {...commonInputProps} />; // Spread common props
     case 'number':
       return (
         <NumberInput
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
+          {...commonInputProps} // Spread common props
           disableAutocomplete={disableAutocomplete}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
         />
       );
     case 'switch':
-      return (
-        <SwitchInput
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
-        />
-      );
+      return <SwitchInput {...commonInputProps} />; // Spread common props
     case 'time':
-      return (
-        <TimePicker
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
-        />
-      );
+      return <TimePicker {...commonInputProps} />; // Spread common props
     case 'datetime-local':
-      return (
-        <DateTimePicker
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
-        />
-      );
+      return <DateTimePicker {...commonInputProps} />; // Spread common props
     case 'combobox':
-      return (
-        <ComboBox
-          id={id}
-          fieldConfig={fieldConfig}
-          formClassNameConfig={formClassNameConfig}
-          formValues={formValues}
-          showInlineError={showInlineError}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          registerResult={registerResult}
-          error={error}
-        />
-      );
+      return <ComboBox {...commonInputProps} />; // Spread common props
     default:
       return null;
   }
@@ -220,11 +102,18 @@ const FormContent: React.FC<FormContentProps> = ({
   formClassNameConfig,
   horizontalLabel,
   labelWidth,
-  register,
-  formValues,
   disableAutocomplete,
   showInlineError,
 }) => {
+  const { register } = useFormContext();
+
+  useEffect(() => {
+    fields.forEach(field => {
+      const fieldConfig = config[field.id] || {};
+      register(field.id, fieldConfig.validation);
+    });
+  }, [fields, register, config]);
+
   return (
     <>
       {fields.map(field => (
@@ -233,12 +122,10 @@ const FormContent: React.FC<FormContentProps> = ({
             field,
             config,
             formClassNameConfig,
-            formValues,
             disableAutocomplete,
             showInlineError,
             horizontalLabel,
-            labelWidth,
-            register
+            labelWidth
           )}
         </React.Fragment>
       ))}

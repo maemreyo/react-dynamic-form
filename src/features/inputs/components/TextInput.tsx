@@ -1,17 +1,16 @@
 import React from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import { useFormContext, useController } from 'react-hook-form';
 
 interface TextInputProps {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig: FormClassNameConfig;
-  formValues: Record<string, any>;
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
-  registerResult: any;
   error?: FieldError;
 }
 
@@ -19,17 +18,21 @@ const TextInput: React.FC<TextInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
-  formValues,
   disableAutocomplete,
   showInlineError,
   horizontalLabel,
   labelWidth,
-  registerResult,
   error,
 }) => {
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
+  const { control } = useFormContext();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+  });
 
   return (
     <InputWrapper
@@ -53,10 +56,9 @@ const TextInput: React.FC<TextInputProps> = ({
         </Label>
       )}
       <Input
-        {...registerResult}
+        {...field}
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
-        value={formValues[id] || ''}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
       {showInlineError && error && (

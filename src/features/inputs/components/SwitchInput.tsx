@@ -2,6 +2,7 @@ import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import styled from 'styled-components';
+import { useFormContext, useController } from 'react-hook-form';
 
 const SwitchContainer = styled.label`
   position: relative;
@@ -56,11 +57,9 @@ interface SwitchInputProps {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig: FormClassNameConfig;
-  formValues: Record<string, any>;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
-  registerResult: any;
   error?: FieldError;
 }
 
@@ -68,16 +67,20 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
-  formValues,
   showInlineError,
   horizontalLabel,
   labelWidth,
-  registerResult,
   error,
 }) => {
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
+  const { control } = useFormContext();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+  });
 
   return (
     <InputWrapper
@@ -97,12 +100,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
         </Label>
       )}
       <SwitchContainer htmlFor={id}>
-        <SwitchInputStyled
-          {...registerResult}
-          type="checkbox"
-          id={id}
-          checked={formValues[id] === true}
-        />
+        <SwitchInputStyled {...field} type="checkbox" id={id} />
         <Slider className="slider" />
       </SwitchContainer>
       {showInlineError && error && (

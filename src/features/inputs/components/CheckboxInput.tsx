@@ -1,16 +1,15 @@
 import React from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import { useFormContext, useController } from 'react-hook-form';
 
 interface CheckboxInputProps {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig: FormClassNameConfig;
-  formValues: Record<string, any>;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
-  registerResult: any;
   error?: FieldError;
 }
 
@@ -18,16 +17,20 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
-  formValues,
   showInlineError,
   horizontalLabel,
   labelWidth,
-  registerResult,
   error,
 }) => {
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
+  const { control } = useFormContext();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+  });
 
   return (
     <InputWrapper
@@ -52,11 +55,11 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
       )}
 
       <Input
-        {...registerResult}
+        {...field}
         className={fieldClassNameConfig.input || formClassName.input}
         type="checkbox"
         id={id}
-        checked={formValues[id] === true}
+        checked={!!field.value}
       />
       {showInlineError && error && (
         <ErrorMessage

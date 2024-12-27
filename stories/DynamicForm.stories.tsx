@@ -12,7 +12,6 @@ export default {
 const Template: StoryFn<typeof DynamicForm> = args => <DynamicForm {...args} />;
 
 // --- Examples ---
-
 export const BasicForm = Template.bind({});
 BasicForm.args = {
   data: {
@@ -59,7 +58,6 @@ BasicForm.args = {
 };
 BasicForm.storyName = 'Basic Form';
 
-
 export const FormWithValidationSchema = Template.bind({});
 FormWithValidationSchema.args = {
   ...BasicForm.args,
@@ -80,46 +78,6 @@ FormWithValidationSchema.args = {
 };
 FormWithValidationSchema.storyName = 'Form with Validation Schema';
 
-export const FormWithCustomInput = Template.bind({});
-FormWithCustomInput.args = {
-  ...BasicForm.args,
-  renderInput: (field, register) => {
-    const { inputProps, id, error } = field;
-    if (!inputProps) return null;
-    if (inputProps.type === 'checkbox') {
-      return (
-        <div>
-          <input
-            type="checkbox"
-            id={id}
-            {...inputProps}
-            {...register(inputProps.name as string)}
-          />
-          <label htmlFor={id}>{inputProps.label}</label>
-          {error && <span>{error}</span>}
-        </div>
-      );
-    }
-
-    return (
-      <>
-        <input
-          {...inputProps}
-          {...register(inputProps.name as string)}
-          style={{
-            backgroundColor: 'lightyellow',
-            padding: '5px',
-            border: '1px solid blue',
-            borderRadius: '3px',
-          }}
-        />
-        {error && <span>{error}</span>}
-      </>
-    );
-  },
-};
-FormWithCustomInput.storyName = 'Form with Custom Input';
-
 export const FormWithCustomLayout = Template.bind({});
 FormWithCustomLayout.args = {
   ...BasicForm.args, // Use the same data and config as the Default story
@@ -129,7 +87,6 @@ FormWithCustomLayout.args = {
   labelWidth: '150px', // Set a fixed width for labels
 };
 FormWithCustomLayout.storyName = 'Form with Custom Layout';
-
 export const FormWithNestedObject = Template.bind({});
 FormWithNestedObject.args = {
   data: {
@@ -160,7 +117,7 @@ FormWithNestedObject.args = {
     },
     address: {
       // Nested form
-      type: 'nested',
+      label: 'Address',
       fields: {
         street: {
           label: 'Street',

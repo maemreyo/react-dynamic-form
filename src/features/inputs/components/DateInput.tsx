@@ -1,16 +1,15 @@
 import React from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import { useFormContext, useController } from 'react-hook-form';
 
 interface DateInputProps {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig: FormClassNameConfig;
-  formValues: Record<string, any>;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
-  registerResult: any;
   error?: FieldError;
 }
 
@@ -18,16 +17,20 @@ const DateInput: React.FC<DateInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
-  formValues,
   showInlineError,
   horizontalLabel,
   labelWidth,
-  registerResult,
   error,
 }) => {
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
+  const { control } = useFormContext();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+  });
 
   return (
     <InputWrapper
@@ -51,11 +54,10 @@ const DateInput: React.FC<DateInputProps> = ({
         </Label>
       )}
       <Input
-        {...registerResult}
+        {...field}
         className={fieldClassNameConfig.input || formClassName.input}
         type="date"
         id={id}
-        value={formValues[id] || ''}
       />
       {showInlineError && error && (
         <ErrorMessage

@@ -1,4 +1,3 @@
-// src/DynamicForm.tsx
 import React from 'react';
 import {
   FormLayout,
@@ -9,6 +8,7 @@ import {
   useRHFOptions,
   DynamicFormProps,
 } from './features/core';
+import { FormProvider, useForm } from 'react-hook-form';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   data,
@@ -64,17 +64,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     onFormReady,
   });
 
-  const { formState, watch } = form;
-  const formValues = watch();
+  const { formState, watch, control } = form; // Destructure control
 
-  const fields = useFormFields(
-    data,
-    config,
-    form.register,
-    readOnly,
-    disableForm,
-    formState
-  );
+  const fields = useFormFields(data, config, formState);
 
   const handleSubmit = () => {
     form.handleSubmit(data => {
@@ -85,41 +77,41 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   };
 
   return (
-    <FormLayout
-      onSubmit={handleSubmit}
-      className={className}
-      formClassNameConfig={formClassNameConfig}
-      style={style}
-      layout={layout}
-      layoutConfig={layoutConfig}
-      horizontalLabel={horizontalLabel}
-      theme={theme}
-    >
-      {header}
-      <FormContent
-        fields={fields}
-        config={config}
+    <FormProvider {...form}>
+      <FormLayout
+        onSubmit={handleSubmit}
+        className={className}
         formClassNameConfig={formClassNameConfig}
+        style={style}
+        layout={layout}
+        layoutConfig={layoutConfig}
         horizontalLabel={horizontalLabel}
-        labelWidth={labelWidth}
-        register={form.register}
-        formValues={formValues}
-        disableAutocomplete={disableAutocomplete}
-        showInlineError={showInlineError}
-      />
-      <FormFooter
-        footer={footer}
-        formClassNameConfig={formClassNameConfig}
-        showSubmitButton={showSubmitButton}
-        renderSubmitButton={renderSubmitButton}
-        isSubmitting={formState.isSubmitting}
-        showErrorSummary={showErrorSummary}
-        errors={Object.keys(formState.errors).reduce((acc, key) => {
-          acc[key] = formState.errors[key] as any;
-          return acc;
-        }, {} as Record<string, any>)}
-      />
-    </FormLayout>
+        theme={theme}
+      >
+        {header}
+        <FormContent
+          config={config}
+          formClassNameConfig={formClassNameConfig}
+          horizontalLabel={horizontalLabel}
+          labelWidth={labelWidth}
+          disableAutocomplete={disableAutocomplete}
+          showInlineError={showInlineError}
+          fields={fields}
+        />
+        <FormFooter
+          footer={footer}
+          formClassNameConfig={formClassNameConfig}
+          showSubmitButton={showSubmitButton}
+          renderSubmitButton={renderSubmitButton}
+          isSubmitting={formState.isSubmitting}
+          showErrorSummary={showErrorSummary}
+          errors={Object.keys(formState.errors).reduce((acc, key) => {
+            acc[key] = formState.errors[key] as any;
+            return acc;
+          }, {} as Record<string, any>)}
+        />
+      </FormLayout>
+    </FormProvider>
   );
 };
 

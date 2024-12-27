@@ -1,5 +1,7 @@
 // utils/formUtils.ts
 
+import { FormConfig } from './types';
+
 /**
  * Flattens a nested object into a single-level object.
  *
@@ -20,6 +22,35 @@ export const flattenObject = (
         flattenObject(obj[key], newKey, result);
       } else {
         result[newKey] = obj[key];
+      }
+    }
+  }
+  return result;
+};
+
+// src/features/core/utils.ts
+
+/**
+ * Flattens a nested config object into a single-level object.
+ *
+ * @param config - The config object to flatten.
+ * @param parentKey - The parent key (used for recursion).
+ * @param result - The resulting flattened config object.
+ * @returns The flattened config object.
+ */
+export const flattenConfig = (
+  config: FormConfig,
+  parentKey = '',
+  result: FormConfig = {}
+): FormConfig => {
+  for (const key in config) {
+    if (Object.prototype.hasOwnProperty.call(config, key)) {
+      const newKey = parentKey ? `${parentKey}.${key}` : key;
+      const fieldConfig = config[key];
+      if (fieldConfig.fields) {
+        flattenConfig(fieldConfig.fields, newKey, result);
+      } else {
+        result[newKey] = fieldConfig;
       }
     }
   }
