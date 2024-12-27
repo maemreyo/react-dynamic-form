@@ -17,7 +17,6 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import ConditionalFields from '../../conditional/components/ConditionalFields';
 
 interface FormContentProps {
-  fields: FormField[];
   config: FormConfig;
   formClassNameConfig: FormClassNameConfig;
   horizontalLabel?: boolean;
@@ -38,7 +37,6 @@ const renderInputComponent = (
   const { id, type, error } = field;
   const fieldConfig = config[id] || {};
 
-  // Create an object with common props
   const commonInputProps = {
     id,
     fieldConfig,
@@ -57,40 +55,40 @@ const renderInputComponent = (
     case 'url':
       return (
         <TextInput
-          {...commonInputProps} // Spread common props
+          {...commonInputProps}
           disableAutocomplete={disableAutocomplete}
         />
       );
     case 'checkbox':
-      return <CheckboxInput {...commonInputProps} />; // Spread common props
+      return <CheckboxInput {...commonInputProps} />;
     case 'textarea':
       return (
         <TextareaInput
-          {...commonInputProps} // Spread common props
+          {...commonInputProps}
           disableAutocomplete={disableAutocomplete}
         />
       );
     case 'select':
-      return <SelectInput {...commonInputProps} />; // Spread common props
+      return <SelectInput {...commonInputProps} />;
     case 'radio':
-      return <RadioInput {...commonInputProps} />; // Spread common props
+      return <RadioInput {...commonInputProps} />;
     case 'date':
-      return <DateInput {...commonInputProps} />; // Spread common props
+      return <DateInput {...commonInputProps} />;
     case 'number':
       return (
         <NumberInput
-          {...commonInputProps} // Spread common props
+          {...commonInputProps}
           disableAutocomplete={disableAutocomplete}
         />
       );
     case 'switch':
-      return <SwitchInput {...commonInputProps} />; // Spread common props
+      return <SwitchInput {...commonInputProps} />;
     case 'time':
-      return <TimePicker {...commonInputProps} />; // Spread common props
+      return <TimePicker {...commonInputProps} />;
     case 'datetime-local':
-      return <DateTimePicker {...commonInputProps} />; // Spread common props
+      return <DateTimePicker {...commonInputProps} />;
     case 'combobox':
-      return <ComboBox {...commonInputProps} />; // Spread common props
+      return <ComboBox {...commonInputProps} />;
     default:
       return null;
   }
@@ -104,7 +102,7 @@ const FormContent: React.FC<FormContentProps> = ({
   disableAutocomplete,
   showInlineError,
 }) => {
-  const { control, register, unregister } = useFormContext();
+  const { control } = useFormContext();
 
   const conditionalFieldsConfig = useMemo(
     () =>
@@ -115,7 +113,7 @@ const FormContent: React.FC<FormContentProps> = ({
             typeof config[fieldId].conditional?.when === 'string'
         )
         .map(fieldId => ({
-          when: config[fieldId].conditional!.when, // Now 'when' is guaranteed to be a string
+          when: config[fieldId].conditional!.when,
           is: config[fieldId].conditional!.is,
           fields: config[fieldId].conditional!.fields || [],
         })),
@@ -129,12 +127,10 @@ const FormContent: React.FC<FormContentProps> = ({
 
   const fieldsToRender = useMemo(() => {
     const shouldRenderField = (fieldId: string): boolean => {
-      // Check if the field is part of any conditional logic
       const isConditionalField = conditionalFieldsConfig.some(condition =>
         condition.fields.includes(fieldId)
       );
 
-      // If it's a conditional field, check if the condition is met
       if (isConditionalField) {
         return conditionalFieldsConfig.some(condition => {
           const conditionIndex = conditionalFieldsConfig.indexOf(condition);
@@ -145,27 +141,11 @@ const FormContent: React.FC<FormContentProps> = ({
         });
       }
 
-      // If it's not a conditional field, render it
       return true;
     };
 
     return Object.keys(config).filter(shouldRenderField);
   }, [config, conditionalFieldsConfig, watchedValues]);
-
-  useEffect(() => {
-    fieldsToRender.forEach(fieldId => {
-      const fieldConfig = config[fieldId] || {};
-      register(fieldId, fieldConfig.validation);
-    });
-
-    // Unregister fields that are not rendered
-    const allFields = Object.keys(config);
-    allFields.forEach(fieldId => {
-      if (!fieldsToRender.includes(fieldId)) {
-        unregister(fieldId);
-      }
-    });
-  }, [config, register, unregister, fieldsToRender]);
 
   return (
     <>
@@ -173,9 +153,9 @@ const FormContent: React.FC<FormContentProps> = ({
         const fieldConfig = config[fieldId] || {};
         const field: FormField = {
           id: fieldId,
-          type: fieldConfig.type || 'text', // Default to 'text' if type is not specified
+          type: fieldConfig.type || 'text',
           label: fieldConfig.label,
-          error: undefined, // Assuming error handling is done elsewhere
+          error: undefined,
         };
 
         return (
@@ -201,7 +181,6 @@ const FormContent: React.FC<FormContentProps> = ({
         showInlineError={showInlineError}
         horizontalLabel={horizontalLabel}
         labelWidth={labelWidth}
-        fieldsToRender={fieldsToRender}
       />
     </>
   );
