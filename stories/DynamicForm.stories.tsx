@@ -1,3 +1,6 @@
+// Filename: DynamicForm.stories.tsx
+// Filepath: /stories/DynamicForm.stories.tsx
+
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { fn } from '@storybook/test';
@@ -246,74 +249,10 @@ FormWithConditionalFields.storyName = 'Form with Conditional Fields';
 export const FormWithRepeater = Template.bind({});
 FormWithRepeater.args = {
   data: {
-    // country: '',
-    // state: '',
-    // age: 0,
-    // subscribe: false,
-    // newsletterType: '',
-    password: '',
-    items: [{ name: '', quantity: 0 }],
+    password: '&7dDooiiiiiiioo',
+    items: [{ name: 'Name 1', quantity: 1 }, [{ name: 'Name 2', quantity: 2 }]],
   },
   config: {
-    // country: {
-    //   label: 'Country',
-    //   type: 'select',
-    //   options: [
-    //     { value: '', label: 'Select Country' },
-    //     { value: 'US', label: 'United States' },
-    //     { value: 'CA', label: 'Canada' },
-    //   ],
-    //   validation: { required: 'This field is required' },
-    // },
-    // state: {
-    //   label: 'State',
-    //   type: 'text',
-    //   conditional: {
-    //     when: 'country',
-    //     operator: 'is',
-    //     value: 'US',
-    //     fields: ['state'],
-    //   },
-    // },
-    // age: {
-    //   label: 'Age',
-    //   type: 'number',
-    //   // validation: {
-    //   //   min: {
-    //   //     value: 0,
-    //   //     message: '???',
-    //   //   },
-    //   // },
-    // },
-    // drivingLicense: {
-    //   label: 'Driving License',
-    //   type: 'text',
-    //   conditional: {
-    //     when: 'age',
-    //     operator: 'greaterThanOrEqual',
-    //     value: 18,
-    //     fields: ['drivingLicense'],
-    //   },
-    // },
-    // subscribe: {
-    //   label: 'Subscribe to newsletter?',
-    //   type: 'checkbox',
-    // },
-    // newsletterType: {
-    //   label: 'Newsletter Type',
-    //   type: 'select',
-    //   options: [
-    //     { value: '', label: 'Select Type' },
-    //     { value: 'daily', label: 'Daily' },
-    //     { value: 'weekly', label: 'Weekly' },
-    //   ],
-    //   conditional: {
-    //     when: 'subscribe',
-    //     operator: 'is',
-    //     value: true,
-    //     fields: ['newsletterType'],
-    //   },
-    // },
     password: {
       label: 'Password',
       type: 'text',
