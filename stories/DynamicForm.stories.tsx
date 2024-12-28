@@ -251,7 +251,7 @@ FormWithRepeater.args = {
     // age: 0,
     // subscribe: false,
     // newsletterType: '',
-    // password: '',
+    password: '',
     items: [{ name: '', quantity: 0 }],
   },
   config: {
@@ -314,29 +314,29 @@ FormWithRepeater.args = {
     //     fields: ['newsletterType'],
     //   },
     // },
-    // password: {
-    //   label: 'Password',
-    //   type: 'text',
-    //   validation: {
-    //     required: true,
-    //     minLength: 8,
-    //     validate: (value: string) => {
-    //       if (!/[A-Z]/.test(value)) {
-    //         return 'Password must contain at least one uppercase letter';
-    //       }
-    //       if (!/[a-z]/.test(value)) {
-    //         return 'Password must contain at least one lowercase letter';
-    //       }
-    //       if (!/[0-9]/.test(value)) {
-    //         return 'Password must contain at least one number';
-    //       }
-    //       if (!/[^A-Za-z0-9]/.test(value)) {
-    //         return 'Password must contain at least one special character';
-    //       }
-    //       return undefined;
-    //     },
-    //   },
-    // },
+    password: {
+      label: 'Password',
+      type: 'text',
+      validation: {
+        required: true,
+        minLength: 8,
+        validate: (value: string) => {
+          if (!/[A-Z]/.test(value)) {
+            return 'Password must contain at least one uppercase letter';
+          }
+          if (!/[a-z]/.test(value)) {
+            return 'Password must contain at least one lowercase letter';
+          }
+          if (!/[0-9]/.test(value)) {
+            return 'Password must contain at least one number';
+          }
+          if (!/[^A-Za-z0-9]/.test(value)) {
+            return 'Password must contain at least one special character';
+          }
+          return undefined;
+        },
+      },
+    },
     items: {
       type: 'repeater',
       label: 'Items',

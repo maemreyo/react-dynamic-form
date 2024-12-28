@@ -97,8 +97,11 @@ const createFieldSchema = (
       fieldSchema = yup.string();
       break;
     case 'repeater':
+      console.log('[createFieldSchema] validation', validation);
       const repeaterConfig = fieldConfig as RepeaterFieldConfig;
+      console.log('[createFieldSchema] repeaterConfig', repeaterConfig);
       const repeaterSchema = createValidationSchema(repeaterConfig.fields);
+      console.log('[createFieldSchema] repeaterSchema', repeaterSchema);
       fieldSchema = yup.array().of(repeaterSchema);
       if (validation.minItems) {
         fieldSchema = fieldSchema.min(

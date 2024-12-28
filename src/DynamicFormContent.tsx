@@ -50,6 +50,7 @@ const DynamicFormContent: React.FC<DynamicFormContentProps> = ({
     formState,
     control,
     handleSubmit: rootHandleSubmit,
+    getValues,
   } = useFormContext();
 
   useFormController({
@@ -78,13 +79,16 @@ const DynamicFormContent: React.FC<DynamicFormContentProps> = ({
     flattenedConfig,
   } = useFormFields(data, config, formState, control);
 
-  const handleSubmit = () => {
-    rootHandleSubmit(data => {
+  const handleSubmit = rootHandleSubmit(
+    data => {
       if (onSubmit) {
         onSubmit(data);
       }
-    })();
-  };
+    },
+    errors => {
+      console.log('Form validation failed:', errors);
+    }
+  );
 
   return (
     <FormLayout

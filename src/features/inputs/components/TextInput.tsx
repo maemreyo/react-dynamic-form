@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
+import { Input, Label, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import { useFormContext, useController } from 'react-hook-form';
 
@@ -19,10 +19,8 @@ const TextInput: React.FC<TextInputProps> = ({
   fieldConfig,
   formClassNameConfig,
   disableAutocomplete,
-  showInlineError,
   horizontalLabel,
   labelWidth,
-  error,
 }) => {
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
@@ -61,15 +59,6 @@ const TextInput: React.FC<TextInputProps> = ({
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
-      {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
-          {error.message}
-        </ErrorMessage>
-      )}
     </InputWrapper>
   );
 };

@@ -21,6 +21,7 @@ import {
   ComboBox,
 } from '.';
 import { Repeater } from '../../repeater';
+import { ErrorMessage } from '../../../styles';
 
 interface InputRendererProps {
   field: FormField;
@@ -41,7 +42,6 @@ const renderInputComponent = ({
   horizontalLabel,
   labelWidth,
 }: InputRendererProps) => {
-  console.log('[renderInputComponent] field', field);
   const { id, type, error } = field;
   const fieldConfig = config[id] || {};
 
@@ -54,7 +54,7 @@ const renderInputComponent = ({
     labelWidth,
     error,
   };
-
+  console.log('[renderInputComponent] field', field);
   if (type === 'repeater') {
     return (
       <Repeater
@@ -65,51 +65,70 @@ const renderInputComponent = ({
     );
   }
 
-  switch (type) {
-    case 'text':
-    case 'email':
-    case 'password':
-    case 'tel':
-    case 'url':
-      return (
-        <TextInput
-          {...commonInputProps}
-          disableAutocomplete={disableAutocomplete}
-        />
-      );
-    case 'checkbox':
-      return <CheckboxInput {...commonInputProps} />;
-    case 'textarea':
-      return (
-        <TextareaInput
-          {...commonInputProps}
-          disableAutocomplete={disableAutocomplete}
-        />
-      );
-    case 'select':
-      return <SelectInput {...commonInputProps} />;
-    case 'radio':
-      return <RadioInput {...commonInputProps} />;
-    case 'date':
-      return <DateInput {...commonInputProps} />;
-    case 'number':
-      return (
-        <NumberInput
-          {...commonInputProps}
-          disableAutocomplete={disableAutocomplete}
-        />
-      );
-    case 'switch':
-      return <SwitchInput {...commonInputProps} />;
-    case 'time':
-      return <TimePicker {...commonInputProps} />;
-    case 'datetime-local':
-      return <DateTimePicker {...commonInputProps} />;
-    case 'combobox':
-      return <ComboBox {...commonInputProps} />;
-    default:
-      return null;
-  }
+  const renderInput = () => {
+    switch (type) {
+      case 'text':
+      case 'email':
+      case 'password':
+      case 'tel':
+      case 'url':
+        return (
+          <TextInput
+            {...commonInputProps}
+            disableAutocomplete={disableAutocomplete}
+          />
+        );
+      case 'checkbox':
+        return <CheckboxInput {...commonInputProps} />;
+      case 'textarea':
+        return (
+          <TextareaInput
+            {...commonInputProps}
+            disableAutocomplete={disableAutocomplete}
+          />
+        );
+      case 'select':
+        return <SelectInput {...commonInputProps} />;
+      case 'radio':
+        return <RadioInput {...commonInputProps} />;
+      case 'date':
+        return <DateInput {...commonInputProps} />;
+      case 'number':
+        return (
+          <NumberInput
+            {...commonInputProps}
+            disableAutocomplete={disableAutocomplete}
+          />
+        );
+      case 'switch':
+        return <SwitchInput {...commonInputProps} />;
+      case 'time':
+        return <TimePicker {...commonInputProps} />;
+      case 'datetime-local':
+        return <DateTimePicker {...commonInputProps} />;
+      case 'combobox':
+        return <ComboBox {...commonInputProps} />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <>
+      {renderInput()}
+      {showInlineError && error && (
+        <ErrorMessage
+          className={
+            (fieldConfig.classNameConfig &&
+              fieldConfig.classNameConfig.errorMessage) ||
+            (formClassNameConfig && formClassNameConfig.errorMessage)
+          }
+        >
+          {error.message}
+        </ErrorMessage>
+      )}
+    </>
+  );
 };
 
 export default renderInputComponent;

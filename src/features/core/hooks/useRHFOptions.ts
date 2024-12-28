@@ -1,3 +1,4 @@
+// useRHFOptions.ts
 // src/features/core/hooks/useRHFOptions.ts
 import { useMemo } from 'react';
 import { UseFormProps } from 'react-hook-form';
@@ -18,27 +19,18 @@ import { createValidationSchema } from '../../validation';
 
 const useRHFOptions = (
   config: FormConfig,
-  formOptions: UseFormProps | undefined,
-  validateOnSubmit: boolean,
-  validateOnChange: boolean,
-  validateOnBlur: boolean
+  formOptions: UseFormProps | undefined
 ): UseFormProps => {
   return useMemo(() => {
     const schema = createValidationSchema(config)!;
     const resolver = yupResolver(schema);
+    console.log('schema', schema);
     return {
       ...formOptions,
-      mode: validateOnSubmit
-        ? 'onSubmit'
-        : validateOnChange
-        ? 'onChange'
-        : validateOnBlur
-        ? 'onBlur'
-        : 'onSubmit',
       criteriaMode: 'all',
       resolver,
     };
-  }, [config, formOptions, validateOnSubmit, validateOnChange, validateOnBlur]);
+  }, [config, formOptions]);
 };
 
 export default useRHFOptions;
