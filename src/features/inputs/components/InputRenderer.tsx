@@ -1,5 +1,5 @@
-// InputRenderer.tsx
-// src/features/inputs/components/InputRenderer.tsx
+// Filename: /src/features/inputs/components/InputRenderer.tsx
+
 import React from 'react';
 import {
   FormField,
@@ -7,21 +7,9 @@ import {
   FormClassNameConfig,
   RepeaterFieldConfig,
 } from '../../core/types';
-import {
-  TextInput,
-  CheckboxInput,
-  TextareaInput,
-  SelectInput,
-  RadioInput,
-  DateInput,
-  NumberInput,
-  SwitchInput,
-  TimePicker,
-  DateTimePicker,
-  ComboBox,
-} from '.';
 import { Repeater } from '../../repeater';
 import { ErrorMessage } from '../../../styles';
+import { getInputComponent } from '../InputRegistry'; // Import getInputComponent
 
 interface InputRendererProps {
   field: FormField;
@@ -54,7 +42,7 @@ const renderInputComponent = ({
     labelWidth,
     error,
   };
-  console.log('[renderInputComponent] field', field);
+
   if (type === 'repeater') {
     return (
       <Repeater
@@ -65,57 +53,20 @@ const renderInputComponent = ({
     );
   }
 
-  const renderInput = () => {
-    switch (type) {
-      case 'text':
-      case 'email':
-      case 'password':
-      case 'tel':
-      case 'url':
-        return (
-          <TextInput
-            {...commonInputProps}
-            disableAutocomplete={disableAutocomplete}
-          />
-        );
-      case 'checkbox':
-        return <CheckboxInput {...commonInputProps} />;
-      case 'textarea':
-        return (
-          <TextareaInput
-            {...commonInputProps}
-            disableAutocomplete={disableAutocomplete}
-          />
-        );
-      case 'select':
-        return <SelectInput {...commonInputProps} />;
-      case 'radio':
-        return <RadioInput {...commonInputProps} />;
-      case 'date':
-        return <DateInput {...commonInputProps} />;
-      case 'number':
-        return (
-          <NumberInput
-            {...commonInputProps}
-            disableAutocomplete={disableAutocomplete}
-          />
-        );
-      case 'switch':
-        return <SwitchInput {...commonInputProps} />;
-      case 'time':
-        return <TimePicker {...commonInputProps} />;
-      case 'datetime-local':
-        return <DateTimePicker {...commonInputProps} />;
-      case 'combobox':
-        return <ComboBox {...commonInputProps} />;
-      default:
-        return null;
-    }
-  };
+  // Use getInputComponent to get the component based on type
+  const InputComponent = getInputComponent(type);
+
+  if (!InputComponent) {
+    console.warn(`No input component found for type: ${type}`);
+    return null;
+  }
 
   return (
     <>
-      {renderInput()}
+      <InputComponent
+        {...commonInputProps}
+        disableAutocomplete={disableAutocomplete}
+      />
       {showInlineError && error && (
         <ErrorMessage
           className={

@@ -1,35 +1,26 @@
-// Repeater.tsx
-// src/features/repeater/components/Repeater.tsx
+// Filename: /src/features/repeater/components/Repeater.tsx
+
 import React, { useMemo } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
 import { RepeaterProps } from '../types';
 import { AddButton, RemoveButton } from '../styles';
 import RepeaterFields from './RepeaterFields';
 import { flattenConfig } from '../../core/utils';
+import useRepeater from '../hooks/useRepeater';
 
 const Repeater: React.FC<RepeaterProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
 }) => {
-  const { control } = useFormContext();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: id,
+  const { fields, handleAppend, handleRemove } = useRepeater({
+    repeaterId: id,
+    fieldConfig,
   });
 
   const flattenedFieldsConfig = useMemo(
     () => flattenConfig(fieldConfig.fields || {}),
     [fieldConfig.fields]
   );
-
-  const handleAppend = () => {
-    append({});
-  };
-
-  const handleRemove = (index: number) => {
-    remove(index);
-  };
 
   return (
     <div>

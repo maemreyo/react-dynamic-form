@@ -1,11 +1,18 @@
+// Filename: /src/features/inputs/components/DateTimePicker.tsx
+
 import React from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  DateTimeFieldConfig,
+} from '../../core/types';
 import { useFormContext, useController } from 'react-hook-form';
 
 interface DateTimePickerProps {
   id: string;
-  fieldConfig: FieldConfig;
+  fieldConfig: DateTimeFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
@@ -30,6 +37,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: '',
   });
 
   return (

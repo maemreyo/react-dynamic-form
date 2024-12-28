@@ -1,8 +1,10 @@
-// src/features/core/components/FormFooter.tsx
+// Filename: /src/features/core/components/FormFooter.tsx
+
 import React from 'react';
 import { FormClassNameConfig, FieldError } from '../types';
 import { SubmitButton } from '../../../styles';
 import { ErrorSummary } from '../../../components';
+import { FieldErrors } from 'react-hook-form';
 
 interface FormFooterProps {
   footer?: React.ReactNode;
@@ -13,7 +15,7 @@ interface FormFooterProps {
   ) => React.ReactNode;
   isSubmitting: boolean;
   showErrorSummary: boolean;
-  errors: Record<string, FieldError>;
+  errors: FieldErrors;
   formClassNameConfig?: FormClassNameConfig;
 }
 

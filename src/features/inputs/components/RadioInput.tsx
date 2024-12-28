@@ -1,6 +1,13 @@
+// Filename: /src/features/inputs/components/RadioInput.tsx
+
 import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  RadioFieldConfig,
+} from '../../core/types';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 
@@ -48,7 +55,7 @@ const RadioInputStyled = styled.input`
 
 interface RadioInputProps {
   id: string;
-  fieldConfig: FieldConfig;
+  fieldConfig: RadioFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
@@ -73,6 +80,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: '',
   });
 
   return (
@@ -103,6 +111,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
               type="radio"
               id={`${id}-${option.value}`}
               name={id}
+              value={option.value}
             />
             {option.label}
           </RadioLabel>

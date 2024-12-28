@@ -1,8 +1,11 @@
+// Filename: /src/components/ErrorSummary.tsx
+
 import React from 'react';
 import { FieldError } from '../features/core';
+import { FieldErrors } from 'react-hook-form';
 
 interface ErrorSummaryProps {
-  errors: Partial<Record<string, FieldError>>;
+  errors: FieldErrors;
 }
 
 const ErrorSummary: React.FC<ErrorSummaryProps> = ({ errors }) => {

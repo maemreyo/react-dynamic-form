@@ -1,11 +1,15 @@
 import React from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import {
+  TimeFieldConfig,
+  FormClassNameConfig,
+  FieldError,
+} from '../../core/types';
 import { useFormContext, useController } from 'react-hook-form';
 
 interface TimePickerProps {
   id: string;
-  fieldConfig: FieldConfig;
+  fieldConfig: TimeFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
@@ -30,6 +34,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: '',
   });
 
   return (

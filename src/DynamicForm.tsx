@@ -1,5 +1,5 @@
-// DynamicForm.tsx
-// src/DynamicForm.tsx
+// Filename: /src/DynamicForm.tsx
+
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,13 +22,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     ? yupResolver(validationSchema)
     : yupResolver(schema);
 
-  const mergedFormOptions = useRHFOptions(
-    config,
-    { ...formOptions, resolver: resolver },
-    true,
-    true,
-    false
-  );
+  const mergedFormOptions = useRHFOptions(config, {
+    ...formOptions,
+    resolver: resolver,
+  });
 
   const form = useForm({
     ...mergedFormOptions,

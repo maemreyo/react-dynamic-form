@@ -1,6 +1,13 @@
+// Filename: /src/features/inputs/components/NumberInput.tsx
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  NumberFieldConfig,
+} from '../../core/types';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 
@@ -46,7 +53,7 @@ const SpinButton = styled.button`
 
 interface NumberInputProps {
   id: string;
-  fieldConfig: FieldConfig;
+  fieldConfig: NumberFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
@@ -73,6 +80,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: 0,
   });
   const [internalValue, setInternalValue] = useState<number>(+field.value || 0);
 

@@ -1,5 +1,5 @@
-// types.ts
-// src/features/core/types.ts
+// Filename: /src/features/core/types.ts
+
 import {
   UseFormProps,
   UseFormReturn,
@@ -7,6 +7,7 @@ import {
   RegisterOptions,
   FieldPath,
   SubmitHandler,
+  FieldErrors,
 } from 'react-hook-form';
 import { Schema } from 'yup';
 import {
@@ -20,6 +21,7 @@ import {
   RemoveButtonComponent,
   RemoveButtonProps,
 } from '../repeater';
+
 export type LayoutType = 'flex' | 'grid';
 
 export interface DynamicFormProps {
@@ -41,7 +43,7 @@ export interface DynamicFormProps {
   autoSave?: {
     interval: number;
     save: (data: Record<string, any>) => void;
-  };
+  } | null;
   resetOnSubmit?: boolean;
   focusFirstError?: boolean;
   layout?: LayoutType;
@@ -131,6 +133,9 @@ export interface SelectFieldConfig extends BaseFieldConfig {
 
 export interface CheckboxFieldConfig extends BaseFieldConfig {
   type: 'checkbox';
+}
+export interface NumberFieldConfig extends BaseFieldConfig {
+  type: 'number';
 }
 
 export interface RadioFieldConfig extends BaseFieldConfig {

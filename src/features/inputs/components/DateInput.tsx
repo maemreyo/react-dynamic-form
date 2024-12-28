@@ -1,11 +1,18 @@
+// Filename: /src/features/inputs/components/DateInput.tsx
+
 import React from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  DateFieldConfig,
+} from '../../core/types';
 import { useFormContext, useController } from 'react-hook-form';
 
 interface DateInputProps {
   id: string;
-  fieldConfig: FieldConfig;
+  fieldConfig: DateFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
@@ -30,6 +37,7 @@ const DateInput: React.FC<DateInputProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: '',
   });
 
   return (

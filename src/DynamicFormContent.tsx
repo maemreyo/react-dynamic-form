@@ -1,5 +1,5 @@
-// DynamicFormContent.tsx
-// src/features/core/components/DynamicFormContent.tsx
+// Filename: /src/DynamicFormContent.tsx
+
 import React from 'react';
 import {
   FormLayout,
@@ -8,12 +8,10 @@ import {
   useFormController,
   useFormFields,
   DynamicFormProps,
-} from '.';
-import { useFormContext } from 'react-hook-form';
+} from './';
+import { useFormContext, FieldErrors } from 'react-hook-form';
 
-interface DynamicFormContentProps extends DynamicFormProps {}
-
-const DynamicFormContent: React.FC<DynamicFormContentProps> = ({
+const DynamicFormContent: React.FC<DynamicFormProps> = ({
   data,
   config = {},
   onChange,
@@ -46,15 +44,9 @@ const DynamicFormContent: React.FC<DynamicFormContentProps> = ({
   onFormReady,
   renderSubmitButton,
 }) => {
-  const {
-    formState,
-    control,
-    handleSubmit: rootHandleSubmit,
-    getValues,
-  } = useFormContext();
-
-  useFormController({
+  const form = useFormController({
     data,
+    config,
     mergedFormOptions: {
       ...formOptions,
       defaultValues: data,
@@ -72,12 +64,9 @@ const DynamicFormContent: React.FC<DynamicFormContentProps> = ({
     },
   });
 
-  const {
-    fields,
-    fieldsToRender,
-    conditionalFieldsConfig,
-    flattenedConfig,
-  } = useFormFields(data, config, formState, control);
+  const { handleSubmit: rootHandleSubmit, formState } = form;
+
+  const { fields, flattenedConfig } = useFormFields(data, config, formState);
 
   const handleSubmit = rootHandleSubmit(
     data => {
@@ -103,7 +92,6 @@ const DynamicFormContent: React.FC<DynamicFormContentProps> = ({
     >
       {header}
       <FormContent
-        fieldsToRender={fieldsToRender}
         fields={fields}
         config={config}
         formClassNameConfig={formClassNameConfig}
@@ -111,7 +99,6 @@ const DynamicFormContent: React.FC<DynamicFormContentProps> = ({
         labelWidth={labelWidth}
         disableAutocomplete={disableAutocomplete}
         showInlineError={showInlineError}
-        conditionalFieldsConfig={conditionalFieldsConfig}
         flattenedConfig={flattenedConfig}
       />
       <FormFooter
@@ -121,10 +108,7 @@ const DynamicFormContent: React.FC<DynamicFormContentProps> = ({
         renderSubmitButton={renderSubmitButton}
         isSubmitting={formState.isSubmitting}
         showErrorSummary={showErrorSummary}
-        errors={Object.keys(formState.errors).reduce((acc, key) => {
-          acc[key] = formState.errors[key] as any;
-          return acc;
-        }, {} as Record<string, any>)}
+        errors={formState.errors as FieldErrors<any>}
       />
     </FormLayout>
   );

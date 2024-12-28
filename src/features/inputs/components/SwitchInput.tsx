@@ -1,3 +1,5 @@
+// Filename: /src/features/inputs/components/SwitchInput.tsx
+
 import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
@@ -80,6 +82,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: false,
   });
 
   return (
@@ -100,7 +103,12 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
         </Label>
       )}
       <SwitchContainer htmlFor={id}>
-        <SwitchInputStyled {...field} type="checkbox" id={id} />
+        <SwitchInputStyled
+          {...field}
+          type="checkbox"
+          id={id}
+          checked={!!field.value}
+        />
         <Slider className="slider" />
       </SwitchContainer>
       {showInlineError && error && (

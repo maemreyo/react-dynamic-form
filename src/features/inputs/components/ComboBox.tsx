@@ -1,6 +1,13 @@
+// Filename: /src/features/inputs/components/ComboBox.tsx
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  ComboBoxFieldConfig,
+} from '../../core/types';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 
@@ -41,7 +48,7 @@ const DropdownItem = styled.li`
 
 interface ComboBoxProps {
   id: string;
-  fieldConfig: FieldConfig;
+  fieldConfig: ComboBoxFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
@@ -70,6 +77,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: '',
   });
 
   useEffect(() => {

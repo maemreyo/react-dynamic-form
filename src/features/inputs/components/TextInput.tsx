@@ -1,3 +1,5 @@
+// Filename: /src/features/inputs/components/TextInput.tsx
+
 import React from 'react';
 import { Input, Label, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
@@ -21,6 +23,7 @@ const TextInput: React.FC<TextInputProps> = ({
   disableAutocomplete,
   horizontalLabel,
   labelWidth,
+  error,
 }) => {
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
@@ -30,6 +33,7 @@ const TextInput: React.FC<TextInputProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: '',
   });
 
   return (
@@ -59,6 +63,11 @@ const TextInput: React.FC<TextInputProps> = ({
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
+      {error && error.message && (
+        <div style={{ color: 'red', fontSize: '0.8rem', marginTop: '0.2rem' }}>
+          {error.message}
+        </div>
+      )}
     </InputWrapper>
   );
 };

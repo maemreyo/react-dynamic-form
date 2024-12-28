@@ -1,5 +1,5 @@
-// RepeaterFields.tsx
-// src/features/repeater/components/RepeaterFields.tsx
+// Filename: /src/features/repeater/components/RepeaterFields.tsx
+
 import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import renderInputComponent from '../../inputs/components/InputRenderer';
@@ -40,7 +40,7 @@ const RepeaterFields: React.FC<RepeaterFieldsProps> = ({
                 {renderInputComponent({
                   field: {
                     ...formField,
-                    ...renderField, // Merge formField first, then override with renderField
+                    ...renderField,
                     error: fieldState.error,
                   },
                   config,

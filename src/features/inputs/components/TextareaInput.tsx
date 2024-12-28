@@ -1,6 +1,13 @@
+// Filename: /src/features/inputs/components/TextareaInput.tsx
+
 import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  TextAreaFieldConfig,
+} from '../../core/types';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 
@@ -24,7 +31,7 @@ const StyledTextarea = styled.textarea`
 `;
 interface TextareaInputProps {
   id: string;
-  fieldConfig: FieldConfig;
+  fieldConfig: TextAreaFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
@@ -51,6 +58,7 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: '',
   });
 
   return (

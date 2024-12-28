@@ -1,8 +1,6 @@
-// validationSchema.ts
-// src/features/validation/validationSchema.ts
+// Filename: /src/features/validation/validationSchema.ts
 
 import * as yup from 'yup';
-import { AnySchema } from 'yup';
 import {
   FormConfig,
   RepeaterFieldConfig,
@@ -97,11 +95,8 @@ const createFieldSchema = (
       fieldSchema = yup.string();
       break;
     case 'repeater':
-      console.log('[createFieldSchema] validation', validation);
       const repeaterConfig = fieldConfig as RepeaterFieldConfig;
-      console.log('[createFieldSchema] repeaterConfig', repeaterConfig);
       const repeaterSchema = createValidationSchema(repeaterConfig.fields);
-      console.log('[createFieldSchema] repeaterSchema', repeaterSchema);
       fieldSchema = yup.array().of(repeaterSchema);
       if (validation.minItems) {
         fieldSchema = fieldSchema.min(
@@ -162,7 +157,7 @@ const applyValidationRule = (
                 ? ruleValue
                 : 'This field is required'
             )
-          : fieldSchema) as AnySchema;
+          : fieldSchema) as yup.StringSchema | yup.ArraySchema<any>;
       }
       break;
     case 'minLength':
@@ -171,12 +166,12 @@ const applyValidationRule = (
           fieldSchema = fieldSchema.min(
             ruleValue,
             `Minimum length is ${ruleValue}`
-          ) as AnySchema;
+          );
         } else if (typeof ruleValue === 'object' && ruleValue.value) {
           fieldSchema = fieldSchema.min(
             ruleValue.value,
             ruleValue.message || `Minimum length is ${ruleValue.value}`
-          ) as AnySchema;
+          );
         }
       }
       break;
@@ -186,27 +181,24 @@ const applyValidationRule = (
           fieldSchema = fieldSchema.max(
             ruleValue,
             `Maximum length is ${ruleValue}`
-          ) as AnySchema;
+          );
         } else if (typeof ruleValue === 'object' && ruleValue.value) {
           fieldSchema = fieldSchema.max(
             ruleValue.value,
             ruleValue.message || `Maximum length is ${ruleValue.value}`
-          ) as AnySchema;
+          );
         }
       }
       break;
     case 'pattern':
       if (fieldSchema instanceof yup.StringSchema) {
         if (ruleValue instanceof RegExp) {
-          fieldSchema = fieldSchema.matches(
-            ruleValue,
-            'Invalid format'
-          ) as AnySchema;
+          fieldSchema = fieldSchema.matches(ruleValue, 'Invalid format');
         } else if (typeof ruleValue === 'object' && ruleValue.value) {
           fieldSchema = fieldSchema.matches(
             ruleValue.value,
             ruleValue.message || 'Invalid format'
-          ) as AnySchema;
+          );
         }
       }
       break;
@@ -218,7 +210,7 @@ const applyValidationRule = (
         fieldSchema = fieldSchema.min(
           +ruleValue,
           `Value must be greater than or equal to ${ruleValue}`
-        ) as AnySchema;
+        );
       }
       break;
     case 'max':
@@ -229,17 +221,13 @@ const applyValidationRule = (
         fieldSchema = fieldSchema.max(
           +ruleValue,
           `Value must be less than or equal to ${ruleValue}`
-        ) as AnySchema;
+        );
       }
       break;
     case 'validate':
       const customRules = getValidationRules(fieldConfig);
       customRules.forEach(({ name, validator }) => {
-        fieldSchema = fieldSchema.test(
-          name,
-          'Validation failed',
-          validator
-        ) as AnySchema;
+        fieldSchema = fieldSchema.test(name, 'Validation failed', validator);
       });
       break;
     case 'minItems':

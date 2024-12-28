@@ -1,11 +1,11 @@
-// useRepeaterFields.ts
-// src/features/repeater/hooks/useRepeaterFields.ts
+// Filename: /src/features/repeater/hooks/useRepeaterFields.ts
+
 import { useMemo } from 'react';
 import {
-  UseFormRegister,
   FieldValues,
   UseFormReturn,
   ControllerRenderProps,
+  RegisterOptions,
 } from 'react-hook-form';
 import { FormField, FieldConfig, RepeaterFieldConfig } from '../../core/types';
 
@@ -25,7 +25,7 @@ type UseRepeaterFieldsReturn = {
     config: {
       [key: string]: FieldConfig;
     };
-    rules: any
+    rules: RegisterOptions;
   }[];
 };
 
@@ -37,14 +37,12 @@ const useRepeaterFields = ({
   fieldConfig,
   form,
 }: UseRepeaterFieldsProps): UseRepeaterFieldsReturn => {
-
   const fields = useMemo(() => {
     return Object.entries(flattenedFieldsConfig).map(
       ([nestedFieldId, config]) => {
         const fullNestedFieldId = `${repeaterId}.${index}.${nestedFieldId}`;
         const validationRules = fieldConfig.fields?.[nestedFieldId]?.validation;
-        console.log('[useRepeaterFields] fullNestedFieldId', fullNestedFieldId);
-        console.log('[useRepeaterFields] validationRules', validationRules);
+
         return {
           field: {
             name: fullNestedFieldId,
@@ -65,7 +63,7 @@ const useRepeaterFields = ({
               validation: validationRules,
             },
           },
-          rules: validationRules,
+          rules: validationRules as RegisterOptions,
         };
       }
     );

@@ -1,5 +1,5 @@
-// types.ts
-// src/features/repeater/types.ts
+// Filename: /src/features/repeater/types.ts
+
 import {
   FieldConfig,
   FormClassNameConfig,

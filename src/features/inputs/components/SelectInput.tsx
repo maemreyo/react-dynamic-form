@@ -1,6 +1,13 @@
+// Filename: /src/features/inputs/components/SelectInput.tsx
+
 import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  SelectFieldConfig,
+} from '../../core/types';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 
@@ -25,7 +32,7 @@ const StyledSelect = styled.select`
 
 interface SelectInputProps {
   id: string;
-  fieldConfig: FieldConfig;
+  fieldConfig: SelectFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
@@ -50,6 +57,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: '',
   });
 
   return (
