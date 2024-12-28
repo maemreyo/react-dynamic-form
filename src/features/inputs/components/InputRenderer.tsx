@@ -33,8 +33,8 @@ const renderInputComponent = ({
 }: InputRendererProps) => {
   const { id, type, error } = field;
   const fieldConfig = config[id];
-  console.log('[renderInputComponent] field', field);
-  console.log('[renderInputComponent] config', config);
+  // console.log('[renderInputComponent] field', field);
+  // console.log('[renderInputComponent] config', config);
 
   // Explicit type for commonInputProps
   const commonInputProps: {

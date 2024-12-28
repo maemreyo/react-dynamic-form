@@ -74,7 +74,6 @@ const useFormController = (
   // Register and unregister fields based on fieldsToRender
   useEffect(() => {
     const fieldsToRender = getFieldsToRender(config, watch, flattenedConfig);
-    console.log('fieldsToRender', fieldsToRender);
     Object.keys(flattenedConfig).forEach(fieldId => {
       const fieldConfig = flattenedConfig[fieldId];
 

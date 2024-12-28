@@ -21,7 +21,6 @@ const useRHFOptions = (
 
   return useMemo(() => {
     const resolver = yupResolver(schema);
-    console.log('schema', schema);
     return {
       ...formOptions,
       criteriaMode: 'all',
