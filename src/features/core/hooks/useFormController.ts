@@ -68,20 +68,20 @@ const useFormController = (
   const { isSubmitting, isSubmitSuccessful, errors } = formState;
 
   // Memoize flattenedConfig
-  const flattenedConfig = useMemo(
-    () => flattenConfig(config),
-    [JSON.stringify(config)]
-  );
-
+  const flattenedConfig = useMemo(() => flattenConfig(config), [
+    JSON.stringify(config),
+  ]);
   // Register and unregister fields based on fieldsToRender
   useEffect(() => {
     const fieldsToRender = getFieldsToRender(config, watch, flattenedConfig);
+    console.log('fieldsToRender', fieldsToRender);
     Object.keys(flattenedConfig).forEach(fieldId => {
       const fieldConfig = flattenedConfig[fieldId];
 
+      // Register nested fields
       if (fieldsToRender.includes(fieldId)) {
-        if (fieldConfig?.type !== 'repeater') {
-          register(fieldId, fieldConfig?.validation);
+        if (fieldConfig && fieldConfig.type !== 'repeater') {
+          register(fieldId, fieldConfig.validation);
         }
       } else {
         unregister(fieldId);
@@ -256,8 +256,17 @@ const getFieldsToRender = (
         result.push(fullFieldId);
       }
 
-      if (fieldConfig?.type === 'repeater' && fieldConfig.fields) {
-        // Don't add nested fields here, only add the repeater field
+      // Recursively check nested fields (non-repeater)
+      if (
+        fieldConfig &&
+        fieldConfig.fields &&
+        fieldConfig.type !== 'repeater'
+      ) {
+        const nestedFields = getFieldsToRenderRecursively(
+          fieldConfig.fields,
+          fullFieldId
+        );
+        result = result.concat(nestedFields);
       }
     }
 

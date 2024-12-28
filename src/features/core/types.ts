@@ -173,6 +173,7 @@ export interface ComboBoxFieldConfig extends BaseFieldConfig {
   options: { value: string; label: string }[];
 }
 
+
 export interface RepeaterFieldConfig extends BaseFieldConfig {
   type: 'repeater';
   addButtonLabel?: string;

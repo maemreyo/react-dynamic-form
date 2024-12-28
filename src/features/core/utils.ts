@@ -1,7 +1,7 @@
 // utils.ts
 // utils/formUtils.ts
 
-import { FormConfig, RepeaterFieldConfig } from './types';
+import { FormConfig } from './types';
 
 /**
  * Flattens a nested object into a single-level object.
@@ -47,15 +47,10 @@ export const flattenConfig = (
       const newKey = parentKey ? `${parentKey}.${key}` : key;
       const fieldConfig = config[key];
 
-      // Preserve repeater fields
-      if (fieldConfig.type === 'repeater') {
+      // Preserve repeater fields and don't flatten their nested fields
+      if (fieldConfig && fieldConfig.type === 'repeater') {
         result[newKey] = fieldConfig;
-        flattenConfig(
-          (fieldConfig as RepeaterFieldConfig).fields,
-          newKey,
-          result
-        );
-      } else if (fieldConfig.fields) {
+      } else if (fieldConfig && fieldConfig.fields) {
         // Handle nested fields (non-repeater)
         flattenConfig(fieldConfig.fields, newKey, result);
       } else {

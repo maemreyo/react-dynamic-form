@@ -49,7 +49,7 @@ const useRepeaterFields = ({
             onBlur: () => {},
             onChange: () => {},
             ref: () => {},
-            value: (form.watch(fullNestedFieldId) || '') as string, // Explicit type
+            value: (form.watch(fullNestedFieldId) || '') as string,
           },
           formField: {
             label: fieldConfig.fields?.[nestedFieldId]?.label,
@@ -67,13 +67,7 @@ const useRepeaterFields = ({
         };
       }
     );
-  }, [
-    index,
-    repeaterId,
-    flattenedFieldsConfig,
-    JSON.stringify(fieldConfig),
-    form.formState,
-  ]); // Use JSON.stringify(fieldConfig) and form.formState
+  }, [index, repeaterId, flattenedFieldsConfig, JSON.stringify(fieldConfig)]);
 
   return { fields };
 };
