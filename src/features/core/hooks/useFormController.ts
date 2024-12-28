@@ -1,6 +1,6 @@
 // Filename: /src/features/core/hooks/useFormController.ts
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
   FieldValues,
   useForm,
@@ -66,7 +66,12 @@ const useFormController = (
     unregister,
   } = form;
   const { isSubmitting, isSubmitSuccessful, errors } = formState;
-  const flattenedConfig = flattenConfig(config);
+
+  // Memoize flattenedConfig
+  const flattenedConfig = useMemo(
+    () => flattenConfig(config),
+    [JSON.stringify(config)]
+  );
 
   // Register and unregister fields based on fieldsToRender
   useEffect(() => {
@@ -75,8 +80,8 @@ const useFormController = (
       const fieldConfig = flattenedConfig[fieldId];
 
       if (fieldsToRender.includes(fieldId)) {
-        if (fieldConfig.type !== 'repeater') {
-          register(fieldId, fieldConfig.validation);
+        if (fieldConfig?.type !== 'repeater') {
+          register(fieldId, fieldConfig?.validation);
         }
       } else {
         unregister(fieldId);
@@ -177,7 +182,9 @@ const getFieldsToRender = (
     let result: string[] = [];
 
     for (const fieldId in currentConfig) {
-      const fullFieldId = parentFieldId ? `${parentFieldId}.${fieldId}` : fieldId;
+      const fullFieldId = parentFieldId
+        ? `${parentFieldId}.${fieldId}`
+        : fieldId;
       const fieldConfig = currentConfig[fieldId];
 
       const shouldRenderField = (fieldId: string): boolean => {

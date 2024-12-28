@@ -27,7 +27,14 @@ const useRHFOptions = (
       criteriaMode: 'all',
       resolver,
     };
-  }, [schema, formOptions]);
+  }, [
+    schema,
+    formOptions?.mode,
+    formOptions?.reValidateMode,
+    formOptions?.defaultValues,
+    formOptions?.values,
+    formOptions?.resetOptions,
+  ]);
 };
 
 export default useRHFOptions;

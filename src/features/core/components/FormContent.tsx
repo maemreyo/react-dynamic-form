@@ -1,6 +1,6 @@
 // Filename: /src/features/core/components/FormContent.tsx
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormField, FormConfig, FormClassNameConfig } from '../types';
 import renderInputComponent from '../../inputs/components/InputRenderer';
 
@@ -25,25 +25,34 @@ const FormContent: React.FC<FormContentProps> = ({
   showInlineError,
   flattenedConfig,
 }) => {
-  return (
-    <>
-      {fields.map(field => {
-        return (
-          <React.Fragment key={field.id}>
-            {renderInputComponent({
-              field,
-              config: flattenedConfig,
-              formClassNameConfig,
-              disableAutocomplete,
-              showInlineError,
-              horizontalLabel,
-              labelWidth,
-            })}
-          </React.Fragment>
-        );
-      })}
-    </>
-  );
+  // Use useMemo with flattenedConfig as a dependency
+  const memoizedRenderedComponents = useMemo(() => {
+    return fields.map(field => {
+      return (
+        <React.Fragment key={field.id}>
+          {renderInputComponent({
+            field,
+            config: flattenedConfig,
+            formClassNameConfig,
+            disableAutocomplete,
+            showInlineError,
+            horizontalLabel,
+            labelWidth,
+          })}
+        </React.Fragment>
+      );
+    });
+  }, [
+    fields,
+    flattenedConfig,
+    formClassNameConfig,
+    horizontalLabel,
+    labelWidth,
+    disableAutocomplete,
+    showInlineError,
+  ]);
+
+  return <>{memoizedRenderedComponents}</>;
 };
 
 export default FormContent;
