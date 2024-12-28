@@ -2,11 +2,13 @@
 
 import { useEffect } from 'react';
 import {
-  useForm,
-  UseFormReturn,
-  UseFormProps,
   FieldValues,
+  useForm,
+  UseFormProps,
+  UseFormReturn,
+  UseFormStateReturn,
 } from 'react-hook-form';
+
 import { debounce, loadFromLocalStorage, saveToLocalStorage } from '../utils';
 import { FormConfig, Condition } from '../types';
 import { flattenConfig } from '../utils';
@@ -142,34 +144,31 @@ const useFormController = (
 // Helper function to determine fields to render
 const getFieldsToRender = (
   config: FormConfig,
-  watch: <TFieldName extends string, TFieldValue>(
-    name?:
-      | TFieldName
-      | TFieldName[]
-      | readonly TFieldName[]
-      | { [K in TFieldName]?: boolean }
-      | undefined,
-    defaultValue?: Partial<TFieldValue> | undefined
-  ) => TFieldValue extends any ? any : any,
+  watch: (
+    name?: string | string[] | undefined,
+    defaultValue?: unknown
+  ) => unknown,
   flattenedConfig: FormConfig
 ): string[] => {
   const conditionalFieldsConfig = Object.keys(config)
     .filter(
       fieldId =>
-        config[fieldId].conditional &&
-        typeof config[fieldId].conditional?.when === 'string'
+        config[fieldId]?.conditional &&
+        typeof config[fieldId]?.conditional?.when === 'string'
     )
     .map(fieldId => ({
-      when: config[fieldId].conditional!.when,
-      operator: config[fieldId].conditional!.operator || 'is',
-      value: config[fieldId].conditional?.value,
-      comparator: config[fieldId].conditional?.comparator,
-      fields: config[fieldId].conditional!.fields || [],
+      when: config[fieldId]!.conditional!.when,
+      operator: config[fieldId]!.conditional!.operator || 'is',
+      value: config[fieldId]!.conditional?.value,
+      comparator: config[fieldId]!.conditional?.comparator,
+      fields: config[fieldId]!.conditional!.fields || [],
     }));
 
-  const watchedValues = watch(
-    conditionalFieldsConfig.map(condition => condition.when)
-  );
+  // Explicit type for watchedValues
+  const watchedValues: { [key: string]: any } = {};
+  conditionalFieldsConfig.forEach(condition => {
+    watchedValues[condition.when] = watch(condition.when);
+  });
 
   const getFieldsToRenderRecursively = (
     currentConfig: FormConfig,
@@ -178,9 +177,7 @@ const getFieldsToRender = (
     let result: string[] = [];
 
     for (const fieldId in currentConfig) {
-      const fullFieldId = parentFieldId
-        ? `${parentFieldId}.${fieldId}`
-        : fieldId;
+      const fullFieldId = parentFieldId ? `${parentFieldId}.${fieldId}` : fieldId;
       const fieldConfig = currentConfig[fieldId];
 
       const shouldRenderField = (fieldId: string): boolean => {
@@ -191,7 +188,7 @@ const getFieldsToRender = (
         if (isConditionalField) {
           return conditionalFieldsConfig.some(condition => {
             const conditionIndex = conditionalFieldsConfig.indexOf(condition);
-            const watchedValue = (watchedValues as any[])[conditionIndex];
+            const watchedValue = watchedValues[condition.when];
             let conditionMet = false;
 
             switch (condition.operator) {
@@ -252,7 +249,7 @@ const getFieldsToRender = (
         result.push(fullFieldId);
       }
 
-      if (fieldConfig.type === 'repeater' && fieldConfig.fields) {
+      if (fieldConfig?.type === 'repeater' && fieldConfig.fields) {
         // Don't add nested fields here, only add the repeater field
       }
     }

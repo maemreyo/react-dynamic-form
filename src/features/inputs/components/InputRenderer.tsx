@@ -6,15 +6,16 @@ import {
   FormConfig,
   FormClassNameConfig,
   RepeaterFieldConfig,
+  FieldConfig,
 } from '../../core/types';
 import { Repeater } from '../../repeater';
 import { ErrorMessage } from '../../../styles';
-import { getInputComponent } from '../InputRegistry'; // Import getInputComponent
+import { getInputComponent } from '../InputRegistry';
 
 interface InputRendererProps {
   field: FormField;
   config: FormConfig;
-  formClassNameConfig: FormClassNameConfig;
+  formClassNameConfig?: FormClassNameConfig;
   disableAutocomplete?: boolean;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
@@ -31,11 +32,25 @@ const renderInputComponent = ({
   labelWidth,
 }: InputRendererProps) => {
   const { id, type, error } = field;
-  const fieldConfig = config[id] || {};
+  const fieldConfig = config[id];
 
-  const commonInputProps = {
+  // Explicit type for commonInputProps
+  const commonInputProps: {
+    id: string;
+    fieldConfig: FieldConfig;
+    formClassNameConfig?: FormClassNameConfig;
+    showInlineError?: boolean;
+    horizontalLabel?: boolean;
+    labelWidth?: string | number;
+    error?:
+      | {
+          type: string;
+          message?: string | undefined;
+        }
+      | undefined;
+  } = {
     id,
-    fieldConfig,
+    fieldConfig: fieldConfig!,
     formClassNameConfig,
     showInlineError,
     horizontalLabel,
@@ -53,7 +68,6 @@ const renderInputComponent = ({
     );
   }
 
-  // Use getInputComponent to get the component based on type
   const InputComponent = getInputComponent(type);
 
   if (!InputComponent) {
@@ -70,7 +84,7 @@ const renderInputComponent = ({
       {showInlineError && error && (
         <ErrorMessage
           className={
-            (fieldConfig.classNameConfig &&
+            (fieldConfig?.classNameConfig &&
               fieldConfig.classNameConfig.errorMessage) ||
             (formClassNameConfig && formClassNameConfig.errorMessage)
           }

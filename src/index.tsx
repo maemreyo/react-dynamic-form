@@ -1,3 +1,5 @@
+// Filename: index.tsx
+
 import React, { FC, HTMLAttributes } from 'react';
 
 export interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -19,3 +21,4 @@ export * from './features/core';
 export * from './features/inputs';
 export * from './components';
 export { default as DynamicForm } from './DynamicForm';
+export type { FormConfig } from './features/core/types';

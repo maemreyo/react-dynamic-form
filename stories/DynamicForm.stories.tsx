@@ -5,7 +5,6 @@ import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { DynamicForm } from '../src';
-import * as yup from 'yup';
 
 export default {
   title: 'DynamicForm',
@@ -27,13 +26,16 @@ BasicForm.args = {
   config: {
     firstName: {
       label: 'First Name',
+      type: 'text',
       validation: { required: 'This field is required' },
     },
     lastName: {
       label: 'Last Name',
+      type: 'text',
     },
     email: {
       label: 'Email',
+      type: 'text',
       validation: {
         required: 'This field is required',
         pattern: {
@@ -47,7 +49,7 @@ BasicForm.args = {
       type: 'number',
       validation: {
         required: 'This field is required',
-        min: { value: 18, message: 'You must be at least 18 years old' },
+        min: 18,
       },
     },
     agree: {
@@ -223,7 +225,10 @@ FormWithConditionalFields.args = {
       type: 'text',
       validation: {
         required: true,
-        minLength: 8,
+        minLength: {
+          value: 8,
+          message: 'Password must be at least 8 characters long',
+        },
         validate: (value: string) => {
           if (!/[A-Z]/.test(value)) {
             return 'Password must contain at least one uppercase letter';
@@ -237,7 +242,7 @@ FormWithConditionalFields.args = {
           if (!/[^A-Za-z0-9]/.test(value)) {
             return 'Password must contain at least one special character';
           }
-          return undefined;
+          return true;
         },
       },
     },
@@ -249,8 +254,8 @@ FormWithConditionalFields.storyName = 'Form with Conditional Fields';
 export const FormWithRepeater = Template.bind({});
 FormWithRepeater.args = {
   data: {
-    password: '&7dDooiiiiiiioo',
-    items: [{ name: 'Name 1', quantity: 1 }, [{ name: 'Name 2', quantity: 2 }]],
+    password: '',
+    items: [{ name: '', quantity: 0 }],
   },
   config: {
     password: {
@@ -281,11 +286,13 @@ FormWithRepeater.args = {
       label: 'Items',
       addButtonLabel: 'Add Item',
       removeButtonLabel: 'Remove',
+      validation: {
+        minItems: 1,
+      },
       fields: {
         name: {
           label: 'Name',
           type: 'text',
-          required: true,
           validation: { required: 'This field is required' },
         },
         quantity: {
@@ -293,7 +300,7 @@ FormWithRepeater.args = {
           type: 'number',
           validation: {
             required: 'This field is required',
-            min: { value: 1, message: 'Quantity must be at least 1' },
+            min: 1,
           },
         },
       },

@@ -1,11 +1,18 @@
+// Filename: /src/features/inputs/components/CheckboxInput.tsx
+
 import React from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  CheckboxFieldConfig,
+} from '../../core/types';
 import { useFormContext, useController } from 'react-hook-form';
 
 interface CheckboxInputProps {
   id: string;
-  fieldConfig: FieldConfig;
+  fieldConfig: CheckboxFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
@@ -30,6 +37,7 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: false,
   });
 
   return (
@@ -59,7 +67,7 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         type="checkbox"
         id={id}
-        checked={!!field.value}
+        checked={!!field.value as boolean} // Explicit type
       />
       {showInlineError && error && (
         <ErrorMessage

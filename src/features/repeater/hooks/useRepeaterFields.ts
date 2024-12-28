@@ -49,7 +49,7 @@ const useRepeaterFields = ({
             onBlur: () => {},
             onChange: () => {},
             ref: () => {},
-            value: form.watch(fullNestedFieldId) || '',
+            value: (form.watch(fullNestedFieldId) || '') as string, // Explicit type
           },
           formField: {
             label: fieldConfig.fields?.[nestedFieldId]?.label,

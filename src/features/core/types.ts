@@ -7,6 +7,7 @@ import {
   RegisterOptions,
   FieldPath,
   SubmitHandler,
+  FieldError,
   FieldErrors,
 } from 'react-hook-form';
 import { Schema } from 'yup';
@@ -27,7 +28,7 @@ export type LayoutType = 'flex' | 'grid';
 export interface DynamicFormProps {
   data: Record<string, any>;
   config?: FormConfig;
-  onChange?: (formData: FormValues) => void;
+  onChange?: (formData: FieldValues) => void;
   onSubmit?: SubmitHandler<FieldValues>;
   formOptions?: UseFormProps;
   validationSchema?: Schema<any>;
@@ -81,8 +82,9 @@ export interface FieldClassNameConfig {
   errorMessage?: string;
 }
 
+// FormConfig allows undefined FieldConfig
 export interface FormConfig {
-  [key: string]: FieldConfig;
+  [key: string]: FieldConfig | undefined;
 }
 
 export type FieldConfig =
@@ -177,12 +179,38 @@ export interface RepeaterFieldConfig extends BaseFieldConfig {
   removeButtonLabel?: string;
   addButtonComponent?: AddButtonComponent;
   removeButtonComponent?: RemoveButtonComponent;
-  minItems?: number;
-  maxItems?: number;
   fields: FormConfig;
+  validation?: {
+    minItems?: number;
+    maxItems?: number;
+  };
 }
 
-export type ValidationConfig = Record<string, any>;
+// More specific validation config
+export type ValidationConfig =
+  | {
+      required?: boolean | string;
+      minLength?:
+        | number
+        | {
+            value: number;
+            message: string;
+          };
+      maxLength?:
+        | number
+        | {
+            value: number;
+            message: string;
+          };
+      pattern?: {
+        value: RegExp;
+        message: string;
+      };
+      min?: number | string;
+      max?: number | string;
+      validate?: (value: any) => Promise<string | boolean> | string | boolean;
+    }
+  | { [key: string]: any }; // Fallback for unknown validation rules
 
 export type InputType = NonNullable<FieldConfig['type']>;
 
