@@ -37,6 +37,7 @@ const useRepeaterFields = ({
   fieldConfig,
   form,
 }: UseRepeaterFieldsProps): UseRepeaterFieldsReturn => {
+  // Memoize fields to prevent unnecessary re-renders
   const fields = useMemo(() => {
     return Object.entries(flattenedFieldsConfig).map(
       ([nestedFieldId, config]) => {
@@ -49,7 +50,7 @@ const useRepeaterFields = ({
             onBlur: () => {},
             onChange: () => {},
             ref: () => {},
-            value: (form.watch(fullNestedFieldId) || '') as string, // Explicit type
+            value: (form.watch(fullNestedFieldId) || '') as string,
           },
           formField: {
             label: fieldConfig.fields?.[nestedFieldId]?.label,

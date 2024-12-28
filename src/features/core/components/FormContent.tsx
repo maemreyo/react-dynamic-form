@@ -1,6 +1,6 @@
 // Filename: /src/features/core/components/FormContent.tsx
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormField, FormConfig, FormClassNameConfig } from '../types';
 import renderInputComponent from '../../inputs/components/InputRenderer';
 
@@ -28,7 +28,6 @@ const FormContent: React.FC<FormContentProps> = ({
   return (
     <>
       {fields.map(field => {
-        const fieldConfig = flattenedConfig[field.id] || {};
         return (
           <React.Fragment key={field.id}>
             {renderInputComponent({

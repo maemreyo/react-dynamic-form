@@ -26,12 +26,13 @@ function useFormFields(
 } {
   const flattenedConfig = useMemo(() => flattenConfig(config), [config]);
 
+  // Memoize fields to prevent unnecessary re-renders
   const fields = useMemo(() => {
     return Object.entries(flattenedConfig).map(([key, fieldConfig]) => {
-      const inputType = fieldConfig.type || getInputTypeFromValue(data[key]);
+      const inputType = fieldConfig!.type || getInputTypeFromValue(data[key]);
 
       return {
-        label: fieldConfig.label,
+        label: fieldConfig!.label,
         id: key,
         type: inputType,
         error: formState.errors?.[key] as FieldError | undefined,
