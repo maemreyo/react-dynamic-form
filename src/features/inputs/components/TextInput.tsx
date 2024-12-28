@@ -35,7 +35,6 @@ const TextInput: React.FC<TextInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: '',
   });
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}

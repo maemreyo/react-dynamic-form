@@ -14,6 +14,7 @@ const RepeaterFields: React.FC<RepeaterFieldsProps> = ({
   flattenedFieldsConfig,
   fieldConfig,
   formClassNameConfig,
+  parentFieldId,
 }) => {
   const form = useFormContext();
   const { fields } = useRepeaterFields({
@@ -23,6 +24,7 @@ const RepeaterFields: React.FC<RepeaterFieldsProps> = ({
     flattenedFieldsConfig,
     fieldConfig,
     form,
+    parentFieldId,
   });
 
   return (

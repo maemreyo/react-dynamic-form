@@ -77,6 +77,7 @@ const useFormController = (
   const flattenedConfig = useMemo(() => flattenConfig(config), [
     JSON.stringify(config),
   ]);
+
   // Register and unregister fields based on fieldsToRender
   useEffect(() => {
     const fieldsToRender = getFieldsToRender(config, watch, flattenedConfig);
@@ -93,11 +94,7 @@ const useFormController = (
         const fieldConfig = config[fieldId];
 
         // Register nested fields
-        if (
-          fieldsToRender.includes(fullFieldId) &&
-          fieldConfig &&
-          fieldConfig.type !== 'repeater'
-        ) {
+        if (fieldsToRender.includes(fullFieldId) && fieldConfig) {
           console.log(
             `[useFormController] Registering field: ${fullFieldId}`,
             fieldConfig.validation
@@ -105,12 +102,8 @@ const useFormController = (
           register(fullFieldId, fieldConfig.validation);
         }
 
-        // Recursively register for nested fields (non-repeater)
-        if (
-          fieldConfig &&
-          fieldConfig.fields &&
-          fieldConfig.type !== 'repeater'
-        ) {
+        // Recursively register for nested fields and repeater fields
+        if (fieldConfig && fieldConfig.fields) {
           registerFieldsRecursively(fieldConfig.fields, fullFieldId);
         }
       }

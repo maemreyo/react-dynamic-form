@@ -6,6 +6,7 @@ import { AddButton, RemoveButton } from '../styles';
 import RepeaterFields from './RepeaterFields';
 import { flattenConfig } from '../../core/utils';
 import useRepeater from '../hooks/useRepeater';
+import { useFormContext } from 'react-hook-form';
 
 const Repeater: React.FC<RepeaterProps> = ({
   id,
@@ -22,6 +23,9 @@ const Repeater: React.FC<RepeaterProps> = ({
     [fieldConfig.fields]
   );
 
+  // Pass form down to RepeaterFields
+  const form = useFormContext();
+
   return (
     <div>
       {fields.map((field, index) => (
@@ -33,6 +37,8 @@ const Repeater: React.FC<RepeaterProps> = ({
             flattenedFieldsConfig={flattenedFieldsConfig}
             fieldConfig={fieldConfig}
             formClassNameConfig={formClassNameConfig}
+            form={form}
+            parentFieldId={id} // Pass id as parentFieldId
           />
           <RemoveButton
             $index={index}

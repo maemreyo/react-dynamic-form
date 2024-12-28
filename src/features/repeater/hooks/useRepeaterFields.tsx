@@ -16,6 +16,7 @@ interface UseRepeaterFieldsProps {
   flattenedFieldsConfig: Record<string, FieldConfig>;
   fieldConfig: RepeaterFieldConfig;
   form: UseFormReturn<FieldValues>;
+  parentFieldId?: string;
 }
 
 type UseRepeaterFieldsReturn = {
@@ -36,11 +37,15 @@ const useRepeaterFields = ({
   flattenedFieldsConfig,
   fieldConfig,
   form,
+  parentFieldId,
 }: UseRepeaterFieldsProps): UseRepeaterFieldsReturn => {
   const fields = useMemo(() => {
     return Object.entries(flattenedFieldsConfig).map(
       ([nestedFieldId, config]) => {
-        const fullNestedFieldId = `${repeaterId}.${index}.${nestedFieldId}`;
+        // Construct fullNestedFieldId using parentFieldId
+        const fullNestedFieldId = parentFieldId
+          ? `${parentFieldId}.${index}.${nestedFieldId}`
+          : `${repeaterId}.${index}.${nestedFieldId}`;
         const validationRules = fieldConfig.fields?.[nestedFieldId]?.validation;
         console.log(
           `[useRepeaterFields] Creating field: ${fullNestedFieldId}`,
@@ -70,7 +75,13 @@ const useRepeaterFields = ({
         };
       }
     );
-  }, [index, repeaterId, flattenedFieldsConfig, JSON.stringify(fieldConfig)]);
+  }, [
+    index,
+    repeaterId,
+    flattenedFieldsConfig,
+    JSON.stringify(fieldConfig),
+    parentFieldId,
+  ]);
 
   return { fields };
 };

@@ -39,4 +39,5 @@ export interface RepeaterFieldsProps {
   flattenedFieldsConfig: Record<string, FieldConfig>;
   fieldConfig: RepeaterFieldConfig;
   formClassNameConfig?: FormClassNameConfig;
+  parentFieldId?: string;
 }

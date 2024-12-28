@@ -37,7 +37,11 @@ const useRepeater = ({
   // Log when the repeater field is watched
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      if (name === repeaterId) {
+      // if (name === repeaterId) {
+      //   console.log(`[useRepeater] Watch triggered for ${repeaterId}`, value[repeaterId]);
+      // }
+      // Watch the array of fields instead of a single string
+      if (Array.isArray(value[repeaterId])) {
         console.log(
           `[useRepeater] Watch triggered for ${repeaterId}`,
           value[repeaterId]
