@@ -1,6 +1,4 @@
-// Filename: /src/features/inputs/components/DateInput.tsx
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   FieldConfig,
@@ -40,6 +38,14 @@ const DateInput: React.FC<DateInputProps> = ({
     defaultValue: '',
   });
 
+  const handleChange = useMemo(
+    () => (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(`[DateInput] onChange: id=${id}, value=${e.target.value}`); // Log onChange event
+      field.onChange(e); // Update form state
+    },
+    [id, field.onChange]
+  );
+
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -66,12 +72,7 @@ const DateInput: React.FC<DateInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         type="date"
         id={id}
-        onChange={e => {
-          console.log(
-            `[DateInput] onChange: id=${id}, value=${e.target.value}`
-          ); // Log onChange event
-          field.onChange(e); // Update form state
-        }}
+        onChange={handleChange}
       />
       {showInlineError && error && (
         <ErrorMessage

@@ -1,6 +1,4 @@
-// Filename: /src/features/inputs/components/CheckboxInput.tsx
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   FieldConfig,
@@ -40,6 +38,16 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
     defaultValue: false,
   });
 
+  const handleChange = useMemo(
+    () => (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(
+        `[CheckboxInput] onChange: id=${id}, checked=${e.target.checked}`
+      ); // Log onChange event
+      field.onChange(e); // Update form state
+    },
+    [id, field.onChange]
+  );
+
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -68,12 +76,7 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
         type="checkbox"
         id={id}
         checked={!!field.value}
-        onChange={e => {
-          console.log(
-            `[CheckboxInput] onChange: id=${id}, checked=${e.target.checked}`
-          ); // Log onChange event
-          field.onChange(e); // Update form state
-        }}
+        onChange={handleChange}
       />
       {showInlineError && error && (
         <ErrorMessage

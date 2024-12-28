@@ -1,6 +1,4 @@
-// Filename: /src/features/inputs/components/TextInput.tsx
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Input, Label, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import { useFormContext, useController } from 'react-hook-form';
@@ -35,6 +33,15 @@ const TextInput: React.FC<TextInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: '',
   });
+
+  const handleChange = useMemo(
+    () => (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(`[TextInput] onChange: id=${id}, value=${e.target.value}`); // Log onChange event
+      field.onChange(e); // Update form state with the new value
+    },
+    [id, field.onChange]
+  );
+
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -61,12 +68,7 @@ const TextInput: React.FC<TextInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
-        onChange={e => {
-          console.log(
-            `[TextInput] onChange: id=${id}, value=${e.target.value}`
-          ); // Log onChange event
-          field.onChange(e); // Update form state with the new value
-        }}
+        onChange={handleChange}
       />
       {error && error.message && (
         <div style={{ color: 'red', fontSize: '0.8rem', marginTop: '0.2rem' }}>

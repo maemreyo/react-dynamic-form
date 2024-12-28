@@ -1,5 +1,3 @@
-// Filename: /src/features/repeater/components/Repeater.tsx
-
 import React, { useMemo } from 'react';
 import { RepeaterProps } from '../types';
 import { AddButton, RemoveButton } from '../styles';

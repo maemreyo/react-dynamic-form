@@ -1,6 +1,10 @@
-// Filename: /src/features/inputs/components/ComboBox.tsx
-
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   FieldConfig,
@@ -84,34 +88,42 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     setInputValue(field.value || '');
   }, [field.value]);
 
-  const filteredOptions = options
-    ? options.filter(option =>
-        option.label.toLowerCase().includes(inputValue.toLowerCase())
-      )
-    : [];
+  const filteredOptions = useMemo(() => {
+    return options
+      ? options.filter(option =>
+          option.label.toLowerCase().includes(inputValue.toLowerCase())
+        )
+      : [];
+  }, [options, inputValue]);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const val = event.target.value;
-    setInputValue(val);
-    console.log(`[ComboBox] onChange: id=${id}, value=${val}`); // Log onChange event
-    field.onChange(event); // Update form state with the new value
-    if (!isOpen && val) {
-      setIsOpen(true);
-    } else if (isOpen && !val) {
+  const handleInputChange = useMemo(
+    () => (event: React.ChangeEvent<HTMLInputElement>) => {
+      const val = event.target.value;
+      setInputValue(val);
+      console.log(`[ComboBox] onChange: id=${id}, value=${val}`); // Log onChange event
+      field.onChange(val); // Update form state with the new value
+      if (!isOpen && val) {
+        setIsOpen(true);
+      } else if (isOpen && !val) {
+        setIsOpen(false);
+      }
+    },
+    [id, field.onChange, isOpen]
+  );
+
+  const handleOptionClick = useMemo(
+    () => (value: string) => {
+      setInputValue(value);
+      console.log(`[ComboBox] onOptionClick: id=${id}, value=${value}`); // Log option click
+      field.onChange(value); // Update form state
       setIsOpen(false);
-    }
-  };
+    },
+    [id, field.onChange]
+  );
 
-  const handleOptionClick = (value: string) => {
-    setInputValue(value);
-    console.log(`[ComboBox] onOptionClick: id=${id}, value=${value}`); // Log option click
-    field.onChange(value); // Update form state
-    setIsOpen(false);
-  };
-
-  const toggleDropdown = () => {
+  const toggleDropdown = useCallback(() => {
     setIsOpen(!isOpen);
-  };
+  }, []);
 
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
@@ -131,32 +143,35 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [closeDropdown]);
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      setHighlightedIndex(prevIndex =>
-        filteredOptions.length > 0
-          ? Math.min(prevIndex + 1, filteredOptions.length - 1)
-          : -1
-      );
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      setHighlightedIndex(prevIndex =>
-        prevIndex > 0 ? prevIndex - 1 : filteredOptions.length - 1
-      );
-    } else if (event.key === 'Enter') {
-      event.preventDefault();
-      if (highlightedIndex >= 0) {
-        const selectedValue = filteredOptions[highlightedIndex].value;
-        setInputValue(selectedValue);
-        field.onChange(selectedValue); // Update form state
+  const handleKeyDown = useMemo(
+    () => (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setHighlightedIndex(prevIndex =>
+          filteredOptions.length > 0
+            ? Math.min(prevIndex + 1, filteredOptions.length - 1)
+            : -1
+        );
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setHighlightedIndex(prevIndex =>
+          prevIndex > 0 ? prevIndex - 1 : filteredOptions.length - 1
+        );
+      } else if (event.key === 'Enter') {
+        event.preventDefault();
+        if (highlightedIndex >= 0) {
+          const selectedValue = filteredOptions[highlightedIndex].value;
+          setInputValue(selectedValue);
+          field.onChange(selectedValue); // Update form state
+          setIsOpen(false);
+        }
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
         setIsOpen(false);
       }
-    } else if (event.key === 'Escape') {
-      event.preventDefault();
-      setIsOpen(false);
-    }
-  };
+    },
+    [filteredOptions, highlightedIndex, field.onChange]
+  );
 
   useEffect(() => {
     if (isOpen && highlightedIndex >= 0 && containerRef.current) {

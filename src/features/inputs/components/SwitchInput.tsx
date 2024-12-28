@@ -1,6 +1,4 @@
-// Filename: /src/features/inputs/components/SwitchInput.tsx
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import styled from 'styled-components';
@@ -85,6 +83,16 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
     defaultValue: false,
   });
 
+  const handleChange = useMemo(
+    () => (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(
+        `[SwitchInput] onChange: id=${id}, checked=${e.target.checked}`
+      ); // Log onChange event
+      field.onChange(e); // Update form state
+    },
+    [id, field.onChange]
+  );
+
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -108,12 +116,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
           type="checkbox"
           id={id}
           checked={!!field.value}
-          onChange={e => {
-            console.log(
-              `[SwitchInput] onChange: id=${id}, checked=${e.target.checked}`
-            ); // Log onChange event
-            field.onChange(e); // Update form state
-          }}
+          onChange={handleChange}
         />
         <Slider className="slider" />
       </SwitchContainer>

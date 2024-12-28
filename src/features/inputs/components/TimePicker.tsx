@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   TimeFieldConfig,
@@ -37,6 +37,14 @@ const TimePicker: React.FC<TimePickerProps> = ({
     defaultValue: '',
   });
 
+  const handleChange = useMemo(
+    () => (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(`[TimePicker] onChange: id=${id}, value=${e.target.value}`); // Log onChange event
+      field.onChange(e); // Update form state
+    },
+    [id, field.onChange]
+  );
+
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -63,12 +71,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         type="time"
         id={id}
-        onChange={e => {
-          console.log(
-            `[TimePicker] onChange: id=${id}, value=${e.target.value}`
-          ); // Log onChange event
-          field.onChange(e); // Update form state
-        }}
+        onChange={handleChange}
       />
       {showInlineError && error && (
         <ErrorMessage

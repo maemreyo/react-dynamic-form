@@ -1,6 +1,4 @@
-// Filename: /src/features/inputs/components/RadioInput.tsx
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   FieldConfig,
@@ -83,6 +81,14 @@ const RadioInput: React.FC<RadioInputProps> = ({
     defaultValue: '',
   });
 
+  const handleChange = useMemo(
+    () => (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(`[RadioInput] onChange: id=${id}, value=${e.target.value}`); // Log onChange event
+      field.onChange(e); // Update form state
+    },
+    [id, field.onChange]
+  );
+
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -112,12 +118,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
               id={`${id}-${option.value}`}
               name={id}
               value={option.value}
-              onChange={e => {
-                console.log(
-                  `[RadioInput] onChange: id=${id}, value=${e.target.value}`
-                ); // Log onChange event
-                field.onChange(e); // Update form state
-              }}
+              onChange={handleChange}
             />
             {option.label}
           </RadioLabel>

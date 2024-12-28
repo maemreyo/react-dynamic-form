@@ -1,5 +1,3 @@
-// Filename: /src/features/core/hooks/useFormFields.ts
-
 import { useMemo } from 'react';
 import { FormField, FormConfig, FieldError } from '../types';
 import { getInputTypeFromValue } from '../../inputs/utils';
@@ -24,7 +22,9 @@ function useFormFields(
   fields: FormField[];
   flattenedConfig: FormConfig;
 } {
-  const flattenedConfig = useMemo(() => flattenConfig(config), [config]);
+  const flattenedConfig = useMemo(() => flattenConfig(config), [
+    JSON.stringify(config),
+  ]);
 
   // Memoize fields to prevent unnecessary re-renders
   const fields = useMemo(() => {
@@ -38,7 +38,7 @@ function useFormFields(
         error: formState.errors?.[key] as FieldError | undefined,
       };
     });
-  }, [formState, flattenedConfig, data]);
+  }, [formState, flattenedConfig, JSON.stringify(data)]);
 
   return { fields, flattenedConfig };
 }

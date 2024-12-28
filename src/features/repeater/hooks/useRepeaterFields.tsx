@@ -1,5 +1,3 @@
-// Filename: /src/features/repeater/hooks/useRepeaterFields.ts
-
 import { useMemo } from 'react';
 import {
   FieldValues,
@@ -81,6 +79,8 @@ const useRepeaterFields = ({
     flattenedFieldsConfig,
     JSON.stringify(fieldConfig),
     parentFieldId,
+    form.watch,
+    form.formState.errors,
   ]);
 
   return { fields };

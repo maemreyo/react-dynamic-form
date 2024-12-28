@@ -1,6 +1,4 @@
-// Filename: /src/features/inputs/components/SelectInput.tsx
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   FieldConfig,
@@ -60,6 +58,14 @@ const SelectInput: React.FC<SelectInputProps> = ({
     defaultValue: '',
   });
 
+  const handleChange = useMemo(
+    () => (e: React.ChangeEvent<HTMLSelectElement>) => {
+      console.log(`[SelectInput] onChange: id=${id}, value=${e.target.value}`); // Log onChange event
+      field.onChange(e); // Update form state
+    },
+    [id, field.onChange]
+  );
+
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -85,14 +91,13 @@ const SelectInput: React.FC<SelectInputProps> = ({
         {...field}
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
-        onChange={e => {
-          console.log(
-            `[SelectInput] onChange: id=${id}, value=${e.target.value}`
-          ); // Log onChange event
-          field.onChange(e); // Update form state
-        }}
+        onChange={handleChange}
       >
-        {/* ... options */}
+        {options?.map(option => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
       </StyledSelect>
       {showInlineError && error && (
         <ErrorMessage

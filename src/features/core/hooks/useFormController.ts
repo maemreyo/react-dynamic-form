@@ -1,5 +1,3 @@
-// Filename: /src/features/core/hooks/useFormController.ts
-
 import { useEffect, useMemo } from 'react';
 import {
   FieldValues,

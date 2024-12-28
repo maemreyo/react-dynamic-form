@@ -1,6 +1,4 @@
-// Filename: /src/features/inputs/components/TextareaInput.tsx
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   FieldConfig,
@@ -61,6 +59,16 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
     defaultValue: '',
   });
 
+  const handleChange = useMemo(
+    () => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      console.log(
+        `[TextareaInput] onChange: id=${id}, value=${e.target.value}`
+      ); // Log onChange event
+      field.onChange(e); // Update form state
+    },
+    [id, field.onChange]
+  );
+
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -87,12 +95,7 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
-        onChange={e => {
-          console.log(
-            `[TextareaInput] onChange: id=${id}, value=${e.target.value}`
-          ); // Log onChange event
-          field.onChange(e); // Update form state
-        }}
+        onChange={handleChange}
       />
       {showInlineError && error && (
         <ErrorMessage

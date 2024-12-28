@@ -1,6 +1,4 @@
-// Filename: /src/DynamicFormContent.tsx
-
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import {
   FormLayout,
   FormContent,
@@ -8,7 +6,7 @@ import {
   useFormController,
   useFormFields,
   DynamicFormProps,
-} from './';
+} from '.';
 import { useFormContext, FieldErrors } from 'react-hook-form';
 
 const DynamicFormContent: React.FC<DynamicFormProps> = ({
@@ -68,32 +66,49 @@ const DynamicFormContent: React.FC<DynamicFormProps> = ({
 
   const { fields, flattenedConfig } = useFormFields(data, config, formState);
 
-  const handleSubmit = rootHandleSubmit(
-    data => {
-      if (onSubmit) {
-        const allValues = form.getValues(); // Get all values using getValues()
-        console.log('Form submitted with values:', allValues); // Log all values
-        onSubmit(allValues);
+  const handleSubmit = useCallback(
+    rootHandleSubmit(
+      data => {
+        if (onSubmit) {
+          const allValues = form.getValues(); // Get all values using getValues()
+          console.log('Form submitted with values:', allValues); // Log all values
+          onSubmit(allValues);
+        }
+      },
+      errors => {
+        console.log('Form validation failed:', errors);
       }
-    },
-    errors => {
-      console.log('Form validation failed:', errors);
-    }
+    ),
+    [onSubmit, form, rootHandleSubmit]
   );
-  
+
   console.log('formState.values', formState.values);
 
+  const formLayoutProps = useMemo(
+    () => ({
+      onSubmit: handleSubmit,
+      className,
+      formClassNameConfig,
+      style,
+      layout,
+      layoutConfig,
+      horizontalLabel,
+      theme,
+    }),
+    [
+      handleSubmit,
+      className,
+      formClassNameConfig,
+      style,
+      layout,
+      layoutConfig,
+      horizontalLabel,
+      theme,
+    ]
+  );
+
   return (
-    <FormLayout
-      onSubmit={handleSubmit}
-      className={className}
-      formClassNameConfig={formClassNameConfig}
-      style={style}
-      layout={layout}
-      layoutConfig={layoutConfig}
-      horizontalLabel={horizontalLabel}
-      theme={theme}
-    >
+    <FormLayout {...formLayoutProps}>
       {header}
       <FormContent
         fields={fields}

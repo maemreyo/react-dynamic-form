@@ -1,6 +1,4 @@
-// Filename: /src/features/inputs/components/DateTimePicker.tsx
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   FieldConfig,
@@ -40,6 +38,16 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
     defaultValue: '',
   });
 
+  const handleChange = useMemo(
+    () => (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(
+        `[DateTimePicker] onChange: id=${id}, value=${e.target.value}`
+      ); // Log onChange event
+      field.onChange(e); // Update form state
+    },
+    [id, field.onChange]
+  );
+
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -66,12 +74,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         type="datetime-local"
         id={id}
-        onChange={e => {
-          console.log(
-            `[DateTimePicker] onChange: id=${id}, value=${e.target.value}`
-          ); // Log onChange event
-          field.onChange(e); // Update form state
-        }}
+        onChange={handleChange}
       />
       {showInlineError && error && (
         <ErrorMessage

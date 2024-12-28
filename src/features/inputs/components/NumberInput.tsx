@@ -1,6 +1,4 @@
-// Filename: /src/features/inputs/components/NumberInput.tsx
-
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   FieldConfig,
@@ -104,17 +102,23 @@ const NumberInput: React.FC<NumberInputProps> = ({
     setInternalValue(+field.value || 0);
   }, [field.value]);
 
-  const handleIncrement = () => {
-    const newValue = clampValue(internalValue + 1);
-    setInternalValue(newValue);
-    field.onChange(newValue);
-  };
+  const handleIncrement = useMemo(
+    () => () => {
+      const newValue = clampValue(internalValue + 1);
+      setInternalValue(newValue);
+      field.onChange(newValue);
+    },
+    [clampValue, internalValue, field.onChange]
+  );
 
-  const handleDecrement = () => {
-    const newValue = clampValue(internalValue - 1);
-    setInternalValue(newValue);
-    field.onChange(newValue);
-  };
+  const handleDecrement = useMemo(
+    () => () => {
+      const newValue = clampValue(internalValue - 1);
+      setInternalValue(newValue);
+      field.onChange(newValue);
+    },
+    [clampValue, internalValue, field.onChange]
+  );
 
   return (
     <InputWrapper
