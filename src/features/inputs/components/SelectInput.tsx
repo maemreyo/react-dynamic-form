@@ -85,12 +85,14 @@ const SelectInput: React.FC<SelectInputProps> = ({
         {...field}
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
+        onChange={e => {
+          console.log(
+            `[SelectInput] onChange: id=${id}, value=${e.target.value}`
+          ); // Log onChange event
+          field.onChange(e); // Update form state
+        }}
       >
-        {options?.map(option => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
+        {/* ... options */}
       </StyledSelect>
       {showInlineError && error && (
         <ErrorMessage

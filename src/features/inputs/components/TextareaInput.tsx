@@ -87,6 +87,12 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
+        onChange={e => {
+          console.log(
+            `[TextareaInput] onChange: id=${id}, value=${e.target.value}`
+          ); // Log onChange event
+          field.onChange(e); // Update form state
+        }}
       />
       {showInlineError && error && (
         <ErrorMessage

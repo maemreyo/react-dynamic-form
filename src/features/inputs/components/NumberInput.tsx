@@ -83,15 +83,16 @@ const NumberInput: React.FC<NumberInputProps> = ({
     defaultValue: 0,
   });
   const [internalValue, setInternalValue] = useState<number>(+field.value || 0);
-
   const clampValue = useCallback(
     (value: number) => {
       const { min, max } = fieldConfig.validation || {};
       let clampedValue = value;
       if (min !== undefined && value < +min) {
+        // Convert min and max to numbers for comparison
         clampedValue = +min;
       }
       if (max !== undefined && value > +max) {
+        // Convert min and max to numbers for comparison
         clampedValue = +max;
       }
       return clampedValue;
@@ -153,6 +154,9 @@ const NumberInput: React.FC<NumberInputProps> = ({
           type="number"
           id={id}
           onChange={e => {
+            console.log(
+              `[NumberInput] onChange: id=${id}, value=${e.target.value}`
+            ); // Log onChange event
             field.onChange(e);
             setInternalValue(+e.target.value);
           }}

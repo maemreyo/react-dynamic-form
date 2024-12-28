@@ -16,6 +16,7 @@ import {
   ComboBox,
 } from './components';
 import { InputType } from '../core/types';
+import { Repeater } from '../repeater';
 
 const inputRegistry: Record<InputType, React.ComponentType<any> | undefined> = {
   text: TextInput,
@@ -33,7 +34,7 @@ const inputRegistry: Record<InputType, React.ComponentType<any> | undefined> = {
   time: TimePicker,
   'datetime-local': DateTimePicker,
   combobox: ComboBox,
-  repeater: undefined, // Repeater is handled separately
+  repeater: Repeater,
 };
 
 export const getInputComponent = (type: InputType) => {

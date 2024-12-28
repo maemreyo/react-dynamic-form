@@ -62,6 +62,12 @@ const TextInput: React.FC<TextInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
+        onChange={e => {
+          console.log(
+            `[TextInput] onChange: id=${id}, value=${e.target.value}`
+          ); // Log onChange event
+          field.onChange(e); // Update form state with the new value
+        }}
       />
       {error && error.message && (
         <div style={{ color: 'red', fontSize: '0.8rem', marginTop: '0.2rem' }}>

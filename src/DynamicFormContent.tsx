@@ -44,7 +44,6 @@ const DynamicFormContent: React.FC<DynamicFormProps> = ({
   onFormReady,
   renderSubmitButton,
 }) => {
-  
   const form = useFormController({
     data,
     config,
@@ -72,13 +71,17 @@ const DynamicFormContent: React.FC<DynamicFormProps> = ({
   const handleSubmit = rootHandleSubmit(
     data => {
       if (onSubmit) {
-        onSubmit(data);
+        const allValues = form.getValues(); // Get all values using getValues()
+        console.log('Form submitted with values:', allValues); // Log all values
+        onSubmit(allValues);
       }
     },
     errors => {
       console.log('Form validation failed:', errors);
     }
   );
+  
+  console.log('formState.values', formState.values);
 
   return (
     <FormLayout

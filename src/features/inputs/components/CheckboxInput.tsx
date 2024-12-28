@@ -67,7 +67,13 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         type="checkbox"
         id={id}
-        checked={!!field.value as boolean} // Explicit type
+        checked={!!field.value}
+        onChange={e => {
+          console.log(
+            `[CheckboxInput] onChange: id=${id}, checked=${e.target.checked}`
+          ); // Log onChange event
+          field.onChange(e); // Update form state
+        }}
       />
       {showInlineError && error && (
         <ErrorMessage

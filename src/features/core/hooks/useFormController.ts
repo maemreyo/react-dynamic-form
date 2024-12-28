@@ -55,7 +55,6 @@ const useFormController = (
     ...mergedFormOptions,
     defaultValues: data,
   });
-
   const {
     formState,
     reset,
@@ -65,7 +64,14 @@ const useFormController = (
     register,
     unregister,
   } = form;
-  const { isSubmitting, isSubmitSuccessful, errors } = formState;
+  const {
+    isSubmitting,
+    isSubmitSuccessful,
+    errors,
+    isDirty,
+    isValid,
+    values,
+  } = formState;
 
   // Memoize flattenedConfig
   const flattenedConfig = useMemo(() => flattenConfig(config), [
@@ -74,19 +80,62 @@ const useFormController = (
   // Register and unregister fields based on fieldsToRender
   useEffect(() => {
     const fieldsToRender = getFieldsToRender(config, watch, flattenedConfig);
-    Object.keys(flattenedConfig).forEach(fieldId => {
-      const fieldConfig = flattenedConfig[fieldId];
 
-      // Register nested fields
-      if (fieldsToRender.includes(fieldId)) {
-        if (fieldConfig && fieldConfig.type !== 'repeater') {
-          register(fieldId, fieldConfig.validation);
+    // Helper function to recursively register fields
+    const registerFieldsRecursively = (
+      config: FormConfig,
+      parentFieldId?: string
+    ) => {
+      for (const fieldId in config) {
+        const fullFieldId = parentFieldId
+          ? `${parentFieldId}.${fieldId}`
+          : fieldId;
+        const fieldConfig = config[fieldId];
+
+        // Register nested fields
+        if (
+          fieldsToRender.includes(fullFieldId) &&
+          fieldConfig &&
+          fieldConfig.type !== 'repeater'
+        ) {
+          console.log(
+            `[useFormController] Registering field: ${fullFieldId}`,
+            fieldConfig.validation
+          ); // Log register
+          register(fullFieldId, fieldConfig.validation);
         }
-      } else {
+
+        // Recursively register for nested fields (non-repeater)
+        if (
+          fieldConfig &&
+          fieldConfig.fields &&
+          fieldConfig.type !== 'repeater'
+        ) {
+          registerFieldsRecursively(fieldConfig.fields, fullFieldId);
+        }
+      }
+    };
+
+    // Register fields
+    registerFieldsRecursively(config);
+
+    // Unregister fields that are not in fieldsToRender
+    Object.keys(flattenedConfig).forEach(fieldId => {
+      if (!fieldsToRender.includes(fieldId)) {
+        console.log(`[useFormController] Unregistering field: ${fieldId}`); // Log unregister
         unregister(fieldId);
       }
     });
   }, [register, unregister, flattenedConfig, watch, config]);
+
+  // Log formState changes
+  useEffect(() => {
+    console.log('[useFormController] formState changed:', {
+      isDirty,
+      isValid,
+      values,
+    });
+  }, [isDirty, isValid, values]);
 
   // Auto-save
   useEffect(() => {
@@ -140,6 +189,7 @@ const useFormController = (
     if (onFormReady) {
       onFormReady(form);
     }
+    console.log('watch():', watch());
   }, [form, onFormReady]);
 
   return form;

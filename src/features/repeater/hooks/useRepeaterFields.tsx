@@ -42,7 +42,10 @@ const useRepeaterFields = ({
       ([nestedFieldId, config]) => {
         const fullNestedFieldId = `${repeaterId}.${index}.${nestedFieldId}`;
         const validationRules = fieldConfig.fields?.[nestedFieldId]?.validation;
-
+        console.log(
+          `[useRepeaterFields] Creating field: ${fullNestedFieldId}`,
+          validationRules
+        );
         return {
           field: {
             name: fullNestedFieldId,

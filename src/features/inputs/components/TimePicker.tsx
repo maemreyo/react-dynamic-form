@@ -63,6 +63,12 @@ const TimePicker: React.FC<TimePickerProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         type="time"
         id={id}
+        onChange={e => {
+          console.log(
+            `[TimePicker] onChange: id=${id}, value=${e.target.value}`
+          ); // Log onChange event
+          field.onChange(e); // Update form state
+        }}
       />
       {showInlineError && error && (
         <ErrorMessage

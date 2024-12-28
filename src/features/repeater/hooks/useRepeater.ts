@@ -1,6 +1,6 @@
 // Filename: /src/features/repeater/hooks/useRepeater.ts
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { RepeaterFieldConfig } from '../../core/types';
 
@@ -19,12 +19,13 @@ const useRepeater = ({
   repeaterId,
   fieldConfig,
 }: UseRepeaterProps): UseRepeaterReturn => {
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: repeaterId,
   });
 
+  console.log(`[useRepeater] fields for ${repeaterId}`, fields);
   const handleAppend = () => {
     append({});
   };
@@ -32,6 +33,19 @@ const useRepeater = ({
   const handleRemove = (index: number) => {
     remove(index);
   };
+
+  // Log when the repeater field is watched
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name === repeaterId) {
+        console.log(
+          `[useRepeater] Watch triggered for ${repeaterId}`,
+          value[repeaterId]
+        );
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, repeaterId]);
 
   // Use JSON.stringify(fieldConfig) in dependency list
   const memoizedFields = useMemo(() => fields, [

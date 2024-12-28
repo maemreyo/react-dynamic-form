@@ -66,6 +66,12 @@ const DateInput: React.FC<DateInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         type="date"
         id={id}
+        onChange={e => {
+          console.log(
+            `[DateInput] onChange: id=${id}, value=${e.target.value}`
+          ); // Log onChange event
+          field.onChange(e); // Update form state
+        }}
       />
       {showInlineError && error && (
         <ErrorMessage

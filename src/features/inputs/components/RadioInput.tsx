@@ -112,6 +112,12 @@ const RadioInput: React.FC<RadioInputProps> = ({
               id={`${id}-${option.value}`}
               name={id}
               value={option.value}
+              onChange={e => {
+                console.log(
+                  `[RadioInput] onChange: id=${id}, value=${e.target.value}`
+                ); // Log onChange event
+                field.onChange(e); // Update form state
+              }}
             />
             {option.label}
           </RadioLabel>

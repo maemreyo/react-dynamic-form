@@ -93,7 +93,8 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
     setInputValue(val);
-    field.onChange(event); // Update form state
+    console.log(`[ComboBox] onChange: id=${id}, value=${val}`); // Log onChange event
+    field.onChange(event); // Update form state with the new value
     if (!isOpen && val) {
       setIsOpen(true);
     } else if (isOpen && !val) {
@@ -103,6 +104,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
 
   const handleOptionClick = (value: string) => {
     setInputValue(value);
+    console.log(`[ComboBox] onOptionClick: id=${id}, value=${value}`); // Log option click
     field.onChange(value); // Update form state
     setIsOpen(false);
   };

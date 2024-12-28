@@ -108,6 +108,12 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
           type="checkbox"
           id={id}
           checked={!!field.value}
+          onChange={e => {
+            console.log(
+              `[SwitchInput] onChange: id=${id}, checked=${e.target.checked}`
+            ); // Log onChange event
+            field.onChange(e); // Update form state
+          }}
         />
         <Slider className="slider" />
       </SwitchContainer>

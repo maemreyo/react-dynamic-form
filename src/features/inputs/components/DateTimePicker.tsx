@@ -66,6 +66,12 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         type="datetime-local"
         id={id}
+        onChange={e => {
+          console.log(
+            `[DateTimePicker] onChange: id=${id}, value=${e.target.value}`
+          ); // Log onChange event
+          field.onChange(e); // Update form state
+        }}
       />
       {showInlineError && error && (
         <ErrorMessage
