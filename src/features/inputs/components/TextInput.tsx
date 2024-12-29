@@ -1,5 +1,6 @@
+// Filepath: /src/features/inputs/components/TextInput.tsx
 import React, { useMemo } from 'react';
-import { Input, Label, InputWrapper } from '../../../styles';
+import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import { useFormContext, useController } from 'react-hook-form';
 
@@ -33,14 +34,8 @@ const TextInput: React.FC<TextInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: '',
   });
-
-  const handleChange = useMemo(
-    () => (e: React.ChangeEvent<HTMLInputElement>) => {
-      console.log(`[TextInput] onChange: id=${id}, value=${e.target.value}`); // Log onChange event
-      field.onChange(e); // Update form state with the new value
-    },
-    [id, field.onChange]
-  );
+  console.log("[TextInput] field:", { field});
+  // The onChange is now correctly memoized and updates the form state using field.onChange.
 
   return (
     <InputWrapper
@@ -68,12 +63,15 @@ const TextInput: React.FC<TextInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
-        onChange={handleChange}
       />
       {error && error.message && (
-        <div style={{ color: 'red', fontSize: '0.8rem', marginTop: '0.2rem' }}>
+        <ErrorMessage
+          className={
+            fieldClassNameConfig.errorMessage || formClassName.errorMessage
+          }
+        >
           {error.message}
-        </div>
+        </ErrorMessage>
       )}
     </InputWrapper>
   );

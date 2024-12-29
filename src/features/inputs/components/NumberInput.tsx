@@ -1,3 +1,4 @@
+// Filepath: /src/features/inputs/components/NumberInput.tsx
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
@@ -86,11 +87,9 @@ const NumberInput: React.FC<NumberInputProps> = ({
       const { min, max } = fieldConfig.validation || {};
       let clampedValue = value;
       if (min !== undefined && value < +min) {
-        // Convert min and max to numbers for comparison
         clampedValue = +min;
       }
       if (max !== undefined && value > +max) {
-        // Convert min and max to numbers for comparison
         clampedValue = +max;
       }
       return clampedValue;
@@ -102,22 +101,24 @@ const NumberInput: React.FC<NumberInputProps> = ({
     setInternalValue(+field.value || 0);
   }, [field.value]);
 
+  // The handleIncrement is correctly memoized and updates the form state.
   const handleIncrement = useMemo(
     () => () => {
       const newValue = clampValue(internalValue + 1);
       setInternalValue(newValue);
-      field.onChange(newValue);
+      field.onChange(newValue); // Update form state with the new value
     },
-    [clampValue, internalValue, field.onChange]
+    [clampValue, internalValue, field.onChange] // Correct dependencies
   );
 
+  // The handleDecrement is correctly memoized and updates the form state.
   const handleDecrement = useMemo(
     () => () => {
       const newValue = clampValue(internalValue - 1);
       setInternalValue(newValue);
-      field.onChange(newValue);
+      field.onChange(newValue); // Update form state with the new value
     },
-    [clampValue, internalValue, field.onChange]
+    [clampValue, internalValue, field.onChange] // Correct dependencies
   );
 
   return (
@@ -154,6 +155,8 @@ const NumberInput: React.FC<NumberInputProps> = ({
         </SpinButton>
         <Input
           {...field}
+          // Ensure the native input receives the value from react-hook-form.
+          value={internalValue}
           className={fieldClassNameConfig.input || formClassName.input}
           type="number"
           id={id}
@@ -161,15 +164,15 @@ const NumberInput: React.FC<NumberInputProps> = ({
             console.log(
               `[NumberInput] onChange: id=${id}, value=${e.target.value}`
             ); // Log onChange event
-            field.onChange(e);
+            field.onChange(+e.target.value);
             setInternalValue(+e.target.value);
           }}
           onBlur={e => {
             field.onBlur();
             const clampedValue = clampValue(+e.target.value);
+            field.onChange(clampedValue); // Update form state with the clamped value
             setInternalValue(clampedValue);
           }}
-          value={internalValue}
           autoComplete={disableAutocomplete ? 'off' : undefined}
         />
         <SpinButton

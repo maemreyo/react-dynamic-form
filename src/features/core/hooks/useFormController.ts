@@ -58,18 +58,11 @@ const useFormController = (
     reset,
     setFocus,
     watch,
-    handleSubmit,
     register,
     unregister,
+    getValues,
   } = form;
-  const {
-    isSubmitting,
-    isSubmitSuccessful,
-    errors,
-    isDirty,
-    isValid,
-    values,
-  } = formState;
+  const { isSubmitSuccessful, errors, isDirty, isValid } = formState;
 
   // Memoize flattenedConfig
   const flattenedConfig = useMemo(() => flattenConfig(config), [
@@ -124,9 +117,9 @@ const useFormController = (
     console.log('[useFormController] formState changed:', {
       isDirty,
       isValid,
-      values,
+      values: getValues(),
     });
-  }, [isDirty, isValid, values]);
+  }, [isDirty, isValid]);
 
   // Auto-save
   useEffect(() => {

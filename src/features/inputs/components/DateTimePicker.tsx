@@ -1,3 +1,4 @@
+// Filepath: /src/features/inputs/components/DateTimePicker.tsx
 import React, { useMemo } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
@@ -38,14 +39,15 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
     defaultValue: '',
   });
 
+  // The onChange is correctly memoized and updates the form state.
   const handleChange = useMemo(
     () => (e: React.ChangeEvent<HTMLInputElement>) => {
       console.log(
         `[DateTimePicker] onChange: id=${id}, value=${e.target.value}`
       ); // Log onChange event
-      field.onChange(e); // Update form state
+      field.onChange(e.target.value); // Update form state with the new value
     },
-    [id, field.onChange]
+    [field.onChange, id] // Correct dependencies
   );
 
   return (
@@ -71,6 +73,8 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
       )}
       <Input
         {...field}
+        // Ensure the native input receives the value from react-hook-form.
+        value={field.value || ''}
         className={fieldClassNameConfig.input || formClassName.input}
         type="datetime-local"
         id={id}

@@ -1,3 +1,4 @@
+// Filepath: /src/features/inputs/components/DateInput.tsx
 import React, { useMemo } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
@@ -38,12 +39,13 @@ const DateInput: React.FC<DateInputProps> = ({
     defaultValue: '',
   });
 
+  // The onChange is correctly memoized and updates the form state.
   const handleChange = useMemo(
     () => (e: React.ChangeEvent<HTMLInputElement>) => {
       console.log(`[DateInput] onChange: id=${id}, value=${e.target.value}`); // Log onChange event
-      field.onChange(e); // Update form state
+      field.onChange(e.target.value); // Update form state with the new value
     },
-    [id, field.onChange]
+    [field.onChange, id] // Correct dependencies
   );
 
   return (
@@ -69,6 +71,8 @@ const DateInput: React.FC<DateInputProps> = ({
       )}
       <Input
         {...field}
+        // Ensure the native input receives the value from react-hook-form.
+        value={field.value || ''}
         className={fieldClassNameConfig.input || formClassName.input}
         type="date"
         id={id}

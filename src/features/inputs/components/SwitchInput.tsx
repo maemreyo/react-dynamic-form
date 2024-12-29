@@ -1,3 +1,4 @@
+// Filepath: /src/features/inputs/components/SwitchInput.tsx
 import React, { useMemo } from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
@@ -83,14 +84,15 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
     defaultValue: false,
   });
 
+  // The onChange is correctly memoized and updates the form state.
   const handleChange = useMemo(
     () => (e: React.ChangeEvent<HTMLInputElement>) => {
       console.log(
         `[SwitchInput] onChange: id=${id}, checked=${e.target.checked}`
       ); // Log onChange event
-      field.onChange(e); // Update form state
+      field.onChange(e.target.checked); // Update form state with the new checked value
     },
-    [id, field.onChange]
+    [field.onChange, id] // Correct dependencies
   );
 
   return (
@@ -113,9 +115,10 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
       <SwitchContainer htmlFor={id}>
         <SwitchInputStyled
           {...field}
+          // The checked attribute is correctly managed by react-hook-form.
+          checked={!!field.value}
           type="checkbox"
           id={id}
-          checked={!!field.value}
           onChange={handleChange}
         />
         <Slider className="slider" />

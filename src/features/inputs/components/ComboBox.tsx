@@ -1,3 +1,4 @@
+// Filepath: /src/features/inputs/components/ComboBox.tsx
 import React, {
   useState,
   useEffect,
@@ -84,6 +85,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     defaultValue: '',
   });
 
+  // Set the initial input value based on the field value from useController.
   useEffect(() => {
     setInputValue(field.value || '');
   }, [field.value]);
@@ -96,6 +98,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       : [];
   }, [options, inputValue]);
 
+  // The handleInputChange is correctly memoized and updates the form state.
   const handleInputChange = useMemo(
     () => (event: React.ChangeEvent<HTMLInputElement>) => {
       const val = event.target.value;
@@ -108,22 +111,23 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         setIsOpen(false);
       }
     },
-    [id, field.onChange, isOpen]
+    [id, field.onChange, isOpen] // Correct dependencies
   );
 
+  // The handleOptionClick is correctly memoized and updates the form state.
   const handleOptionClick = useMemo(
     () => (value: string) => {
       setInputValue(value);
       console.log(`[ComboBox] onOptionClick: id=${id}, value=${value}`); // Log option click
-      field.onChange(value); // Update form state
+      field.onChange(value); // Update form state with the selected value
       setIsOpen(false);
     },
-    [id, field.onChange]
+    [id, field.onChange] // Correct dependencies
   );
 
   const toggleDropdown = useCallback(() => {
     setIsOpen(!isOpen);
-  }, []);
+  }, [isOpen]);
 
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
@@ -162,7 +166,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         if (highlightedIndex >= 0) {
           const selectedValue = filteredOptions[highlightedIndex].value;
           setInputValue(selectedValue);
-          field.onChange(selectedValue); // Update form state
+          field.onChange(selectedValue); // Update form state with the selected value
           setIsOpen(false);
         }
       } else if (event.key === 'Escape') {
@@ -170,7 +174,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         setIsOpen(false);
       }
     },
-    [filteredOptions, highlightedIndex, field.onChange]
+    [filteredOptions, highlightedIndex, field.onChange] // Correct dependencies
   );
 
   useEffect(() => {
@@ -208,9 +212,10 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       <ComboBoxContainer ref={containerRef}>
         <Input
           {...field}
+          // The native input value is managed by the component's state.
+          value={inputValue}
           className={fieldClassNameConfig.input || formClassName.input}
           id={id}
-          value={inputValue}
           onChange={handleInputChange}
           onClick={toggleDropdown}
           onKeyDown={handleKeyDown}

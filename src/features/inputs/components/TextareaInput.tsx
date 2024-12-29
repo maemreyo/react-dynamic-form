@@ -1,3 +1,4 @@
+// Filepath: /src/features/inputs/components/TextareaInput.tsx
 import React, { useMemo } from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
@@ -59,14 +60,15 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
     defaultValue: '',
   });
 
+  // The onChange is correctly memoized and updates the form state.
   const handleChange = useMemo(
     () => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       console.log(
         `[TextareaInput] onChange: id=${id}, value=${e.target.value}`
       ); // Log onChange event
-      field.onChange(e); // Update form state
+      field.onChange(e.target.value); // Update form state with the new value
     },
-    [id, field.onChange]
+    [field.onChange, id] // Correct dependencies
   );
 
   return (
@@ -92,6 +94,8 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
       )}
       <StyledTextarea
         {...field}
+        // Ensure the native textarea receives the value from react-hook-form.
+        value={field.value || ''}
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}

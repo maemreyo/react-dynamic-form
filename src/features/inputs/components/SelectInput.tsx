@@ -1,3 +1,4 @@
+// Filepath: /src/features/inputs/components/SelectInput.tsx
 import React, { useMemo } from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
@@ -58,12 +59,13 @@ const SelectInput: React.FC<SelectInputProps> = ({
     defaultValue: '',
   });
 
+  // The onChange is correctly memoized and updates the form state.
   const handleChange = useMemo(
     () => (e: React.ChangeEvent<HTMLSelectElement>) => {
       console.log(`[SelectInput] onChange: id=${id}, value=${e.target.value}`); // Log onChange event
-      field.onChange(e); // Update form state
+      field.onChange(e.target.value); // Update form state with the new value
     },
-    [id, field.onChange]
+    [field.onChange, id] // Correct dependencies
   );
 
   return (
@@ -89,6 +91,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
       )}
       <StyledSelect
         {...field}
+        // Ensure the native select receives the value from react-hook-form.
+        value={field.value || ''}
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
         onChange={handleChange}

@@ -82,8 +82,6 @@ const DynamicFormContent: React.FC<DynamicFormProps> = ({
     [onSubmit, form, rootHandleSubmit]
   );
 
-  console.log('formState.values', formState.values);
-
   const formLayoutProps = useMemo(
     () => ({
       onSubmit: handleSubmit,
