@@ -65,11 +65,12 @@ const useFormController = (
   } = form;
   const { isSubmitSuccessful, errors, isDirty, isValid } = formState;
 
-  const flattenedConfig = flattenConfig(config);
+  const flattenedConfig = useMemo(() => flattenConfig(config), [config]);
 
   // Register and unregister fields based on fieldsToRender
   useEffect(() => {
     const fieldsToRender = getFieldsToRender(config, watch, flattenedConfig);
+    console.log('[useFormController] Fields to render:', fieldsToRender);
 
     // Helper function to recursively register fields
     const registerFieldsRecursively = (
@@ -89,6 +90,10 @@ const useFormController = (
             fieldConfig.validation
           ); // Log register
           register(fullFieldId, fieldConfig.validation);
+        } else {
+          console.log(
+            `[useFormController] Field not registered (conditional or not included): ${fullFieldId}`
+          );
         }
 
         // Recursively register for nested fields and repeater fields
@@ -108,6 +113,16 @@ const useFormController = (
         unregister(fieldId);
       }
     });
+
+    return () => {
+      // Unregister all fields on unmount
+      Object.keys(flattenedConfig).forEach(fieldId => {
+        console.log(
+          `[useFormController] Unregistering field on unmount: ${fieldId}`
+        );
+        unregister(fieldId);
+      });
+    };
   }, [register, unregister, flattenedConfig, watch, config]);
 
   // Log formState changes
@@ -176,7 +191,7 @@ const useFormController = (
   return form;
 };
 
-// Helper function to determine fields to render
+  // Helper function to determine fields to render
 const getFieldsToRender = (
   config: FormConfig,
   watch: (
@@ -185,6 +200,7 @@ const getFieldsToRender = (
   ) => unknown,
   flattenedConfig: FormConfig
 ): string[] => {
+  console.log('[getFieldsToRender] Determining fields to render...');
   const conditionalFieldsConfig = Object.keys(config)
     .filter(
       fieldId =>
@@ -204,6 +220,7 @@ const getFieldsToRender = (
   conditionalFieldsConfig.forEach(condition => {
     watchedValues[condition.when] = watch(condition.when);
   });
+  console.log('[getFieldsToRender] Watched values:', watchedValues);
 
   const getFieldsToRenderRecursively = (
     currentConfig: FormConfig,
@@ -275,6 +292,7 @@ const getFieldsToRender = (
                 conditionMet = false;
             }
 
+            console.log(`[getFieldsToRender] Condition check - Field: ${fieldId}, Watched Value: ${watchedValue}, Operator: ${condition.operator}, Condition Value: ${condition.value}, Result: ${conditionMet}`);
             return condition.fields.includes(fieldId) && conditionMet;
           });
         }

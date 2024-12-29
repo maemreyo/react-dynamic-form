@@ -3,6 +3,7 @@
 import React, { useMemo } from 'react';
 import { FormField, FormConfig, FormClassNameConfig } from '../types';
 import renderInputComponent from '../../inputs/components/InputRenderer';
+import { v4 as uuidv4 } from 'uuid';
 
 interface FormContentProps {
   fields: FormField[];
@@ -25,25 +26,25 @@ const FormContent: React.FC<FormContentProps> = ({
   showInlineError,
   flattenedConfig,
 }) => {
-  return (
-    <>
-      {fields.map(field => {
-        return (
-          <React.Fragment key={field.id}>
-            {renderInputComponent({
-              field,
-              config: flattenedConfig,
-              formClassNameConfig,
-              disableAutocomplete,
-              showInlineError,
-              horizontalLabel,
-              labelWidth,
-            })}
-          </React.Fragment>
-        );
-      })}
-    </>
-  );
+  const memoizedRenderedComponents = fields.map(field => {
+    const uniqueKey = `${field.id}-${uuidv4()}`;
+
+    return (
+      <React.Fragment key={uniqueKey}>
+        {renderInputComponent({
+          field,
+          config: flattenedConfig,
+          formClassNameConfig,
+          disableAutocomplete,
+          showInlineError,
+          horizontalLabel,
+          labelWidth,
+        })}
+      </React.Fragment>
+    );
+  });
+
+  return <>{memoizedRenderedComponents}</>;
 };
 
 export default FormContent;
