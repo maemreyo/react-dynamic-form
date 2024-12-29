@@ -8,6 +8,7 @@ import {
   DynamicFormProps,
 } from './features/dynamic-form';
 import { FormRenderer } from './features/form-renderer';
+import ThemeProvider from './theme/ThemeProvider';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   data,
@@ -62,7 +63,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     onFormReady,
   });
 
-  const { formState, control, handleSubmit } = form; // Destructure handleSubmit here
+  const { formState, control, handleSubmit } = form;
 
   const { fields, fieldsToRender, conditionalFieldsConfig } = useFormFields(
     data,
@@ -71,7 +72,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     control
   );
 
-  // Use the handleSubmit from useDynamicForm
   const onSubmitHandler = () => {
     handleSubmit(data => {
       if (onSubmit) {
@@ -81,34 +81,36 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   };
 
   return (
-    <DynamicFormProvider form={form}>
-      <FormRenderer
-        onSubmit={onSubmitHandler} // Pass the onSubmit handler
-        className={className}
-        formClassNameConfig={formClassNameConfig}
-        style={style}
-        layout={layout}
-        layoutConfig={layoutConfig}
-        horizontalLabel={horizontalLabel}
-        theme={theme}
-        header={header}
-        fieldsToRender={fieldsToRender}
-        fields={fields}
-        config={config}
-        footer={footer}
-        readOnly={readOnly}
-        disableForm={disableForm}
-        showSubmitButton={showSubmitButton}
-        renderSubmitButton={renderSubmitButton}
-        formOptions={formOptions}
-        showErrorSummary={showErrorSummary}
-        labelWidth={labelWidth}
-        disableAutocomplete={disableAutocomplete}
-        showInlineError={showInlineError}
-        conditionalFieldsConfig={conditionalFieldsConfig}
-        data={data}
-      />
-    </DynamicFormProvider>
+    <ThemeProvider theme={theme}>
+      <DynamicFormProvider form={form}>
+        <FormRenderer
+          onSubmit={onSubmitHandler}
+          className={className}
+          formClassNameConfig={formClassNameConfig}
+          style={style}
+          layout={layout}
+          layoutConfig={layoutConfig}
+          horizontalLabel={horizontalLabel}
+          theme={theme}
+          header={header}
+          fieldsToRender={fieldsToRender}
+          fields={fields}
+          config={config}
+          footer={footer}
+          readOnly={readOnly}
+          disableForm={disableForm}
+          showSubmitButton={showSubmitButton}
+          renderSubmitButton={renderSubmitButton}
+          formOptions={formOptions}
+          showErrorSummary={showErrorSummary}
+          labelWidth={labelWidth}
+          disableAutocomplete={disableAutocomplete}
+          showInlineError={showInlineError}
+          conditionalFieldsConfig={conditionalFieldsConfig}
+          data={data}
+        />
+      </DynamicFormProvider>
+    </ThemeProvider>
   );
 };
 

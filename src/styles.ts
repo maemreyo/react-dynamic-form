@@ -1,14 +1,14 @@
 // styles.ts
 import styled, { css } from 'styled-components';
-import { LayoutType } from './features/core';
+import { LayoutType } from './features/dynamic-form';
 
 /**
  * Base styles for form elements.
  */
 const baseFormElementStyles = css`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 8px;
-  border-radius: 4px;
+  padding: ${({ theme }) => theme.space.sm};
+  border-radius: ${({ theme }) => theme.radii.md};
   font-size: ${({ theme }) => theme.fontSizes.medium};
 
   &:focus {
@@ -143,18 +143,14 @@ export const SubmitButton = styled.button`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.light};
   border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
+  padding: ${({ theme }) => theme.space.sm} ${({ theme }) => theme.space.md};
+  border-radius: ${({ theme }) => theme.radii.md};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    background-color: ${({ theme }) =>
-      theme.colors.primary &&
-      `#${Math.max(0, parseInt(theme.colors.primary.slice(1), 16) - 0x111111)
-        .toString(16)
-        .padStart(6, '0')}`};
+    background-color: ${({ theme }) => theme.colors.primary};
   }
 
   &:disabled {

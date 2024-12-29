@@ -2,7 +2,7 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { fn } from '@storybook/test';
-import { DynamicForm } from '.';
+import { defaultTheme, DynamicForm } from '.';
 
 export default {
   title: 'DynamicForm',
@@ -14,6 +14,7 @@ const Template: StoryFn<typeof DynamicForm> = args => <DynamicForm {...args} />;
 // --- Examples ---
 export const BasicForm = Template.bind({});
 BasicForm.args = {
+  theme: defaultTheme,
   data: {
     firstName: '',
     lastName: '',
@@ -105,7 +106,7 @@ FormWithConditionalFields.args = {
         { value: 'US', label: 'United States' },
         { value: 'CA', label: 'Canada' },
       ],
-      validation: { required: 'This field is required' },
+      validation: { required: true, requiredMessage: 'This field is required' },
     },
     state: {
       label: 'State',

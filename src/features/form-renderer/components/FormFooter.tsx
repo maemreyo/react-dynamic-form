@@ -1,9 +1,9 @@
 // src/features/form-renderer/components/FormFooter.tsx
 import React from 'react';
-import { FormClassNameConfig } from '../../dynamic-form/types';
 import { SubmitButton } from '../../../styles';
 import { ErrorSummary } from '../../../components';
 import { FormFooterProps } from '../types';
+import { useTheme } from '../../../theme/ThemeProvider';
 
 const FormFooter: React.FC<FormFooterProps> = ({
   footer,
@@ -14,6 +14,7 @@ const FormFooter: React.FC<FormFooterProps> = ({
   errors,
   formClassNameConfig,
 }) => {
+  const theme = useTheme();
   return (
     <>
       {footer}
