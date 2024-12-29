@@ -1,4 +1,4 @@
-// src/features/inputs/components/InputRenderer.tsx
+// Filepath: /src/features/inputs/components/InputRenderer.tsx
 import React from 'react';
 import {
   FormField,
@@ -6,10 +6,12 @@ import {
   FormClassNameConfig,
   RenderLabelProps,
   RenderErrorMessageProps,
+  InputComponentMap,
 } from '../../dynamic-form/types';
 import { getInputComponent } from '../registry/InputRegistry';
-import { CommonInputProps } from '../types';
+import { CommonInputProps, CustomInputProps } from '../types';
 import { ErrorMessage } from '../../../styles';
+import { useFormContext } from 'react-hook-form';
 
 interface InputRendererProps {
   field: FormField;
@@ -21,6 +23,7 @@ interface InputRendererProps {
   labelWidth?: string | number;
   renderLabel?: RenderLabelProps;
   renderErrorMessage?: RenderErrorMessageProps;
+  customInputs?: InputComponentMap;
 }
 
 const InputRenderer: React.FC<InputRendererProps> = ({
@@ -32,12 +35,15 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   horizontalLabel,
   labelWidth,
   renderErrorMessage,
+  customInputs,
 }) => {
   const { id, type, error } = field;
   const fieldConfig = config[id] || {};
-
-  // Get the input component from the registry
-  const InputComponent = getInputComponent(type);
+  const { getValues } = useFormContext();
+  // Prioritize custom input components
+  const CustomInputComponent = customInputs?.[type];
+  const RegisteredInputComponent = getInputComponent(type);
+  const InputComponent = CustomInputComponent || RegisteredInputComponent;
 
   const commonInputProps: CommonInputProps = {
     id,
@@ -51,7 +57,6 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   };
 
   // Render error message using renderErrorMessage prop or default
-  // Ensure that error is properly typed as FieldError
   const errorMessageElement =
     showInlineError && error && renderErrorMessage
       ? renderErrorMessage(error, formClassNameConfig)
@@ -63,16 +68,16 @@ const InputRenderer: React.FC<InputRendererProps> = ({
           children: error.message,
         })
       : null;
+
   if (!InputComponent) {
     console.warn(`No input component found for type: ${type}`);
-    return null; // Or return a default input component
+    return null;
   }
 
   return (
     <>
-      {/* InputComponent will render its own label */}
-      <InputComponent {...commonInputProps} />
-      {/* Render error message here */}
+      {/* Cast to CustomInputProps for custom components */}
+      <InputComponent {...(commonInputProps as CustomInputProps)} />
       {errorMessageElement}
     </>
   );

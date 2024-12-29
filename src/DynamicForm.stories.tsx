@@ -1,8 +1,11 @@
-// Filepath: /DynamicForm.stories.tsx
+// Filepath: /src/DynamicForm.stories.tsx
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { defaultTheme, DynamicForm } from '.';
+import { CustomInputProps } from './features/inputs';
+import { useController, useFormContext } from 'react-hook-form';
+import { useTheme } from './theme/ThemeProvider';
 
 export default {
   title: 'DynamicForm',
@@ -10,7 +13,6 @@ export default {
 } as Meta<typeof DynamicForm>;
 
 const Template: StoryFn<typeof DynamicForm> = args => <DynamicForm {...args} />;
-
 
 // --- Examples ---
 export const BasicForm = Template.bind({});
@@ -151,7 +153,10 @@ FormWithConditionalFields.args = {
         { value: 'US', label: 'United States' },
         { value: 'CA', label: 'Canada' },
       ],
-      validation: { required: true, requiredMessage: 'This field is required' },
+      validation: {
+        required: true,
+        requiredMessage: 'This field is required',
+      },
     },
     state: {
       label: 'State',
@@ -259,3 +264,101 @@ FormWithConditionalFields.args = {
   onFormReady: fn(),
 };
 FormWithConditionalFields.storyName = 'Form with Conditional Fields';
+
+// Example custom input component
+const MyCustomInput: React.FC<CustomInputProps> = ({
+  id,
+  fieldConfig,
+  error,
+  formClassNameConfig,
+  showInlineError,
+  horizontalLabel,
+  labelWidth,
+  disableAutocomplete,
+}) => {
+  const theme = useTheme();
+  const { control } = useFormContext();
+
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+    defaultValue: fieldConfig.defaultValue,
+  });
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: horizontalLabel ? 'row' : 'column',
+        marginBottom: '10px',
+        alignItems: horizontalLabel ? 'center' : 'flex-start',
+      }}
+    >
+      <label
+        htmlFor={id}
+        style={{
+          marginRight: horizontalLabel ? '10px' : '0',
+          width: labelWidth ? labelWidth : 'auto',
+          fontWeight: 'bold',
+        }}
+      >
+        {fieldConfig.label}
+        {fieldConfig.validation?.required && (
+          <span style={{ color: theme.colors.error }}>*</span>
+        )}
+      </label>
+      <input
+        {...field}
+        type="text"
+        id={id}
+        style={{
+          border: `1px solid ${
+            error ? theme.colors.error : theme.colors.border
+          }`,
+          borderRadius: theme.radii.md,
+          padding: theme.space.sm,
+        }}
+        autoComplete={disableAutocomplete ? 'off' : 'on'}
+      />
+      {error && showInlineError && (
+        <div style={{ color: theme.colors.error, marginTop: theme.space.xs }}>
+          {error.message}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Story demonstrating custom input
+export const FormWithCustomInput = Template.bind({});
+FormWithCustomInput.args = {
+  theme: defaultTheme,
+  config: {
+    customField: {
+      label: 'Custom Field',
+      type: 'custom',
+      defaultValue: '',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
+      classNameConfig: {
+        input: 'custom-input',
+        label: 'custom-label',
+        errorMessage: 'custom-error',
+      },
+    },
+  },
+  customInputs: {
+    custom: MyCustomInput,
+  },
+  onSubmit: data => {
+    console.log('🚀 ~ file: DynamicForm.stories.tsx:55 ~ data:', data);
+  },
+  onFormReady: fn(),
+  showInlineError: true,
+  horizontalLabel: false,
+  labelWidth: '150px',
+  disableAutocomplete: false,
+};
+FormWithCustomInput.storyName = 'Form with Custom Input';

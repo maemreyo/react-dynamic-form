@@ -1,4 +1,4 @@
-// src/features/form-renderer/FormRenderer.tsx
+// Filepath: /src/features/form-renderer/FormRenderer.tsx
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { FormValues } from '../dynamic-form';
@@ -27,6 +27,7 @@ const FormRenderer: React.FC<FormRendererProps> = ({
   showInlineError,
   renderFormContent,
   renderFormFooter,
+  customInputs,
 }) => {
   const form = useFormContext<FormValues>();
   const { formState, handleSubmit } = form;
@@ -55,6 +56,7 @@ const FormRenderer: React.FC<FormRendererProps> = ({
       disableAutocomplete={disableAutocomplete}
       showInlineError={showInlineError}
       conditionalFieldsConfig={[]}
+      customInputs={customInputs} // Pass customInputs to FormContent
     />
   );
 

@@ -17,3 +17,10 @@ export interface CommonInputProps {
   error?: FieldError;
   disableAutocomplete?: boolean;
 }
+
+/**
+ * Props for custom input components.
+ */
+export interface CustomInputProps extends CommonInputProps {
+  // Add any custom props here if needed
+}

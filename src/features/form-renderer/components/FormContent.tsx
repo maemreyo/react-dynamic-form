@@ -1,4 +1,4 @@
-// src/features/form-renderer/components/FormContent.tsx
+// Filepath: /src/features/form-renderer/components/FormContent.tsx
 import React, { useEffect } from 'react';
 import { FormValues, FieldError } from '../../dynamic-form/types'; // Import FieldError
 import { useFormContext } from 'react-hook-form';
@@ -18,6 +18,7 @@ const FormContent: React.FC<FormContentProps> = ({
   showInlineError,
   renderInput,
   conditionalFieldsConfig,
+  customInputs,
 }) => {
   const {
     register,
@@ -70,6 +71,7 @@ const FormContent: React.FC<FormContentProps> = ({
               showInlineError={showInlineError}
               horizontalLabel={horizontalLabel}
               labelWidth={labelWidth}
+              customInputs={customInputs} // Pass customInputs here
             />
           );
 

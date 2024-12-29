@@ -13,10 +13,14 @@ import {
   InputWrapperProps,
   LabelProps,
 } from '../../styles';
-import { CommonInputProps } from '../inputs/types';
+import { CommonInputProps, CustomInputProps } from '../inputs/types';
 import { FormContentProps } from '../form-renderer';
 
 export type LayoutType = 'flex' | 'grid';
+
+export type InputComponentMap = {
+  [key: string]: React.ComponentType<CustomInputProps>;
+};
 
 export interface DynamicFormProps {
   config: FormConfig;
@@ -60,6 +64,7 @@ export interface DynamicFormProps {
   customValidators?: {
     [key: string]: (value: any, context: any) => string | undefined;
   };
+  customInputs?: InputComponentMap;
 }
 
 export interface FormClassNameConfig {
@@ -159,7 +164,7 @@ export interface FieldConfig {
   options?: { value: string; label: string }[];
   conditional?: Condition;
   fields?: FormConfig;
-  validationMessages?: ValidationMessages; // Add validationMessages
+  validationMessages?: ValidationMessages;
   defaultValue?: any;
 }
 
@@ -178,7 +183,8 @@ export type InputType =
   | 'switch'
   | 'time'
   | 'datetime-local'
-  | 'combobox';
+  | 'combobox'
+  | 'custom';
 
 export type UseFormRegister<TFieldValues extends FieldValues = FieldValues> = (
   name: FieldPath<TFieldValues>,

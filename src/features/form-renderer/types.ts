@@ -1,4 +1,5 @@
 // src/features/form-renderer/types.ts
+import { UseFormRegister, UseFormUnregister } from 'react-hook-form';
 import {
   FormField,
   FormConfig,
@@ -7,6 +8,7 @@ import {
   RenderInputProps,
   DynamicFormProps,
   FieldErrors,
+  FormValues,
 } from '../dynamic-form/types';
 
 /**
@@ -32,6 +34,8 @@ export interface FormContentProps {
   showInlineError?: boolean;
   conditionalFieldsConfig: Condition[];
   renderInput?: RenderInputProps;
+  register: UseFormRegister<FormValues>;
+  unregister: UseFormUnregister<FormValues>;
 }
 
 /**

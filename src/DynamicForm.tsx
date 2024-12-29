@@ -40,6 +40,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   validateOnChange = true,
   validateOnSubmit = true,
   theme,
+  customInputs,
   onFormReady,
   renderSubmitButton,
 }) => {
@@ -106,6 +107,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           disableAutocomplete={disableAutocomplete}
           showInlineError={showInlineError}
           conditionalFieldsConfig={conditionalFieldsConfig}
+          customInputs={customInputs}
         />
       </DynamicFormProvider>
     </ThemeProvider>
