@@ -145,7 +145,7 @@ FormWithConditionalFields.args = {
     country: {
       label: 'Country',
       type: 'select',
-      // defaultValue: 'US',
+      defaultValue: 'US',
       options: [
         { value: '', label: 'Select Country' },
         { value: 'US', label: 'United States' },
@@ -201,7 +201,7 @@ FormWithConditionalFields.args = {
     subscribe: {
       label: 'Subscribe to newsletter?',
       type: 'checkbox',
-      // defaultValue: true,
+      defaultValue: true,
     },
     newsletterType: {
       label: 'Newsletter Type',

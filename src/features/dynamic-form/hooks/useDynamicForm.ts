@@ -1,7 +1,8 @@
+// Filepath: /src/features/dynamic-form/hooks/useDynamicForm.ts
 // src/features/dynamic-form/hooks/useDynamicForm.ts
 import { useEffect } from 'react';
 import { useForm, UseFormReturn, UseFormProps } from 'react-hook-form';
-import { debounce, saveToLocalStorage } from '../utils';
+import { debounce, saveToLocalStorage, flattenConfig } from '../utils';
 import { DynamicFormProps, FormValues } from '../types';
 
 /**
@@ -20,10 +21,23 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
     debounceOnChange,
     onChange,
     onFormReady,
+    config, // Add config prop
   } = props;
+
+  // Flatten the config to access default values easily
+  const flattenedConfig = flattenConfig(config);
+
+  // Create defaultValues object from flattened config
+  const defaultValues = Object.keys(flattenedConfig).reduce((acc, key) => {
+    if (flattenedConfig[key].defaultValue !== undefined) {
+      acc[key] = flattenedConfig[key].defaultValue;
+    }
+    return acc;
+  }, {} as FormValues);
 
   const form = useForm<FormValues>({
     ...formOptions,
+    defaultValues: defaultValues, // Set defaultValues from config
   } as UseFormProps<FormValues>);
 
   const { formState, reset, setFocus, watch, control } = form;

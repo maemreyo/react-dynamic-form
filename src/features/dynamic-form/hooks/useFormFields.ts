@@ -1,5 +1,6 @@
+// Filepath: /src/features/dynamic-form/hooks/useFormFields.ts
 // src/features/dynamic-form/hooks/useFormFields.ts
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { FormField, FormConfig, Condition, FormValues } from '../types';
 import { FormState, useWatch, Control } from 'react-hook-form';
 import { shouldRenderField, getFields, flattenConfig } from '../utils';
@@ -21,6 +22,14 @@ function useFormFields(
   fieldsToRender: string[];
   conditionalFieldsConfig: Condition[];
 } {
+  // Thêm state để force re-render
+  const [update, setUpdate] = useState(false);
+
+  // Thêm useEffect để force re-render khi config thay đổi
+  useEffect(() => {
+    setUpdate(prev => !prev);
+  }, [config]);
+
   const flattenedConfig = useMemo(() => flattenConfig(config), [config]);
 
   const conditionalFieldsConfig = useMemo(
