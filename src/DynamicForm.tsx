@@ -12,7 +12,6 @@ import ThemeProvider from './theme/ThemeProvider';
 import { DefaultTheme } from 'styled-components';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
-  data,
   config = {},
   onChange,
   onSubmit,
