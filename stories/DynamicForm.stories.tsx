@@ -24,13 +24,16 @@ BasicForm.args = {
   config: {
     firstName: {
       label: 'First Name',
+      type: 'text', // Added type
       validation: { required: 'This field is required' },
     },
     lastName: {
       label: 'Last Name',
+      type: 'text', // Added type
     },
     email: {
       label: 'Email',
+      type: 'email', // Added type
       validation: {
         required: 'This field is required',
         pattern: {
@@ -44,7 +47,7 @@ BasicForm.args = {
       type: 'number',
       validation: {
         required: 'This field is required',
-        min: { value: 18, message: 'You must be at least 18 years old' },
+        min: 18,
       },
     },
     agree: {
@@ -242,7 +245,6 @@ FormWithConditionalFields.args = {
   onFormReady: fn(),
 };
 FormWithConditionalFields.storyName = 'Form with Conditional Fields';
-
 
 export const FormWithRepeater = Template.bind({});
 FormWithRepeater.args = {

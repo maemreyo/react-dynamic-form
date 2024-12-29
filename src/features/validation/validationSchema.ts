@@ -17,9 +17,9 @@ export const createValidationSchema = (config: FormConfig) => {
     const fieldConfig = config[fieldId];
     const { validation, type } = fieldConfig;
 
+    // Even without explicit type, add field to shape to avoid null
     if (type === undefined) {
-      console.warn(`Field type is undefined.`);
-      return null;
+      console.warn(`Field type is undefined for field: ${fieldId}`);
     }
 
     if (validation) {
@@ -149,8 +149,5 @@ export const createValidationSchema = (config: FormConfig) => {
       shape[fieldId] = fieldSchema;
     }
   }
-
-  return Object.keys(shape).length > 0
-    ? yup.object().shape(shape)
-    : yup.object();
+  return yup.object().shape(shape); // Always return a yup object, even if shape is empty
 };
