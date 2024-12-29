@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FormField, FormConfig, FormClassNameConfig } from '../../core/types';
-import { getInputComponent } from '../InputRegistry';
+import { getInputComponent } from '../registry/InputRegistry';
 
 interface InputRendererProps {
   field: FormField;

@@ -13,8 +13,8 @@ import {
   TimePicker,
   DateTimePicker,
   ComboBox,
-} from './components';
-import { InputType } from '../core/types';
+} from '../components';
+import { InputType } from '../../core/types';
 
 // Create a map of input types to components
 const inputRegistry: Record<InputType, React.ComponentType<any> | undefined> = {
