@@ -25,34 +25,25 @@ const FormContent: React.FC<FormContentProps> = ({
   showInlineError,
   flattenedConfig,
 }) => {
-  // Use useMemo with flattenedConfig as a dependency
-  const memoizedRenderedComponents = useMemo(() => {
-    return fields.map(field => {
-      return (
-        <React.Fragment key={field.id}>
-          {renderInputComponent({
-            field,
-            config: flattenedConfig,
-            formClassNameConfig,
-            disableAutocomplete,
-            showInlineError,
-            horizontalLabel,
-            labelWidth,
-          })}
-        </React.Fragment>
-      );
-    });
-  }, [
-    fields,
-    flattenedConfig,
-    formClassNameConfig,
-    horizontalLabel,
-    labelWidth,
-    disableAutocomplete,
-    showInlineError,
-  ]);
-
-  return <>{memoizedRenderedComponents}</>;
+  return (
+    <>
+      {fields.map(field => {
+        return (
+          <React.Fragment key={field.id}>
+            {renderInputComponent({
+              field,
+              config: flattenedConfig,
+              formClassNameConfig,
+              disableAutocomplete,
+              showInlineError,
+              horizontalLabel,
+              labelWidth,
+            })}
+          </React.Fragment>
+        );
+      })}
+    </>
+  );
 };
 
 export default FormContent;

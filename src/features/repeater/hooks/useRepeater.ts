@@ -45,13 +45,7 @@ const useRepeater = ({
     return () => subscription.unsubscribe();
   }, [watch, repeaterId]);
 
-  // Use JSON.stringify(fieldConfig) in dependency list
-  const memoizedFields = useMemo(
-    () => fields.map(field => ({ id: field.id })),
-    [fields, JSON.stringify(fieldConfig)]
-  );
-
-  return { fields: memoizedFields, handleAppend, handleRemove };
+  return { fields, handleAppend, handleRemove };
 };
 
 export default useRepeater;

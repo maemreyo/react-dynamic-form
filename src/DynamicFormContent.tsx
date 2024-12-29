@@ -82,28 +82,16 @@ const DynamicFormContent: React.FC<DynamicFormProps> = ({
     [onSubmit, form, rootHandleSubmit]
   );
 
-  const formLayoutProps = useMemo(
-    () => ({
-      onSubmit: handleSubmit,
-      className,
-      formClassNameConfig,
-      style,
-      layout,
-      layoutConfig,
-      horizontalLabel,
-      theme,
-    }),
-    [
-      handleSubmit,
-      className,
-      formClassNameConfig,
-      style,
-      layout,
-      layoutConfig,
-      horizontalLabel,
-      theme,
-    ]
-  );
+  const formLayoutProps = {
+    onSubmit: handleSubmit,
+    className,
+    formClassNameConfig,
+    style,
+    layout,
+    layoutConfig,
+    horizontalLabel,
+    theme,
+  };
 
   return (
     <FormLayout {...formLayoutProps}>

@@ -16,10 +16,7 @@ const Repeater: React.FC<RepeaterProps> = ({
     fieldConfig,
   });
 
-  const flattenedFieldsConfig = useMemo(
-    () => flattenConfig(fieldConfig.fields || {}),
-    [fieldConfig.fields]
-  );
+  const flattenedFieldsConfig = flattenConfig(fieldConfig.fields || {});
 
   // Pass form down to RepeaterFields
   const form = useFormContext();

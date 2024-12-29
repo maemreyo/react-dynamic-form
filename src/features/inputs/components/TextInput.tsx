@@ -1,5 +1,6 @@
 // Filepath: /src/features/inputs/components/TextInput.tsx
-import React, { useMemo } from 'react';
+// Filepath: /src/features/inputs/components/TextInput.tsx
+import React from 'react';
 import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
 import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import { useFormContext, useController } from 'react-hook-form';
@@ -34,8 +35,6 @@ const TextInput: React.FC<TextInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: '',
   });
-  console.log("[TextInput] field:", { field});
-  // The onChange is now correctly memoized and updates the form state using field.onChange.
 
   return (
     <InputWrapper

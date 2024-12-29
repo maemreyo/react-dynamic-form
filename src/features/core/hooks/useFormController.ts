@@ -1,3 +1,4 @@
+// Filepath: /src/features/core/hooks/useFormController.ts
 import { useEffect, useMemo } from 'react';
 import {
   FieldValues,
@@ -64,10 +65,7 @@ const useFormController = (
   } = form;
   const { isSubmitSuccessful, errors, isDirty, isValid } = formState;
 
-  // Memoize flattenedConfig
-  const flattenedConfig = useMemo(() => flattenConfig(config), [
-    JSON.stringify(config),
-  ]);
+  const flattenedConfig = flattenConfig(config);
 
   // Register and unregister fields based on fieldsToRender
   useEffect(() => {
@@ -159,7 +157,6 @@ const useFormController = (
     }
   }, [errors, focusFirstError, setFocus]);
 
-  // Debounce on change
   useEffect(() => {
     if (onChange) {
       const debounced = debounce(onChange, debounceOnChange);

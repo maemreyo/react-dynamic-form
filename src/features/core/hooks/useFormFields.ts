@@ -1,3 +1,4 @@
+// Filepath: /src/features/core/hooks/useFormFields.ts
 import { useMemo } from 'react';
 import { FormField, FormConfig, FieldError } from '../types';
 import { getInputTypeFromValue } from '../../inputs/utils';
@@ -22,23 +23,18 @@ function useFormFields(
   fields: FormField[];
   flattenedConfig: FormConfig;
 } {
-  const flattenedConfig = useMemo(() => flattenConfig(config), [
-    JSON.stringify(config),
-  ]);
+  const flattenedConfig = flattenConfig(config)
 
-  // Memoize fields to prevent unnecessary re-renders
-  const fields = useMemo(() => {
-    return Object.entries(flattenedConfig).map(([key, fieldConfig]) => {
-      const inputType = fieldConfig!.type || getInputTypeFromValue(data[key]);
+  const fields = Object.entries(flattenedConfig).map(([key, fieldConfig]) => {
+    const inputType = fieldConfig!.type || getInputTypeFromValue(data[key]);
 
-      return {
-        label: fieldConfig!.label,
-        id: key,
-        type: inputType,
-        error: formState.errors?.[key] as FieldError | undefined,
-      };
-    });
-  }, [formState, flattenedConfig, JSON.stringify(data)]);
+    return {
+      label: fieldConfig!.label,
+      id: key,
+      type: inputType,
+      error: formState.errors?.[key] as FieldError | undefined,
+    };
+  });
 
   return { fields, flattenedConfig };
 }

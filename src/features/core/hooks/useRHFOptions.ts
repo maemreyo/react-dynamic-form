@@ -18,22 +18,13 @@ const useRHFOptions = (
   formOptions: UseFormProps | undefined
 ): UseFormProps => {
   const schema = useMemo(() => createValidationSchema(config), [config]);
+  const resolver = yupResolver(schema);
 
-  return useMemo(() => {
-    const resolver = yupResolver(schema);
-    return {
-      ...formOptions,
-      criteriaMode: 'all',
-      resolver,
-    };
-  }, [
-    schema,
-    formOptions?.mode,
-    formOptions?.reValidateMode,
-    formOptions?.defaultValues,
-    formOptions?.values,
-    formOptions?.resetOptions,
-  ]);
+  return {
+    ...formOptions,
+    criteriaMode: 'all',
+    resolver,
+  };
 };
 
 export default useRHFOptions;
