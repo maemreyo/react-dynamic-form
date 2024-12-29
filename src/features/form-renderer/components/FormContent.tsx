@@ -1,29 +1,11 @@
 // src/features/form-renderer/components/FormContent.tsx
 import React, { useEffect } from 'react';
-import {
-  FormField,
-  FormConfig,
-  FormClassNameConfig,
-  Condition,
-  FieldError,
-} from '../../dynamic-form/types';
+import { FormValues } from '../../dynamic-form/types';
 import { useFormContext } from 'react-hook-form';
-import ErrorRenderer from '../../../components/ErrorRenderer';
 import { getInputComponent } from '../../inputs/registry/InputRegistry';
 import { InputWrapper } from '../../../styles';
 import { InputRenderer } from '../../inputs/components';
-
-interface FormContentProps {
-  fields: FormField[];
-  fieldsToRender: string[];
-  config: FormConfig;
-  formClassNameConfig: FormClassNameConfig;
-  horizontalLabel?: boolean;
-  labelWidth?: string | number;
-  disableAutocomplete?: boolean;
-  showInlineError?: boolean;
-  conditionalFieldsConfig: Condition[];
-}
+import { FormContentProps } from '../types';
 
 const FormContent: React.FC<FormContentProps> = ({
   fieldsToRender,
@@ -34,13 +16,15 @@ const FormContent: React.FC<FormContentProps> = ({
   labelWidth,
   disableAutocomplete,
   showInlineError,
+  renderInput,
+  conditionalFieldsConfig, // Remove the extra conditionalFieldsConfig prop
 }) => {
   const {
     register,
     unregister,
     formState: { errors },
-  } = useFormContext();
-console.log(errors)
+  } = useFormContext<FormValues>();
+
   useEffect(() => {
     fields.forEach(field => {
       const fieldConfig = config[field.id] || {};
@@ -50,21 +34,21 @@ console.log(errors)
         unregister(field.id);
       }
     });
-  }, [register, unregister, config]);
+  }, [register, unregister, config, fieldsToRender]);
 
   return (
     <>
       {fields
         .filter(field => fieldsToRender.includes(field.id))
         .map(field => {
-          const fieldError = errors[field.id] as FieldError | undefined; // Get the error for the field
+          const fieldError = errors[field.id];
 
           const fieldConfig = config[field.id] || {};
           const InputComponent = getInputComponent(field.type);
           const fieldClassNameConfig = fieldConfig.classNameConfig || {};
           const formClassName = formClassNameConfig || {};
 
-          const commonInputProps = {
+          const commonInputProps: CommonInputProps = {
             id: field.id,
             fieldConfig,
             formClassNameConfig,
@@ -72,7 +56,23 @@ console.log(errors)
             horizontalLabel,
             labelWidth,
             error: fieldError,
+            disableAutocomplete,
           };
+
+          const inputElement = renderInput ? (
+            renderInput(field, fieldConfig, commonInputProps)
+          ) : (
+            <InputRenderer
+              field={field}
+              config={config}
+              formClassNameConfig={formClassNameConfig}
+              disableAutocomplete={disableAutocomplete}
+              showInlineError={showInlineError}
+              horizontalLabel={horizontalLabel}
+              labelWidth={labelWidth}
+            />
+          );
+
           return (
             <InputWrapper
               key={field.id}
@@ -82,21 +82,7 @@ console.log(errors)
                 fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
               }
             >
-              <InputRenderer
-                field={field}
-                config={config}
-                formClassNameConfig={formClassNameConfig}
-                disableAutocomplete={disableAutocomplete}
-                showInlineError={showInlineError}
-                horizontalLabel={horizontalLabel}
-                labelWidth={labelWidth}
-              />
-              {showInlineError && fieldError && (
-                <ErrorRenderer
-                  error={fieldError}
-                  formClassNameConfig={formClassNameConfig}
-                />
-              )}
+              {inputElement}
             </InputWrapper>
           );
         })}

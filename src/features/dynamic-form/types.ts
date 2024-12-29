@@ -13,6 +13,9 @@ import {
   InputWrapperProps,
   LabelProps,
 } from '../../styles';
+import { CommonInputProps } from '../inputs/types';
+import { FormContentProps } from '../form-renderer/components/FormContent';
+
 export type LayoutType = 'flex' | 'grid';
 
 export interface DynamicFormProps {
@@ -22,10 +25,6 @@ export interface DynamicFormProps {
   onSubmit?: SubmitHandler<FieldValues>;
   formOptions?: UseFormProps;
   validationSchema?: Schema<any>;
-  renderSubmitButton?: (
-    handleSubmit: () => void,
-    isSubmitting: boolean
-  ) => React.ReactNode;
   header?: React.ReactNode;
   footer?: React.ReactNode;
   readOnly?: boolean;
@@ -54,6 +53,10 @@ export interface DynamicFormProps {
   style?: React.CSSProperties;
   theme?: any;
   onFormReady?: (form: UseFormReturn<any>) => void;
+
+  renderSubmitButton?: RenderSubmitButtonProps;
+  renderFormContent?: RenderFormContentProps;
+  renderFormFooter?: RenderFormFooterProps;
 }
 
 export interface FormClassNameConfig {
@@ -164,3 +167,68 @@ export interface Condition {
   comparator?: ComparatorFunction;
   fields: string[];
 }
+
+// --- Render Props Types ---
+/**
+ * Props for renderSubmitButton in DynamicFormProps.
+ */
+export type RenderSubmitButtonProps = (
+  handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>,
+  isSubmitting: boolean
+) => React.ReactNode;
+
+/**
+ * Props for renderFormContent in FormRendererProps.
+ */
+export type RenderFormContentProps = (
+  props: Omit<FormContentProps, 'renderInput'> & {
+    renderInput: RenderInputProps;
+  }
+) => React.ReactNode;
+
+/**
+ * Props for renderInput in FormContentProps.
+ */
+export type RenderInputProps = (
+  field: FormField,
+  fieldConfig: FieldConfig,
+  commonInputProps: CommonInputProps
+) => React.ReactNode;
+
+/**
+ * Props for renderLabel in InputWrapperProps.
+ */
+export type RenderLabelProps = (
+  fieldConfig: FieldConfig,
+  commonInputProps: CommonInputProps
+) => React.ReactNode;
+
+/**
+ * Props for renderErrorMessage in InputWrapperProps.
+ */
+export type RenderErrorMessageProps = (
+  error: FieldError | undefined,
+  formClassNameConfig: FormClassNameConfig | undefined
+) => React.ReactNode;
+
+/**
+ * Type for field errors.
+ */
+export type FieldErrors = Partial<Record<string, FieldError>>;
+
+/**
+ * Props for renderFormFooter in FormRendererProps.
+ */
+export type RenderFormFooterProps = (props: {
+  footer?: React.ReactNode;
+  showSubmitButton: boolean;
+  renderSubmitButton: RenderSubmitButtonProps;
+  isSubmitting: boolean;
+  showErrorSummary: boolean;
+  errors: FieldErrors;
+  formClassNameConfig?: FormClassNameConfig;
+}) => React.ReactNode;
+
+/**
+ * Extended DynamicFormProps with render props.
+ */

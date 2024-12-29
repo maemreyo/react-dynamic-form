@@ -16,12 +16,12 @@ const TextInput: React.FC<CommonInputProps> = ({
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
-  const { control } = useFormContext<FormValues>(); // Specify FormValues
+  const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
     control,
     rules: fieldConfig.validation,
-    defaultValue: '',
+    defaultValue: fieldConfig.defaultValue,
   });
 
   return (
@@ -32,6 +32,7 @@ const TextInput: React.FC<CommonInputProps> = ({
         fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
       }
     >
+      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}

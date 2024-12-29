@@ -1,23 +1,11 @@
+// src/features/inputs/components/CheckboxInput.tsx
 import React from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import {
-  FieldConfig,
-  FormClassNameConfig,
-  FieldError,
-} from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
+import { CommonInputProps } from '../types';
+import { FormValues } from '../../dynamic-form';
 
-interface CheckboxInputProps {
-  id: string;
-  fieldConfig: FieldConfig;
-  formClassNameConfig?: FormClassNameConfig;
-  showInlineError?: boolean;
-  horizontalLabel?: boolean;
-  labelWidth?: string | number;
-  error?: FieldError;
-}
-
-const CheckboxInput: React.FC<CheckboxInputProps> = ({
+const CheckboxInput: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
@@ -29,11 +17,12 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
-  const { control } = useFormContext();
+  const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: fieldConfig.defaultValue || false,
   });
 
   return (
@@ -44,6 +33,7 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
         fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
       }
     >
+      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}

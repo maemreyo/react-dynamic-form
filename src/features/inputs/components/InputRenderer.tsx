@@ -4,9 +4,12 @@ import {
   FormField,
   FormConfig,
   FormClassNameConfig,
+  RenderLabelProps,
+  RenderErrorMessageProps,
 } from '../../dynamic-form/types';
 import { getInputComponent } from '../registry/InputRegistry';
 import { CommonInputProps } from '../types';
+import { ErrorMessage } from '../../../styles';
 
 interface InputRendererProps {
   field: FormField;
@@ -16,6 +19,8 @@ interface InputRendererProps {
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
+  renderLabel?: RenderLabelProps;
+  renderErrorMessage?: RenderErrorMessageProps;
 }
 
 const InputRenderer: React.FC<InputRendererProps> = ({
@@ -26,6 +31,8 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   showInlineError,
   horizontalLabel,
   labelWidth,
+  renderLabel,
+  renderErrorMessage,
 }) => {
   const { id, type, error } = field;
   const fieldConfig = config[id] || {};
@@ -44,12 +51,35 @@ const InputRenderer: React.FC<InputRendererProps> = ({
     disableAutocomplete,
   };
 
+  // Render error message using renderErrorMessage prop or default
+  // Ensure that error is properly typed as FieldError
+  const errorMessageElement =
+    showInlineError && error && renderErrorMessage ? (
+      renderErrorMessage(error, formClassNameConfig)
+    ) : showInlineError && error ? (
+      <ErrorMessage
+        className={
+          fieldConfig.classNameConfig?.errorMessage ||
+          formClassNameConfig?.errorMessage
+        }
+      >
+        {error.message}
+      </ErrorMessage>
+    ) : null;
+
   if (!InputComponent) {
     console.warn(`No input component found for type: ${type}`);
     return null; // Or return a default input component
   }
 
-  return <InputComponent {...commonInputProps} />;
+  return (
+    <>
+      {/* InputComponent will render its own label */}
+      <InputComponent {...commonInputProps} />
+      {/* Render error message here */}
+      {errorMessageElement}
+    </>
+  );
 };
 
 export default InputRenderer;

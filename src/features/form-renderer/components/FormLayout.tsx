@@ -2,20 +2,8 @@
 import React, { useMemo } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { defaultTheme } from '../../../theme';
-import { FormClassNameConfig, LayoutType } from '../../dynamic-form/types';
+import { FormLayoutProps } from '../types';
 import { getLayoutComponent } from '../../inputs';
-
-interface FormLayoutProps {
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  children: React.ReactNode;
-  theme?: any;
-  className?: string;
-  formClassNameConfig?: FormClassNameConfig;
-  style?: React.CSSProperties;
-  layout: LayoutType;
-  layoutConfig?: any;
-  horizontalLabel?: boolean;
-}
 
 const FormLayout: React.FC<FormLayoutProps> = ({
   onSubmit,
@@ -32,11 +20,6 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     return theme ? { ...defaultTheme, ...theme } : defaultTheme;
   }, [theme]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSubmit(event);
-  };
-
   // Get the layout component from the registry
   const LayoutComponent = getLayoutComponent(layout);
 
@@ -48,7 +31,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   return (
     <ThemeProvider theme={mergedTheme}>
       <LayoutComponent
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
         className={className}
         formClassNameConfig={formClassNameConfig}
         style={style}

@@ -1,21 +1,9 @@
 // src/features/form-renderer/components/FormFooter.tsx
 import React from 'react';
-import { FormClassNameConfig, FieldError } from '../../dynamic-form/types';
+import { FormClassNameConfig } from '../../dynamic-form/types';
 import { SubmitButton } from '../../../styles';
 import { ErrorSummary } from '../../../components';
-
-interface FormFooterProps {
-  footer?: React.ReactNode;
-  showSubmitButton: boolean;
-  renderSubmitButton?: (
-    handleSubmit: () => void,
-    isSubmitting: boolean
-  ) => React.ReactNode;
-  isSubmitting: boolean;
-  showErrorSummary: boolean;
-  errors: Record<string, FieldError>;
-  formClassNameConfig?: FormClassNameConfig;
-}
+import { FormFooterProps } from '../types';
 
 const FormFooter: React.FC<FormFooterProps> = ({
   footer,

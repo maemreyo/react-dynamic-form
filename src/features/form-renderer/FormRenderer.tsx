@@ -1,19 +1,9 @@
 // src/features/form-renderer/FormRenderer.tsx
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import {
-  FormField,
-  Condition,
-  DynamicFormProps,
-  FormValues,
-} from '../dynamic-form';
+import { FormValues } from '../dynamic-form';
 import { FormLayout, FormContent, FormFooter } from './components';
-
-interface FormRendererProps extends DynamicFormProps {
-  fieldsToRender: string[];
-  fields: FormField[];
-  conditionalFieldsConfig: Condition[];
-}
+import { FormRendererProps } from './types';
 
 const FormRenderer: React.FC<FormRendererProps> = ({
   onSubmit,
@@ -35,45 +25,76 @@ const FormRenderer: React.FC<FormRendererProps> = ({
   labelWidth,
   disableAutocomplete,
   showInlineError,
+  renderFormContent,
+  renderFormFooter,
 }) => {
-  const form = useFormContext<FormValues>(); // Specify FormValues type
-  const { formState } = form;
+  const form = useFormContext<FormValues>();
+  const { formState, handleSubmit } = form;
+
+  const content = renderFormContent ? (
+    renderFormContent({
+      fieldsToRender,
+      fields,
+      config,
+      formClassNameConfig,
+      horizontalLabel,
+      labelWidth,
+      disableAutocomplete,
+      showInlineError,
+      conditionalFieldsConfig: [],
+      renderInput: (field, fieldConfig, commonInputProps) => <></>,
+    })
+  ) : (
+    <FormContent
+      fieldsToRender={fieldsToRender}
+      fields={fields}
+      config={config}
+      formClassNameConfig={formClassNameConfig}
+      horizontalLabel={horizontalLabel}
+      labelWidth={labelWidth}
+      disableAutocomplete={disableAutocomplete}
+      showInlineError={showInlineError}
+      conditionalFieldsConfig={[]}
+    />
+  );
+
+  const footerContent = renderFormFooter ? (
+    renderFormFooter({
+      footer,
+      showSubmitButton,
+      renderSubmitButton: renderSubmitButton!,
+      isSubmitting: formState.isSubmitting,
+      showErrorSummary,
+      errors: formState.errors,
+      formClassNameConfig,
+    })
+  ) : (
+    <FormFooter
+      footer={footer}
+      formClassNameConfig={formClassNameConfig}
+      showSubmitButton={showSubmitButton}
+      renderSubmitButton={renderSubmitButton}
+      isSubmitting={formState.isSubmitting}
+      showErrorSummary={showErrorSummary}
+      errors={formState.errors}
+    />
+  );
 
   return (
-    <>
-      <FormLayout
-        onSubmit={onSubmit}
-        className={className}
-        formClassNameConfig={formClassNameConfig}
-        style={style}
-        layout={layout}
-        layoutConfig={layoutConfig}
-        horizontalLabel={horizontalLabel}
-        theme={theme}
-      >
-        {header}
-        <FormContent
-          fieldsToRender={fieldsToRender}
-          fields={fields}
-          config={config}
-          formClassNameConfig={formClassNameConfig}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          disableAutocomplete={disableAutocomplete}
-          showInlineError={showInlineError}
-          conditionalFieldsConfig={[]}
-        />
-        <FormFooter
-          footer={footer}
-          formClassNameConfig={formClassNameConfig}
-          showSubmitButton={showSubmitButton}
-          renderSubmitButton={renderSubmitButton}
-          isSubmitting={formState.isSubmitting}
-          showErrorSummary={showErrorSummary}
-          errors={formState.errors} // No need to transform errors
-        />
-      </FormLayout>
-    </>
+    <FormLayout
+      onSubmit={handleSubmit(onSubmit)}
+      className={className}
+      formClassNameConfig={formClassNameConfig}
+      style={style}
+      layout={layout}
+      layoutConfig={layoutConfig}
+      horizontalLabel={horizontalLabel}
+      theme={theme}
+    >
+      {header}
+      {content}
+      {footerContent}
+    </FormLayout>
   );
 };
 
