@@ -54,19 +54,16 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   // Render error message using renderErrorMessage prop or default
   // Ensure that error is properly typed as FieldError
   const errorMessageElement =
-    showInlineError && error && renderErrorMessage ? (
-      renderErrorMessage(error, formClassNameConfig)
-    ) : showInlineError && error ? (
-      <ErrorMessage
-        className={
-          fieldConfig.classNameConfig?.errorMessage ||
-          formClassNameConfig?.errorMessage
-        }
-      >
-        {error.message}
-      </ErrorMessage>
-    ) : null;
-
+    showInlineError && error && renderErrorMessage
+      ? renderErrorMessage(error, formClassNameConfig)
+      : showInlineError && error
+      ? React.createElement(ErrorMessage, {
+          className:
+            fieldConfig.classNameConfig?.errorMessage ||
+            formClassNameConfig?.errorMessage,
+          children: error.message,
+        })
+      : null;
   if (!InputComponent) {
     console.warn(`No input component found for type: ${type}`);
     return null; // Or return a default input component

@@ -41,20 +41,20 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
           $labelWidth={labelWidth}
           className={fieldClassNameConfig.label || formClassName.label}
         >
+          <Input
+            {...field}
+            className={fieldClassNameConfig.input || formClassName.input}
+            type="checkbox"
+            id={id}
+            checked={!!field.value}
+          />
           {label}
+          {/* This is handled in InputRenderer now:
           {fieldConfig.validation?.required && (
             <span style={{ color: 'red' }}>*</span>
-          )}
+          )} */}
         </Label>
       )}
-
-      <Input
-        {...field}
-        className={fieldClassNameConfig.input || formClassName.input}
-        type="checkbox"
-        id={id}
-        checked={!!field.value}
-      />
       {showInlineError && error && (
         <ErrorMessage
           className={

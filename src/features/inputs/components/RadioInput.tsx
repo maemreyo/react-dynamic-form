@@ -1,8 +1,15 @@
+// src/features/inputs/components/RadioInput.tsx
 import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../dynamic-form';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  FormValues,
+} from '../../dynamic-form';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
+import { CommonInputProps } from '../types';
 
 const RadioGroup = styled.div`
   display: flex;
@@ -45,16 +52,7 @@ const RadioInputStyled = styled.input`
     box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary};
   }
 `;
-
-interface RadioInputProps {
-  id: string;
-  fieldConfig: FieldConfig;
-  formClassNameConfig?: FormClassNameConfig;
-  showInlineError?: boolean;
-  horizontalLabel?: boolean;
-  labelWidth?: string | number;
-  error?: FieldError;
-}
+interface RadioInputProps extends CommonInputProps {}
 
 const RadioInput: React.FC<RadioInputProps> = ({
   id,
@@ -68,11 +66,12 @@ const RadioInput: React.FC<RadioInputProps> = ({
   const { label, options } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
-  const { control } = useFormContext();
+  const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: fieldConfig.defaultValue,
   });
 
   return (
@@ -83,6 +82,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
         fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
       }
     >
+      {/* Render label here */}
       {label && (
         <Label
           $horizontalLabel={horizontalLabel}
@@ -103,6 +103,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
               type="radio"
               id={`${id}-${option.value}`}
               name={id}
+              value={option.value}
             />
             {option.label}
           </RadioLabel>

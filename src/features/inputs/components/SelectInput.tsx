@@ -1,8 +1,15 @@
+// src/features/inputs/components/SelectInput.tsx
 import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../dynamic-form';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  FormValues,
+} from '../../dynamic-form';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
+import { CommonInputProps } from '../types';
 
 const StyledSelect = styled.select`
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -23,15 +30,7 @@ const StyledSelect = styled.select`
   width: 100%;
 `;
 
-interface SelectInputProps {
-  id: string;
-  fieldConfig: FieldConfig;
-  formClassNameConfig?: FormClassNameConfig;
-  showInlineError?: boolean;
-  horizontalLabel?: boolean;
-  labelWidth?: string | number;
-  error?: FieldError;
-}
+interface SelectInputProps extends CommonInputProps {}
 
 const SelectInput: React.FC<SelectInputProps> = ({
   id,
@@ -45,11 +44,12 @@ const SelectInput: React.FC<SelectInputProps> = ({
   const { label, options } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
-  const { control } = useFormContext();
+  const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: fieldConfig.defaultValue,
   });
 
   return (
@@ -60,6 +60,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
       }
     >
+      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}

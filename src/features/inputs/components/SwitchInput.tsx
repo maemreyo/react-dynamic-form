@@ -1,8 +1,15 @@
+// src/features/inputs/components/SwitchInput.tsx
 import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../dynamic-form';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+  FormValues,
+} from '../../dynamic-form';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
+import { CommonInputProps } from '../types';
 
 const SwitchContainer = styled.label`
   position: relative;
@@ -52,16 +59,7 @@ const Slider = styled.span`
     border-radius: 50%;
   }
 `;
-
-interface SwitchInputProps {
-  id: string;
-  fieldConfig: FieldConfig;
-  formClassNameConfig?: FormClassNameConfig;
-  showInlineError?: boolean;
-  horizontalLabel?: boolean;
-  labelWidth?: string | number;
-  error?: FieldError;
-}
+interface SwitchInputProps extends CommonInputProps {}
 
 const SwitchInput: React.FC<SwitchInputProps> = ({
   id,
@@ -75,11 +73,12 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
-  const { control } = useFormContext();
+  const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: fieldConfig.defaultValue,
   });
 
   return (
@@ -90,6 +89,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
         fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
       }
     >
+      {/* Render label here */}
       {label && (
         <Label
           $horizontalLabel={horizontalLabel}

@@ -1,19 +1,11 @@
+// src/features/inputs/components/TimePicker.tsx
 import React from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
+import { CommonInputProps } from '../types';
+import { FormValues } from '../../dynamic-form';
 
-interface TimePickerProps {
-  id: string;
-  fieldConfig: FieldConfig;
-  formClassNameConfig?: FormClassNameConfig;
-  showInlineError?: boolean;
-  horizontalLabel?: boolean;
-  labelWidth?: string | number;
-  error?: FieldError;
-}
-
-const TimePicker: React.FC<TimePickerProps> = ({
+const TimePicker: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,
@@ -25,11 +17,12 @@ const TimePicker: React.FC<TimePickerProps> = ({
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
-  const { control } = useFormContext();
+  const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: fieldConfig.defaultValue,
   });
 
   return (
@@ -40,6 +33,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
         fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
       }
     >
+      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}

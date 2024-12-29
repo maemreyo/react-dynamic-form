@@ -1,7 +1,10 @@
-// Filepath: /src/components/ErrorRenderer.tsx
 import React from 'react';
 import styled from 'styled-components';
-import { FieldError } from '../features/dynamic-form';
+import {
+  FieldError,
+  FieldConfig,
+  ErrorMessageTemplate,
+} from '../features/dynamic-form';
 
 const ErrorMessage = styled.div`
   color: ${({ theme }) => theme.colors.error};
@@ -12,21 +15,37 @@ const ErrorMessage = styled.div`
 interface ErrorRendererProps {
   error: FieldError;
   formClassNameConfig?: any;
+  fieldConfig?: FieldConfig; // Add fieldConfig prop
 }
 
 const ErrorRenderer: React.FC<ErrorRendererProps> = ({
   error,
   formClassNameConfig,
+  fieldConfig, // Receive fieldConfig
 }) => {
-  if (error && error.message) {
-    return (
-      <ErrorMessage className={formClassNameConfig?.errorMessage}>
-        {error.message}
-      </ErrorMessage>
-    );
+  let message = error.message || '';
+
+  // Use validationMessages from fieldConfig if available
+  if (fieldConfig && fieldConfig.validationMessages) {
+    const template = fieldConfig.validationMessages[error.type];
+    const values = {
+      label: fieldConfig.label,
+      value: error,
+      error: error,
+      config: fieldConfig,
+    };
+    if (typeof template === 'function') {
+      message = template(values);
+    } else if (typeof template === 'string') {
+      message = template;
+    }
   }
 
-  return null;
+  return (
+    <ErrorMessage className={formClassNameConfig?.errorMessage}>
+      {message}
+    </ErrorMessage>
+  );
 };
 
 export default ErrorRenderer;

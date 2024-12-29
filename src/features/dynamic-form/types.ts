@@ -7,14 +7,14 @@ import {
   FieldPath,
   SubmitHandler,
 } from 'react-hook-form';
-import { Schema } from 'yup';
+import { Message, Schema } from 'yup';
 import {
   FormContainerProps,
   InputWrapperProps,
   LabelProps,
 } from '../../styles';
 import { CommonInputProps } from '../inputs/types';
-import { FormContentProps } from '../form-renderer/components/FormContent';
+import { FormContentProps } from '../form-renderer';
 
 export type LayoutType = 'flex' | 'grid';
 
@@ -57,6 +57,10 @@ export interface DynamicFormProps {
   renderSubmitButton?: RenderSubmitButtonProps;
   renderFormContent?: RenderFormContentProps;
   renderFormFooter?: RenderFormFooterProps;
+
+  customValidators?: {
+    [key: string]: (value: any, context: any) => string | undefined;
+  };
 }
 
 export interface FormClassNameConfig {
@@ -79,6 +83,67 @@ export interface FormConfig {
   [key: string]: FieldConfig;
 }
 
+/**
+ * Represents a custom validation function.
+ *
+ * @template TFieldValue - The type of the field value.
+ * @template TFormValues - The type of the form values.
+ *
+ * @param value - The value of the field being validated.
+ * @param formValues - The values of all fields in the form.
+ * @returns - A string representing the error message if validation fails, or `undefined` if validation passes.
+ */
+export type CustomValidator<
+  TFieldValue = any,
+  TFormValues extends FieldValues = FormValues
+> = (
+  value: TFieldValue,
+  formValues: TFormValues
+) => string | undefined | Promise<string | undefined>;
+
+/**
+ * Validation configuration for a field.
+ */
+export type ValidationValue<T> =
+  | T
+  | {
+      value: T;
+      message: string;
+    };
+
+export interface ValidationConfig {
+  required?: ValidationValue<boolean>;
+  minLength?: ValidationValue<number>;
+  maxLength?: ValidationValue<number>;
+  min?: ValidationValue<number | string>;
+  max?: ValidationValue<number | string>;
+  pattern?: ValidationValue<RegExp>;
+  validate?: (
+    value: any,
+    formValues: FormValues
+  ) => string | undefined | Promise<string | undefined>;
+  requiredMessage?: string;
+}
+
+/**
+ * Custom error message template
+ */
+export type ErrorMessageTemplate =
+  | Message
+  | ((values: {
+      label?: string;
+      value: any;
+      error: FieldError;
+      config: FieldConfig;
+    }) => string);
+
+/**
+ * Validation messages for a field.
+ */
+export interface ValidationMessages {
+  [key: string]: ErrorMessageTemplate;
+}
+
 export interface FieldConfig {
   type?: InputType;
   label?: string;
@@ -95,9 +160,9 @@ export interface FieldConfig {
   options?: { value: string; label: string }[];
   conditional?: Condition;
   fields?: FormConfig;
+  validationMessages?: ValidationMessages; // Add validationMessages
+  defaultValue?: any;
 }
-
-export type ValidationConfig = Record<string, any>;
 
 export type InputType =
   | 'text'

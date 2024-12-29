@@ -1,11 +1,13 @@
 // src/features/form-renderer/components/FormContent.tsx
 import React, { useEffect } from 'react';
-import { FormValues } from '../../dynamic-form/types';
+import { FormValues, FieldError } from '../../dynamic-form/types'; // Import FieldError
 import { useFormContext } from 'react-hook-form';
 import { getInputComponent } from '../../inputs/registry/InputRegistry';
 import { InputWrapper } from '../../../styles';
 import { InputRenderer } from '../../inputs/components';
 import { FormContentProps } from '../types';
+import { ErrorRenderer } from '../../../components';
+import { CommonInputProps } from '../../inputs';
 
 const FormContent: React.FC<FormContentProps> = ({
   fieldsToRender,
@@ -17,7 +19,7 @@ const FormContent: React.FC<FormContentProps> = ({
   disableAutocomplete,
   showInlineError,
   renderInput,
-  conditionalFieldsConfig, // Remove the extra conditionalFieldsConfig prop
+  conditionalFieldsConfig,
 }) => {
   const {
     register,
@@ -41,7 +43,8 @@ const FormContent: React.FC<FormContentProps> = ({
       {fields
         .filter(field => fieldsToRender.includes(field.id))
         .map(field => {
-          const fieldError = errors[field.id];
+          // Access the nested error object correctly
+          const fieldError = errors[field.id] as FieldError | undefined;
 
           const fieldConfig = config[field.id] || {};
           const InputComponent = getInputComponent(field.type);

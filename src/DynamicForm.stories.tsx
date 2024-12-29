@@ -24,18 +24,20 @@ BasicForm.args = {
   config: {
     firstName: {
       label: 'First Name',
-      type: 'text', // Added type
-      validation: { required: 'This field is required' },
+      type: 'text',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
     },
     lastName: {
       label: 'Last Name',
-      type: 'text', // Added type
+      type: 'text',
     },
     email: {
       label: 'Email',
-      type: 'email', // Added type
+      type: 'email',
       validation: {
-        required: 'This field is required',
+        required: { value: true, message: 'This field is required' },
         pattern: {
           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
           message: 'Invalid email address',
@@ -46,14 +48,19 @@ BasicForm.args = {
       label: 'Age',
       type: 'number',
       validation: {
-        required: 'This field is required',
-        min: 18,
+        required: { value: true, message: 'This field is required' },
+        min: { value: 18, message: 'You must be at least 18 years old' },
       },
     },
     agree: {
       type: 'checkbox',
       label: 'I agree to the terms and conditions',
-      validation: { required: 'You must agree to continue' },
+      validation: {
+        required: {
+          value: true,
+          message: 'You must agree to the terms and conditions',
+        },
+      },
     },
   },
   onSubmit: data => {
@@ -79,84 +86,13 @@ FormWithCustomLayout.args = {
 };
 FormWithCustomLayout.storyName = 'Form with Custom Layout';
 
-export const FormWithNestedObject = Template.bind({});
-FormWithNestedObject.args = {
-  data: {
-    firstName: 'John',
-    lastName: 'Doe',
-    address: {
-      // Nested object
-      street: '123 Main St',
-      city: 'Anytown',
-      state: 'CA',
-      zip: '90210',
-    },
-  },
-  config: {
-    firstName: {
-      label: 'First Name',
-      type: 'text',
-      validation: {
-        required: 'This field is required',
-      },
-    },
-    lastName: {
-      label: 'Last Name',
-      type: 'text',
-      validation: {
-        required: 'This field is required',
-      },
-    },
-    address: {
-      // Nested form
-      label: 'Address',
-      fields: {
-        street: {
-          label: 'Street',
-          type: 'text',
-          validation: {
-            required: 'This field is required',
-          },
-        },
-        city: {
-          label: 'City',
-          type: 'text',
-          validation: {
-            required: 'This field is required',
-          },
-        },
-        state: {
-          label: 'State',
-          type: 'text',
-          validation: {
-            required: 'This field is required',
-          },
-        },
-        zip: {
-          label: 'Zip',
-          type: 'text',
-          validation: {
-            required: 'This field is required',
-            pattern: {
-              value: /^\d{5}$/,
-              message: 'Invalid zip code',
-            },
-          },
-        },
-      },
-    },
-  },
-  onFormReady: fn(),
-};
-FormWithNestedObject.storyName = 'Form with Nested Object';
-
 export const FormWithConditionalFields = Template.bind({});
 FormWithConditionalFields.args = {
   data: {
-    country: '',
+    country: '', // Start with an empty value
     state: '',
-    age: 0,
-    subscribe: false,
+    age: 0, // Start with 0
+    subscribe: false, // Start with false
     newsletterType: '',
     password: '',
   },
@@ -180,16 +116,22 @@ FormWithConditionalFields.args = {
         value: 'US',
         fields: ['state'],
       },
+      validation: {
+        required: {
+          value: true,
+          message: 'This field is required when country is US',
+        },
+      },
     },
     age: {
       label: 'Age',
       type: 'number',
-      // validation: {
-      //   min: {
-      //     value: 0,
-      //     message: '???',
-      //   },
-      // },
+      validation: {
+        min: {
+          value: 0,
+          message: 'Age must be greater than or equal to 0',
+        },
+      },
     },
     drivingLicense: {
       label: 'Driving License',
@@ -199,6 +141,12 @@ FormWithConditionalFields.args = {
         operator: 'greaterThanOrEqual',
         value: 18,
         fields: ['drivingLicense'],
+      },
+      validation: {
+        required: {
+          value: true,
+          message: 'This field is required when age is 18 or older',
+        },
       },
     },
     subscribe: {
@@ -219,13 +167,25 @@ FormWithConditionalFields.args = {
         value: true,
         fields: ['newsletterType'],
       },
+      validation: {
+        required: {
+          value: true,
+          message: 'This field is required when subscribed to newsletter',
+        },
+      },
     },
     password: {
       label: 'Password',
       type: 'text',
       validation: {
-        required: true,
-        minLength: 8,
+        required: {
+          value: true,
+          message: 'This field is required',
+        },
+        minLength: {
+          value: 8,
+          message: 'Password must be at least 8 characters long',
+        },
         validate: (value: string) => {
           if (!/[A-Z]/.test(value)) {
             return 'Password must contain at least one uppercase letter';

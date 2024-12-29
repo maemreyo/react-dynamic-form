@@ -8,7 +8,7 @@ import {
   FormValues,
 } from '../types';
 import { flattenConfig } from '../utils';
-import { FormState, useWatch, Control } from 'react-hook-form';
+import { FormState, useWatch, Control, get } from 'react-hook-form';
 import { getInputTypeFromValue } from '../../inputs/utils';
 
 /**
@@ -127,12 +127,38 @@ function useFormFields(
   const fields = useMemo(() => {
     return Object.entries(flattenedConfig).map(([key, fieldConfig]) => {
       const inputType = fieldConfig.type || getInputTypeFromValue(data[key]);
+      const validationMessages = fieldConfig.validationMessages;
+      let errorMessage = undefined;
 
+      if (formState.errors && formState.errors[key]) {
+        const fieldError = formState.errors[key] as FieldError;
+        const errorType = fieldError.type;
+
+        if (validationMessages && validationMessages[errorType]) {
+          const template = validationMessages[errorType];
+          const values = {
+            label: fieldConfig.label,
+            value: data[key],
+            error: fieldError,
+            config: fieldConfig,
+          };
+          errorMessage =
+            typeof template === 'function'
+              ? template(values)
+              : typeof template === 'string'
+              ? template
+              : fieldError.message;
+        } else {
+          errorMessage = fieldError.message;
+        }
+      }
       return {
         label: fieldConfig.label,
         id: key,
         type: inputType,
-        error: formState.errors?.[key] as FieldError | undefined, // Type assertion
+        error: errorMessage
+          ? { ...formState.errors[key], message: errorMessage }
+          : formState.errors?.[key],
       };
     });
   }, [flattenedConfig, formState, data]);
