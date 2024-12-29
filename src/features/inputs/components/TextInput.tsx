@@ -3,6 +3,7 @@ import React from 'react';
 import { Input, Label, InputWrapper } from '../../../styles';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
+import { FormValues } from '../../dynamic-form';
 
 const TextInput: React.FC<CommonInputProps> = ({
   id,
@@ -15,11 +16,12 @@ const TextInput: React.FC<CommonInputProps> = ({
   const { label } = fieldConfig;
   const fieldClassNameConfig = fieldConfig.classNameConfig || {};
   const formClassName = formClassNameConfig || {};
-  const { control } = useFormContext();
+  const { control } = useFormContext<FormValues>(); // Specify FormValues
   const { field } = useController({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: '',
   });
 
   return (
@@ -48,6 +50,7 @@ const TextInput: React.FC<CommonInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
+        value={field.value || ''}
       />
     </InputWrapper>
   );

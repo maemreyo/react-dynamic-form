@@ -1,8 +1,8 @@
 // src/features/dynamic-form/hooks/useDynamicForm.ts
 import { useEffect } from 'react';
-import { useForm, UseFormReturn } from 'react-hook-form';
+import { useForm, UseFormReturn, UseFormProps } from 'react-hook-form';
 import { debounce, saveToLocalStorage } from '../utils';
-import { DynamicFormProps } from '../types';
+import { DynamicFormProps, FormValues } from '../types';
 
 /**
  * Custom hook to manage form state and behavior.
@@ -10,7 +10,7 @@ import { DynamicFormProps } from '../types';
  * @param props - The hook props.
  * @returns The `react-hook-form` instance.
  */
-const useDynamicForm = (props: DynamicFormProps): UseFormReturn<any> => {
+const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   const {
     data,
     formOptions,
@@ -23,12 +23,20 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<any> => {
     onFormReady,
   } = props;
 
-  const form = useForm({
+  const form = useForm<FormValues>({
+    // Specify FormValues type here
     ...formOptions,
     defaultValues: data,
-  });
+  } as UseFormProps<FormValues>);
 
-  const { formState, reset, setFocus, watch, handleSubmit } = form;
+  const {
+    formState,
+    reset,
+    setFocus,
+    watch,
+    handleSubmit,
+    control, // Add control here
+  } = form;
   const { isSubmitting, isSubmitSuccessful, errors } = formState;
 
   // Auto-save
@@ -72,8 +80,8 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<any> => {
   // Debounce on change
   useEffect(() => {
     if (onChange) {
-      const debounced = debounce(onChange, debounceOnChange);
-      const subscription = watch(data => debounced(data));
+      const debouncedOnChange = debounce(onChange, debounceOnChange);
+      const subscription = watch(data => debouncedOnChange(data));
       return () => subscription.unsubscribe();
     }
   }, [watch, onChange, debounceOnChange]);

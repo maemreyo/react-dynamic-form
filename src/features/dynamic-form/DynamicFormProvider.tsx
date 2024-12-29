@@ -1,10 +1,11 @@
 // src/features/dynamic-form/DynamicFormProvider.tsx
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { FormProvider, UseFormReturn } from 'react-hook-form';
+import { FormValues } from './types';
 
 interface DynamicFormProviderProps {
-  form: UseFormReturn<any>;
-  children: React.ReactNode;
+  form: UseFormReturn<FormValues>;
+  children: ReactNode;
 }
 
 const DynamicFormProvider: FC<DynamicFormProviderProps> = ({

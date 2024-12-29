@@ -62,7 +62,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     onFormReady,
   });
 
-  const { formState, control } = form;
+  const { formState, control, handleSubmit } = form; // Destructure handleSubmit here
 
   const { fields, fieldsToRender, conditionalFieldsConfig } = useFormFields(
     data,
@@ -71,8 +71,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     control
   );
 
-  const handleSubmit = () => {
-    form.handleSubmit(data => {
+  // Use the handleSubmit from useDynamicForm
+  const onSubmitHandler = () => {
+    handleSubmit(data => {
       if (onSubmit) {
         onSubmit(data);
       }
@@ -82,7 +83,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   return (
     <DynamicFormProvider form={form}>
       <FormRenderer
-        onSubmit={handleSubmit}
+        onSubmit={onSubmitHandler} // Pass the onSubmit handler
         className={className}
         formClassNameConfig={formClassNameConfig}
         style={style}

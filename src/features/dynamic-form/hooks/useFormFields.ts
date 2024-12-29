@@ -1,8 +1,14 @@
 // src/features/dynamic-form/hooks/useFormFields.ts
 import { useMemo } from 'react';
-import { FormField, FormConfig, FieldError, Condition } from '../types';
+import {
+  FormField,
+  FormConfig,
+  FieldError,
+  Condition,
+  FormValues,
+} from '../types';
 import { flattenConfig } from '../utils';
-import { FormState, useWatch } from 'react-hook-form';
+import { FormState, useWatch, Control } from 'react-hook-form';
 import { getInputTypeFromValue } from '../../inputs/utils';
 
 /**
@@ -15,10 +21,10 @@ import { getInputTypeFromValue } from '../../inputs/utils';
  * @returns An object containing the form fields and the fields to render.
  */
 function useFormFields(
-  data: Record<string, any>,
+  data: FormValues,
   config: FormConfig,
-  formState: FormState<any>,
-  control: any
+  formState: FormState<FormValues>,
+  control: Control<FormValues>
 ): {
   fields: FormField[];
   fieldsToRender: string[];
@@ -126,7 +132,7 @@ function useFormFields(
         label: fieldConfig.label,
         id: key,
         type: inputType,
-        error: formState.errors?.[key] as FieldError | undefined,
+        error: formState.errors?.[key] as FieldError | undefined, // Type assertion
       };
     });
   }, [flattenedConfig, formState, data]);

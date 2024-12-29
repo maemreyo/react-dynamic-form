@@ -1,8 +1,13 @@
 // src/features/form-renderer/FormRenderer.tsx
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { FormField, Condition, DynamicFormProps } from '../dynamic-form';
-import { FormLayout, FormContent, FormFooter } from './components/';
+import {
+  FormField,
+  Condition,
+  DynamicFormProps,
+  FormValues,
+} from '../dynamic-form';
+import { FormLayout, FormContent, FormFooter } from './components';
 
 interface FormRendererProps extends DynamicFormProps {
   fieldsToRender: string[];
@@ -31,7 +36,7 @@ const FormRenderer: React.FC<FormRendererProps> = ({
   disableAutocomplete,
   showInlineError,
 }) => {
-  const form = useFormContext();
+  const form = useFormContext<FormValues>(); // Specify FormValues type
   const { formState } = form;
 
   return (
@@ -65,10 +70,7 @@ const FormRenderer: React.FC<FormRendererProps> = ({
           renderSubmitButton={renderSubmitButton}
           isSubmitting={formState.isSubmitting}
           showErrorSummary={showErrorSummary}
-          errors={Object.keys(formState.errors).reduce((acc, key) => {
-            acc[key] = formState.errors[key] as any;
-            return acc;
-          }, {} as Record<string, any>)}
+          errors={formState.errors} // No need to transform errors
         />
       </FormLayout>
     </>
