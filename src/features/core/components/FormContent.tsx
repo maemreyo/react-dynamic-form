@@ -7,6 +7,7 @@ import {
 } from '../types';
 import { useFormContext } from 'react-hook-form';
 import renderInputComponent from '../../inputs/components/InputRenderer';
+import ErrorRenderer from '../../../components/ErrorRenderer';
 
 interface FormContentProps {
   fields: FormField[];
@@ -30,7 +31,11 @@ const FormContent: React.FC<FormContentProps> = ({
   disableAutocomplete,
   showInlineError,
 }) => {
-  const { register, unregister } = useFormContext();
+  const {
+    register,
+    unregister,
+    formState: { errors },
+  } = useFormContext();
 
   useEffect(() => {
     fields.forEach(field => {
@@ -48,6 +53,7 @@ const FormContent: React.FC<FormContentProps> = ({
       {fields
         .filter(field => fieldsToRender.includes(field.id))
         .map(field => {
+          const fieldError = errors[field.id] as FieldError | undefined; // Get the error for the field
           return (
             <React.Fragment key={field.id}>
               {renderInputComponent({
@@ -59,6 +65,12 @@ const FormContent: React.FC<FormContentProps> = ({
                 horizontalLabel,
                 labelWidth,
               })}
+              {showInlineError && fieldError && (
+                <ErrorRenderer
+                  error={fieldError}
+                  formClassNameConfig={formClassNameConfig}
+                />
+              )}
             </React.Fragment>
           );
         })}

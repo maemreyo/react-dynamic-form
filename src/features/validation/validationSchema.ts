@@ -1,9 +1,10 @@
-// src/features/validation/validationSchema.ts
+// Filepath: /src/features/validation/validationSchema.ts
 
 import * as yup from 'yup';
 import { AnySchema } from 'yup';
 import { FormConfig } from '../core/types';
 import { getValidationRules } from './customValidators';
+import { getValidationSchema } from './ValidationSchemaRegistry';
 
 /**
  * Creates a Yup validation schema based on the provided form configuration.
@@ -17,47 +18,15 @@ export const createValidationSchema = (config: FormConfig) => {
     const fieldConfig = config[fieldId];
     const { validation, type } = fieldConfig;
 
-    // Even without explicit type, add field to shape to avoid null
     if (type === undefined) {
       console.warn(`Field type is undefined for field: ${fieldId}`);
     }
 
+    let fieldSchema: yup.AnySchema = getValidationSchema(type!) || yup.mixed();
+
     if (validation) {
-      let fieldSchema: yup.AnySchema = yup.mixed();
-
-      switch (type) {
-        case 'text':
-        case 'email':
-        case 'password':
-        case 'tel':
-        case 'url':
-        case 'textarea':
-        case 'combobox':
-          fieldSchema = yup.string();
-          break;
-        case 'number':
-          fieldSchema = yup.number();
-          break;
-        case 'checkbox':
-        case 'switch':
-        case 'radio':
-          fieldSchema = yup.boolean();
-          break;
-        case 'date':
-        case 'time':
-        case 'datetime-local':
-          fieldSchema = yup.date();
-          break;
-        case 'select': // Assuming select values are strings
-          fieldSchema = yup.string();
-          break;
-        default:
-          fieldSchema = yup.mixed();
-      }
-
       for (const rule in validation) {
         const ruleValue = validation[rule];
-
         switch (rule) {
           case 'required':
             if (fieldSchema instanceof yup.StringSchema) {
@@ -145,9 +114,10 @@ export const createValidationSchema = (config: FormConfig) => {
             console.warn(`Unknown validation rule: ${rule}`);
         }
       }
-
-      shape[fieldId] = fieldSchema;
     }
+
+    shape[fieldId] = fieldSchema;
   }
-  return yup.object().shape(shape); // Always return a yup object, even if shape is empty
+
+  return yup.object().shape(shape);
 };

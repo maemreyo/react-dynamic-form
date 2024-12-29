@@ -15,35 +15,17 @@ const useRHFOptions = (
 ): UseFormProps => {
   return useMemo(() => {
     const schema = createValidationSchema(config);
-    // Check if the schema is null
-    if (!schema) {
-      console.warn(
-        'createValidationSchema returned null. No validation will be performed.'
-      );
-      return {
-        ...formOptions,
-        mode: validateOnSubmit
-          ? 'onSubmit'
-          : validateOnChange
-          ? 'onChange'
-          : validateOnBlur
-          ? 'onBlur'
-          : 'onSubmit',
-        criteriaMode: 'all',
-      };
-    }
-
     const resolver = yupResolver(schema);
     console.log('schema', schema);
     return {
       ...formOptions,
-      mode: validateOnSubmit
-        ? 'onSubmit'
-        : validateOnChange
-        ? 'onChange'
-        : validateOnBlur
-        ? 'onBlur'
-        : 'onSubmit',
+      // mode: validateOnSubmit
+      //   ? 'onSubmit'
+      //   : validateOnChange
+      //   ? 'onChange'
+      //   : validateOnBlur
+      //   ? 'onBlur'
+      //   : 'onSubmit',
       criteriaMode: 'all',
       resolver,
     };

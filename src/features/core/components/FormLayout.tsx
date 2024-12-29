@@ -1,11 +1,12 @@
-import React from 'react';
-import { ThemeProvider } from 'styled-components';
-import { FormContainer, FormContainerProps } from '../../../styles';
-import { defaultTheme } from '../../../theme';
-import { useMemo } from 'react';
-import { FormClassNameConfig, LayoutType } from '../types';
+// Filepath: /src/features/core/components/FormLayout.tsx
 
-interface FormLayoutProps extends FormContainerProps {
+import React, { useMemo } from 'react';
+import { ThemeProvider } from 'styled-components';
+import { defaultTheme } from '../../../theme';
+import { FormClassNameConfig, LayoutType } from '../types';
+import { getLayoutComponent } from '../registry/LayoutRegistry';
+
+interface FormLayoutProps {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   children: React.ReactNode;
   theme?: any;
@@ -37,21 +38,26 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     onSubmit(event);
   };
 
+  // Get the layout component from the registry
+  const LayoutComponent = getLayoutComponent(layout);
+
+  if (!LayoutComponent) {
+    console.warn(`No layout component found for type: ${layout}`);
+    return null; // Or return a default layout component
+  }
+
   return (
     <ThemeProvider theme={mergedTheme}>
-      <FormContainer
+      <LayoutComponent
         onSubmit={handleSubmit}
-        className={`${className || ''} ${formClassNameConfig?.formContainer ||
-          ''}`}
-        $layout={layout}
-        $layoutConfig={layoutConfig}
-        $horizontalLabel={horizontalLabel}
-        data-layoutconfig={JSON.stringify(layoutConfig)}
-        data-horizontallabel={horizontalLabel ? 'true' : 'false'}
+        className={className}
+        formClassNameConfig={formClassNameConfig}
         style={style}
+        layoutConfig={layoutConfig}
+        horizontalLabel={horizontalLabel}
       >
         {children}
-      </FormContainer>
+      </LayoutComponent>
     </ThemeProvider>
   );
 };

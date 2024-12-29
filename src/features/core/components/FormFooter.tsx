@@ -42,7 +42,10 @@ const FormFooter: React.FC<FormFooterProps> = ({
           </SubmitButton>
         ))}
       {showErrorSummary && Object.keys(errors).length > 0 && (
-        <ErrorSummary errors={errors} />
+        <ErrorSummary
+          errors={errors}
+          formClassNameConfig={formClassNameConfig}
+        />
       )}
     </>
   );
