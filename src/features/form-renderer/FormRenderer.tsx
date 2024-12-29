@@ -1,23 +1,16 @@
 // src/features/form-renderer/FormRenderer.tsx
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import {
-  FormField,
-  Condition,
-  DynamicFormProps,
-  FormValues,
-  RenderFormContentProps,
-  RenderFormFooterProps,
-} from '../dynamic-form';
+import { FormValues } from '../dynamic-form';
 import { FormLayout, FormContent, FormFooter } from './components';
 import { FormRendererProps } from './types';
 
 const FormRenderer: React.FC<FormRendererProps> = ({
   onSubmit,
   className,
-  formClassNameConfig, // Add formClassNameConfig here
+  formClassNameConfig = {},
   style,
-  layout,
+  layout = 'grid',
   layoutConfig,
   horizontalLabel,
   theme,
@@ -26,9 +19,9 @@ const FormRenderer: React.FC<FormRendererProps> = ({
   fields,
   config,
   footer,
-  showSubmitButton,
+  showSubmitButton = true,
   renderSubmitButton,
-  showErrorSummary,
+  showErrorSummary = false,
   labelWidth,
   disableAutocomplete,
   showInlineError,
@@ -89,7 +82,7 @@ const FormRenderer: React.FC<FormRendererProps> = ({
 
   return (
     <FormLayout
-      onSubmit={handleSubmit(onSubmit)} // Use handleSubmit from react-hook-form
+      onSubmit={handleSubmit(onSubmit)}
       className={className}
       formClassNameConfig={formClassNameConfig}
       style={style}

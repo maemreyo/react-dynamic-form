@@ -2,9 +2,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
-  FieldConfig,
-  FormClassNameConfig,
-  FieldError,
   FormValues,
 } from '../../dynamic-form';
 import styled from 'styled-components';

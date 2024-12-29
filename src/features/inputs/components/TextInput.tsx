@@ -1,16 +1,11 @@
 // src/features/inputs/components/TextInput.tsx
 import React from 'react';
 import { Input, Label, InputWrapper } from '../../../styles';
-import {
-  useFormContext,
-  useController,
-  RegisterOptions,
-} from 'react-hook-form';
+import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
 import { useTheme } from '../../../theme/ThemeProvider';
 
-// other code
 const TextInput: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
@@ -27,7 +22,7 @@ const TextInput: React.FC<CommonInputProps> = ({
   const { field } = useController({
     name: id,
     control,
-    rules: fieldConfig.validation as RegisterOptions,
+    rules: fieldConfig.validation,
     defaultValue: fieldConfig.defaultValue,
   });
 
@@ -39,7 +34,6 @@ const TextInput: React.FC<CommonInputProps> = ({
         fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
       }
     >
-      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}
@@ -48,9 +42,10 @@ const TextInput: React.FC<CommonInputProps> = ({
           className={fieldClassNameConfig.label || formClassName.label}
         >
           {label}
-          {fieldConfig.validation?.required && (
-            <span style={{ color: theme.colors.error }}>*</span>
-          )}
+          {fieldConfig.validation?.required &&
+            typeof fieldConfig.validation.required === 'object' && (
+              <span style={{ color: theme.colors.error }}>*</span>
+            )}
         </Label>
       )}
       <Input
@@ -58,7 +53,6 @@ const TextInput: React.FC<CommonInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
-        value={field.value || ''}
       />
     </InputWrapper>
   );

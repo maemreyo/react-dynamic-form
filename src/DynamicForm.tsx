@@ -9,6 +9,7 @@ import {
 } from './features/dynamic-form';
 import { FormRenderer } from './features/form-renderer';
 import ThemeProvider from './theme/ThemeProvider';
+import { DefaultTheme } from 'styled-components';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   data,
@@ -52,7 +53,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   );
 
   const form = useDynamicForm({
-    data,
+    config,
     formOptions: mergedFormOptions,
     autoSave,
     enableLocalStorage,
@@ -66,8 +67,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   const { formState, control, handleSubmit } = form;
 
   const { fields, fieldsToRender, conditionalFieldsConfig } = useFormFields(
-    data,
-    config,
+    config, // Pass config instead of data
     formState,
     control
   );
@@ -81,7 +81,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme || ({} as DefaultTheme)}>
       <DynamicFormProvider form={form}>
         <FormRenderer
           onSubmit={onSubmitHandler}
@@ -107,7 +107,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           disableAutocomplete={disableAutocomplete}
           showInlineError={showInlineError}
           conditionalFieldsConfig={conditionalFieldsConfig}
-          data={data}
         />
       </DynamicFormProvider>
     </ThemeProvider>

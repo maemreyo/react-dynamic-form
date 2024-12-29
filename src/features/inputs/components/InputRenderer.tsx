@@ -31,7 +31,6 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   showInlineError,
   horizontalLabel,
   labelWidth,
-  renderLabel,
   renderErrorMessage,
 }) => {
   const { id, type, error } = field;

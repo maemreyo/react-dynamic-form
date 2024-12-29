@@ -12,7 +12,6 @@ import { DynamicFormProps, FormValues } from '../types';
  */
 const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   const {
-    data,
     formOptions,
     autoSave,
     enableLocalStorage,
@@ -24,20 +23,11 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   } = props;
 
   const form = useForm<FormValues>({
-    // Specify FormValues type here
     ...formOptions,
-    defaultValues: data,
   } as UseFormProps<FormValues>);
 
-  const {
-    formState,
-    reset,
-    setFocus,
-    watch,
-    handleSubmit,
-    control, // Add control here
-  } = form;
-  const { isSubmitting, isSubmitSuccessful, errors } = formState;
+  const { formState, reset, setFocus, watch, control } = form;
+  const { isSubmitSuccessful, errors } = formState;
 
   // Auto-save
   useEffect(() => {
@@ -80,7 +70,7 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   // Debounce on change
   useEffect(() => {
     if (onChange) {
-      const debouncedOnChange = debounce(onChange, debounceOnChange);
+      const debouncedOnChange = debounce(onChange, debounceOnChange || 0);
       const subscription = watch(data => debouncedOnChange(data));
       return () => subscription.unsubscribe();
     }
@@ -93,7 +83,7 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
     }
   }, [form, onFormReady]);
 
-  return form;
+  return { ...form, control };
 };
 
 export default useDynamicForm;

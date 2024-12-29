@@ -35,7 +35,7 @@ const ErrorRenderer: React.FC<ErrorRendererProps> = ({
       config: fieldConfig,
     };
     if (typeof template === 'function') {
-      message = template(values);
+      message = template(values) as string;
     } else if (typeof template === 'string') {
       message = template;
     }

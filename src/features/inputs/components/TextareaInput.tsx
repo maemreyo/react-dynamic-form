@@ -1,12 +1,7 @@
 // src/features/inputs/components/TextareaInput.tsx
 import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
-import {
-  FieldConfig,
-  FormClassNameConfig,
-  FieldError,
-  FormValues,
-} from '../../dynamic-form';
+import { FormValues } from '../../dynamic-form';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';

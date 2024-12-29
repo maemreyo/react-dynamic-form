@@ -1,9 +1,10 @@
 // src/features/inputs/components/CheckboxInput.tsx
 import React from 'react';
-import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
+import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
+import { useTheme } from '../../../theme/ThemeProvider';
 
 const CheckboxInput: React.FC<CommonInputProps> = ({
   id,
@@ -21,8 +22,8 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
   const { field } = useController({
     name: id,
     control,
-    rules: fieldConfig.validation,
-    defaultValue: fieldConfig.defaultValue || false,
+    rules: fieldConfig.validation as any,
+    defaultValue: fieldConfig.defaultValue,
   });
 
   return (

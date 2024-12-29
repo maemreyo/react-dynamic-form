@@ -19,8 +19,7 @@ import { FormContentProps } from '../form-renderer';
 export type LayoutType = 'flex' | 'grid';
 
 export interface DynamicFormProps {
-  data: Record<string, any>;
-  config?: FormConfig;
+  config: FormConfig;
   onChange?: (formData: FormValues) => void;
   onSubmit?: SubmitHandler<FieldValues>;
   formOptions?: UseFormProps;

@@ -11,21 +11,16 @@ export default {
 
 const Template: StoryFn<typeof DynamicForm> = args => <DynamicForm {...args} />;
 
+
 // --- Examples ---
 export const BasicForm = Template.bind({});
 BasicForm.args = {
   theme: defaultTheme,
-  data: {
-    firstName: '',
-    lastName: '',
-    email: '',
-    age: 0,
-    agree: false,
-  },
   config: {
     firstName: {
       label: 'First Name',
       type: 'text',
+      defaultValue: 'default first name',
       validation: {
         required: { value: true, message: 'This field is required' },
       },
@@ -33,10 +28,12 @@ BasicForm.args = {
     lastName: {
       label: 'Last Name',
       type: 'text',
+      defaultValue: 'default last name',
     },
     email: {
       label: 'Email',
       type: 'email',
+      defaultValue: 'email@default.com',
       validation: {
         required: { value: true, message: 'This field is required' },
         pattern: {
@@ -48,6 +45,7 @@ BasicForm.args = {
     age: {
       label: 'Age',
       type: 'number',
+      defaultValue: 19,
       validation: {
         required: { value: true, message: 'This field is required' },
         min: { value: 18, message: 'You must be at least 18 years old' },
@@ -56,6 +54,7 @@ BasicForm.args = {
     agree: {
       type: 'checkbox',
       label: 'I agree to the terms and conditions',
+      defaultValue: true,
       validation: {
         required: {
           value: true,
@@ -71,36 +70,82 @@ BasicForm.args = {
 };
 BasicForm.storyName = 'Basic Form';
 
-export const FormWithValidationSchema = Template.bind({});
-FormWithValidationSchema.args = {
-  ...BasicForm.args,
+// other stories ...
+export const FormWithNestedObject = Template.bind({});
+FormWithNestedObject.args = {
+  theme: defaultTheme,
+  config: {
+    firstName: {
+      label: 'First Name',
+      type: 'text',
+      defaultValue: 'nested first name',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
+    },
+    lastName: {
+      label: 'Last Name',
+      type: 'text',
+      defaultValue: 'nested last name',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
+    },
+    address: {
+      // Nested form
+      label: 'Address',
+      fields: {
+        street: {
+          label: 'Street',
+          type: 'text',
+          defaultValue: 'nested street',
+          validation: {
+            required: { value: true, message: 'This field is required' },
+          },
+        },
+        city: {
+          label: 'City',
+          type: 'text',
+          defaultValue: 'nested city',
+          validation: {
+            required: { value: true, message: 'This field is required' },
+          },
+        },
+        state: {
+          label: 'State',
+          type: 'text',
+          defaultValue: 'nested state',
+          validation: {
+            required: { value: true, message: 'This field is required' },
+          },
+        },
+        zip: {
+          label: 'Zip',
+          type: 'text',
+          defaultValue: '123',
+          validation: {
+            required: { value: true, message: 'This field is required' },
+            pattern: {
+              value: /^\d{5}$/,
+              message: 'Invalid zip code',
+            },
+          },
+        },
+      },
+    },
+  },
+  onFormReady: fn(),
 };
-FormWithValidationSchema.storyName = 'Form with Validation Schema';
-
-export const FormWithCustomLayout = Template.bind({});
-FormWithCustomLayout.args = {
-  ...BasicForm.args, // Use the same data and config as the Default story
-  layout: 'grid',
-  layoutConfig: { gap: '20px' }, // Custom gap
-  horizontalLabel: true, // Display labels horizontally
-  labelWidth: '150px', // Set a fixed width for labels
-};
-FormWithCustomLayout.storyName = 'Form with Custom Layout';
+FormWithNestedObject.storyName = 'Form with Nested Object';
 
 export const FormWithConditionalFields = Template.bind({});
 FormWithConditionalFields.args = {
-  data: {
-    country: '', // Start with an empty value
-    state: '',
-    age: 0, // Start with 0
-    subscribe: false, // Start with false
-    newsletterType: '',
-    password: '',
-  },
+  theme: defaultTheme,
   config: {
     country: {
       label: 'Country',
       type: 'select',
+      // defaultValue: 'US',
       options: [
         { value: '', label: 'Select Country' },
         { value: 'US', label: 'United States' },
@@ -111,6 +156,7 @@ FormWithConditionalFields.args = {
     state: {
       label: 'State',
       type: 'text',
+      // defaultValue: 'nested state',
       conditional: {
         when: 'country',
         operator: 'is',
@@ -127,6 +173,7 @@ FormWithConditionalFields.args = {
     age: {
       label: 'Age',
       type: 'number',
+      // defaultValue: 20,
       validation: {
         min: {
           value: 0,
@@ -137,6 +184,7 @@ FormWithConditionalFields.args = {
     drivingLicense: {
       label: 'Driving License',
       type: 'text',
+      // defaultValue: 'nested drivingLicense',
       conditional: {
         when: 'age',
         operator: 'greaterThanOrEqual',
@@ -153,10 +201,12 @@ FormWithConditionalFields.args = {
     subscribe: {
       label: 'Subscribe to newsletter?',
       type: 'checkbox',
+      // defaultValue: true,
     },
     newsletterType: {
       label: 'Newsletter Type',
       type: 'select',
+      // defaultValue: 'daily',
       options: [
         { value: '', label: 'Select Type' },
         { value: 'daily', label: 'Daily' },
@@ -178,6 +228,7 @@ FormWithConditionalFields.args = {
     password: {
       label: 'Password',
       type: 'text',
+      // defaultValue: 'Pass123!',
       validation: {
         required: {
           value: true,

@@ -2,11 +2,9 @@
 import React, { useEffect } from 'react';
 import { FormValues, FieldError } from '../../dynamic-form/types'; // Import FieldError
 import { useFormContext } from 'react-hook-form';
-import { getInputComponent } from '../../inputs/registry/InputRegistry';
 import { InputWrapper } from '../../../styles';
 import { InputRenderer } from '../../inputs/components';
 import { FormContentProps } from '../types';
-import { ErrorRenderer } from '../../../components';
 import { CommonInputProps } from '../../inputs';
 
 const FormContent: React.FC<FormContentProps> = ({
@@ -36,7 +34,7 @@ const FormContent: React.FC<FormContentProps> = ({
         unregister(field.id);
       }
     });
-  }, [register, unregister, config, fieldsToRender]);
+  }, [register, unregister, config]);
 
   return (
     <>
@@ -47,7 +45,6 @@ const FormContent: React.FC<FormContentProps> = ({
           const fieldError = errors[field.id] as FieldError | undefined;
 
           const fieldConfig = config[field.id] || {};
-          const InputComponent = getInputComponent(field.type);
           const fieldClassNameConfig = fieldConfig.classNameConfig || {};
           const formClassName = formClassNameConfig || {};
 
