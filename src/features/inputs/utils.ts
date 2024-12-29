@@ -1,5 +1,5 @@
 // src/features/inputs/utils.ts
-import { InputType } from '../core/types';
+import { InputType } from '../dynamic-form/types';
 
 /**
  * Maps a value to an InputType.

@@ -1,5 +1,4 @@
-// Filepath: /src/features/inputs/InputRegistry.ts
-
+// src/features/inputs/registry/InputRegistry.ts
 import React from 'react';
 import {
   TextInput,
@@ -14,7 +13,7 @@ import {
   DateTimePicker,
   ComboBox,
 } from '../components';
-import { InputType } from '../../core/types';
+import { InputType } from '../../dynamic-form/types';
 
 // Create a map of input types to components
 const inputRegistry: Record<InputType, React.ComponentType<any> | undefined> = {

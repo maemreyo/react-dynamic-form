@@ -1,8 +1,8 @@
 // Filepath: /src/components/ErrorSummary.tsx
 
 import React from 'react';
-import { FieldError } from '../features/core';
 import ErrorRenderer from './ErrorRenderer';
+import { FieldError } from '../features/dynamic-form';
 
 interface ErrorSummaryProps {
   errors: Partial<Record<string, FieldError>>;

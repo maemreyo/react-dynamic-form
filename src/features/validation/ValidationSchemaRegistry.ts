@@ -1,7 +1,7 @@
 // Filepath: /src/features/validation/ValidationSchemaRegistry.ts
 
 import * as yup from 'yup';
-import { InputType } from '../core/types';
+import { InputType } from '../dynamic-form';
 
 // Create a map of input types to Yup schema
 const validationSchemaRegistry: Record<InputType, yup.AnySchema | undefined> = {

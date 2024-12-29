@@ -1,14 +1,13 @@
+// Filepath: /src/DynamicForm.tsx
 import React from 'react';
 import {
-  FormLayout,
-  FormContent,
-  FormFooter,
-  useFormController,
-  useFormFields,
+  useDynamicForm,
   useRHFOptions,
+  useFormFields,
+  DynamicFormProvider,
   DynamicFormProps,
-} from './features/core';
-import { FormProvider } from 'react-hook-form';
+} from './features/dynamic-form';
+import { FormRenderer } from './features/form-renderer';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   data,
@@ -21,7 +20,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   readOnly = false,
   disableForm = false,
   showSubmitButton = true,
-  autoSave = null,
+  autoSave,
   resetOnSubmit = false,
   focusFirstError = false,
   className,
@@ -51,9 +50,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     validateOnBlur
   );
 
-  const form = useFormController({
+  const form = useDynamicForm({
     data,
-    mergedFormOptions,
+    formOptions: mergedFormOptions,
     autoSave,
     enableLocalStorage,
     resetOnSubmit,
@@ -81,9 +80,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   };
 
   return (
-    <FormProvider {...form}>
-      {/* @ts-ignore */}
-      <FormLayout
+    <DynamicFormProvider form={form}>
+      <FormRenderer
         onSubmit={handleSubmit}
         className={className}
         formClassNameConfig={formClassNameConfig}
@@ -92,33 +90,24 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         layoutConfig={layoutConfig}
         horizontalLabel={horizontalLabel}
         theme={theme}
-      >
-        {header}
-        <FormContent
-          fieldsToRender={fieldsToRender}
-          fields={fields}
-          config={config}
-          formClassNameConfig={formClassNameConfig}
-          horizontalLabel={horizontalLabel}
-          labelWidth={labelWidth}
-          disableAutocomplete={disableAutocomplete}
-          showInlineError={showInlineError}
-          conditionalFieldsConfig={conditionalFieldsConfig}
-        />
-        <FormFooter
-          footer={footer}
-          formClassNameConfig={formClassNameConfig}
-          showSubmitButton={showSubmitButton}
-          renderSubmitButton={renderSubmitButton}
-          isSubmitting={formState.isSubmitting}
-          showErrorSummary={showErrorSummary}
-          errors={Object.keys(formState.errors).reduce((acc, key) => {
-            acc[key] = formState.errors[key] as any;
-            return acc;
-          }, {} as Record<string, any>)}
-        />
-      </FormLayout>
-    </FormProvider>
+        header={header}
+        fieldsToRender={fieldsToRender}
+        fields={fields}
+        config={config}
+        footer={footer}
+        readOnly={readOnly}
+        disableForm={disableForm}
+        showSubmitButton={showSubmitButton}
+        renderSubmitButton={renderSubmitButton}
+        formOptions={formOptions}
+        showErrorSummary={showErrorSummary}
+        labelWidth={labelWidth}
+        disableAutocomplete={disableAutocomplete}
+        showInlineError={showInlineError}
+        conditionalFieldsConfig={conditionalFieldsConfig}
+        data={data}
+      />
+    </DynamicFormProvider>
   );
 };
 

@@ -15,7 +15,8 @@ export const Thing: FC<Props> = ({ children }) => {
 };
 
 // src/index.tsx
-export * from './features/core';
+export * from './features/dynamic-form';
+export * from './features/form-renderer';
 export * from './features/inputs';
 export * from './components';
 export { default as DynamicForm } from './DynamicForm';

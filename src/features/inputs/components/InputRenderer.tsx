@@ -1,8 +1,12 @@
-// Filepath: /src/features/inputs/components/InputRenderer.tsx
-
+// src/features/inputs/components/InputRenderer.tsx
 import React from 'react';
-import { FormField, FormConfig, FormClassNameConfig } from '../../core/types';
+import {
+  FormField,
+  FormConfig,
+  FormClassNameConfig,
+} from '../../dynamic-form/types';
 import { getInputComponent } from '../registry/InputRegistry';
+import { CommonInputProps } from '../types';
 
 interface InputRendererProps {
   field: FormField;
@@ -29,7 +33,7 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   // Get the input component from the registry
   const InputComponent = getInputComponent(type);
 
-  const commonInputProps = {
+  const commonInputProps: CommonInputProps = {
     id,
     fieldConfig,
     formClassNameConfig,
@@ -37,6 +41,7 @@ const InputRenderer: React.FC<InputRendererProps> = ({
     horizontalLabel,
     labelWidth,
     error,
+    disableAutocomplete,
   };
 
   if (!InputComponent) {
@@ -44,12 +49,7 @@ const InputRenderer: React.FC<InputRendererProps> = ({
     return null; // Or return a default input component
   }
 
-  return (
-    <InputComponent
-      {...commonInputProps}
-      disableAutocomplete={disableAutocomplete}
-    />
-  );
+  return <InputComponent {...commonInputProps} />;
 };
 
 export default InputRenderer;

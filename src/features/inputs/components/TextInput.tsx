@@ -1,20 +1,10 @@
+// src/features/inputs/components/TextInput.tsx
 import React from 'react';
 import { Input, Label, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
 import { useFormContext, useController } from 'react-hook-form';
+import { CommonInputProps } from '../types';
 
-interface TextInputProps {
-  id: string;
-  fieldConfig: FieldConfig;
-  formClassNameConfig?: FormClassNameConfig;
-  disableAutocomplete?: boolean;
-  showInlineError?: boolean;
-  horizontalLabel?: boolean;
-  labelWidth?: string | number;
-  error?: FieldError;
-}
-
-const TextInput: React.FC<TextInputProps> = ({
+const TextInput: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig,

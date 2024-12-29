@@ -1,6 +1,6 @@
 // src/features/validation/customValidators.ts
 
-import { FieldConfig } from '../core/types';
+import { FieldConfig } from '../dynamic-form';
 
 interface ValidationRule {
   name: string;

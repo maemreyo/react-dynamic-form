@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../core/types';
+import { FieldConfig, FormClassNameConfig, FieldError } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 
 interface TimePickerProps {

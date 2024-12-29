@@ -1,3 +1,4 @@
+// Filepath: /DynamicForm.stories.tsx
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { fn } from '@storybook/test';
@@ -56,7 +57,9 @@ BasicForm.args = {
       validation: { required: 'You must agree to continue' },
     },
   },
-  onSubmit: data => {},
+  onSubmit: data => {
+    console.log('🚀 ~ file: DynamicForm.stories.tsx:55 ~ data:', data);
+  },
   onFormReady: fn(), // Keep fn() here for other stories
 };
 BasicForm.storyName = 'Basic Form';
@@ -70,7 +73,7 @@ FormWithValidationSchema.storyName = 'Form with Validation Schema';
 export const FormWithCustomLayout = Template.bind({});
 FormWithCustomLayout.args = {
   ...BasicForm.args, // Use the same data and config as the Default story
-  layout: 'flex',
+  layout: 'grid',
   layoutConfig: { gap: '20px' }, // Custom gap
   horizontalLabel: true, // Display labels horizontally
   labelWidth: '150px', // Set a fixed width for labels

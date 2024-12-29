@@ -2,7 +2,7 @@
 
 import * as yup from 'yup';
 import { AnySchema } from 'yup';
-import { FormConfig } from '../core/types';
+import { FormConfig } from '../dynamic-form';
 import { getValidationRules } from './customValidators';
 import { getValidationSchema } from './ValidationSchemaRegistry';
 
