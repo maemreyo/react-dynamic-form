@@ -6,8 +6,9 @@ import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import styled from 'styled-components';
+import { useTheme } from '../../../theme/ThemeProvider';
 
-const StyledSelect = styled.select`
+const StyledSelect = styled.select<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 8px;
   border-radius: 4px;
@@ -49,15 +50,14 @@ interface SelectInputProps extends CommonInputProps {}
 const SelectInput: React.FC<SelectInputProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
+  const theme = useTheme();
   const { label, options } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -69,29 +69,22 @@ const SelectInput: React.FC<SelectInputProps> = ({
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
-      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           {label}
           {fieldConfig.validation?.required && (
-            <span style={{ color: 'red' }}>*</span>
+            <span style={{ color: theme.colors.danger }}>*</span>
           )}
         </Label>
       )}
-      <StyledSelect
-        {...field}
-        className={fieldClassNameConfig.input || formClassName.input}
-        id={id}
-      >
+      <StyledSelect {...field} className={formClassNameConfig.select} id={id}>
         {options?.map(option => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -99,11 +92,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         ))}
       </StyledSelect>
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}

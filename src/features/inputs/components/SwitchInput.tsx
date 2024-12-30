@@ -6,14 +6,15 @@ import { CommonInputProps } from '../types';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import styled from 'styled-components';
 
-const SwitchContainer = styled.label`
+const SwitchContainer = styled.label<{ className?: string }>`
   position: relative;
   display: inline-block;
   width: 48px;
   height: 24px;
   cursor: pointer;
 `;
-const SwitchInputStyled = styled.input`
+
+const SwitchInputStyled = styled.input<{ className?: string }>`
   opacity: 0;
   width: 0;
   height: 0;
@@ -36,7 +37,7 @@ const SwitchInputStyled = styled.input`
   }
 `;
 
-const Slider = styled.span`
+const Slider = styled.span<{ className?: string }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -63,15 +64,13 @@ interface SwitchInputProps extends CommonInputProps {}
 const SwitchInput: React.FC<SwitchInputProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
   const { label } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -83,30 +82,31 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
-      {/* Render label here */}
       {label && (
         <Label
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           {label}
         </Label>
       )}
-      <SwitchContainer htmlFor={id}>
-        <SwitchInputStyled {...field} type="checkbox" id={id} />
-        <Slider className="slider" />
+      <SwitchContainer
+        htmlFor={id}
+        className={formClassNameConfig.switchContainer}
+      >
+        <SwitchInputStyled
+          {...field}
+          type="checkbox"
+          id={id}
+          className={formClassNameConfig.switch}
+        />
+        <Slider className={formClassNameConfig.switchSlider} />
       </SwitchContainer>
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}

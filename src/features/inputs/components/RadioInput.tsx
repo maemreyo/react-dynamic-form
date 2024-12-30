@@ -6,18 +6,21 @@ import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { Label, InputWrapper, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
+import { useTheme } from '../../../theme/ThemeProvider';
 
-const RadioGroup = styled.div`
+const RadioGroup = styled.div<{ className?: string }>`
   display: flex;
   gap: 16px;
 `;
-const RadioLabel = styled.label`
+
+const RadioLabel = styled.label<{ className?: string }>`
   display: flex;
   align-items: center;
   gap: 6px;
   cursor: pointer;
 `;
-const RadioInputStyled = styled.input`
+
+const RadioInputStyled = styled.input<{ className?: string }>`
   appearance: none;
   width: 16px;
   height: 16px;
@@ -57,15 +60,14 @@ interface RadioInputProps extends CommonInputProps {}
 const RadioInput: React.FC<RadioInputProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
+  const theme = useTheme();
   const { label, options } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -77,26 +79,27 @@ const RadioInput: React.FC<RadioInputProps> = ({
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
-      {/* Render label here */}
       {label && (
         <Label
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           {label}
           {fieldConfig.validation?.required && (
-            <span style={{ color: 'red' }}>*</span>
+            <span style={{ color: theme.colors.danger }}>*</span>
           )}
         </Label>
       )}
-      <RadioGroup>
+      <RadioGroup className={formClassNameConfig.radioGroup}>
         {options?.map(option => (
-          <RadioLabel key={option.value} htmlFor={`${id}-${option.value}`}>
+          <RadioLabel
+            key={option.value}
+            htmlFor={`${id}-${option.value}`}
+            className={formClassNameConfig.radioLabel}
+          >
             <RadioInputStyled
               {...field}
               type="radio"
@@ -104,17 +107,14 @@ const RadioInput: React.FC<RadioInputProps> = ({
               name={id}
               value={option.value}
               checked={field.value === option.value}
+              className={formClassNameConfig.radioButton}
             />
             {option.label}
           </RadioLabel>
         ))}
       </RadioGroup>
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}

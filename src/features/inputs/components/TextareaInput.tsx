@@ -5,8 +5,9 @@ import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import styled from 'styled-components';
+import { useTheme } from '../../../theme/ThemeProvider';
 
-const StyledTextarea = styled.textarea`
+const StyledTextarea = styled.textarea<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: ${({ theme }) => theme.space.xl};
   border-radius: ${({ theme }) => theme.radii.md};
@@ -48,16 +49,15 @@ interface TextareaInputProps extends CommonInputProps {}
 const TextareaInput: React.FC<TextareaInputProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   disableAutocomplete,
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
+  const theme = useTheme();
   const { label } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -69,36 +69,29 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
-      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           {label}
           {fieldConfig.validation?.required && (
-            <span style={{ color: 'red' }}>*</span>
+            <span style={{ color: theme.colors.danger }}>*</span>
           )}
         </Label>
       )}
       <StyledTextarea
         {...field}
-        className={fieldClassNameConfig.input || formClassName.input}
+        className={formClassNameConfig.textarea}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}

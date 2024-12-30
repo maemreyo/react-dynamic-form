@@ -7,7 +7,7 @@ import { FormValues } from '../../dynamic-form';
 import { Label, InputWrapper, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
 
-const CheckboxInputStyled = styled.input`
+const CheckboxInputStyled = styled.input<{ className?: string }>`
   appearance: none;
   width: 16px;
   height: 16px;
@@ -44,15 +44,13 @@ const CheckboxInputStyled = styled.input`
 const CheckboxInput: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
   const { label } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -64,21 +62,18 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
-      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           <CheckboxInputStyled
             {...field}
-            className={fieldClassNameConfig.input || formClassName.input}
+            className={formClassNameConfig.checkboxInput}
             type="checkbox"
             id={id}
             checked={!!field.value}
@@ -87,11 +82,7 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
         </Label>
       )}
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}

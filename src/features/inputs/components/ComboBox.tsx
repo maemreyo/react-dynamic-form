@@ -10,12 +10,12 @@ import { useFormContext, useController } from 'react-hook-form';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import styled from 'styled-components';
 
-const ComboBoxContainer = styled.div`
+const ComboBoxContainer = styled.div<{ className?: string }>`
   position: relative;
   width: 100%;
 `;
 
-const DropdownList = styled.ul`
+const DropdownList = styled.ul<{ className?: string }>`
   position: absolute;
   top: 100%;
   left: 0;
@@ -31,7 +31,7 @@ const DropdownList = styled.ul`
   overflow-y: auto;
 `;
 
-const DropdownItem = styled.li`
+const DropdownItem = styled.li<{ className?: string }>`
   padding: ${({ theme }) => theme.space.xl};
   cursor: pointer;
   &:hover {
@@ -46,7 +46,7 @@ const DropdownItem = styled.li`
 interface ComboBoxProps {
   id: string;
   fieldConfig: FieldConfig;
-  formClassNameConfig?: FormClassNameConfig;
+  formClassNameConfig: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
@@ -56,15 +56,13 @@ interface ComboBoxProps {
 const ComboBox: React.FC<ComboBoxProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
   const { label, options } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
@@ -156,16 +154,14 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
       {label && (
         <Label
           htmlFor={id}
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           {label}
           {fieldConfig.validation?.required && (
@@ -173,10 +169,13 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           )}
         </Label>
       )}
-      <ComboBoxContainer ref={containerRef}>
+      <ComboBoxContainer
+        ref={containerRef}
+        className={formClassNameConfig.comboBoxContainer}
+      >
         <Input
           {...field}
-          className={fieldClassNameConfig.input || formClassName.input}
+          className={formClassNameConfig.comboBox}
           id={id}
           value={inputValue}
           onChange={handleInputChange}
@@ -185,29 +184,31 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           autoComplete="off"
         />
         {isOpen && (
-          <DropdownList>
+          <DropdownList className={formClassNameConfig.comboBoxDropdownList}>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <DropdownItem
                   key={option.value}
                   onClick={() => handleOptionClick(option.value)}
-                  className={index === highlightedIndex ? 'selected' : ''}
+                  className={`${
+                    index === highlightedIndex ? 'selected' : ''
+                  } ${formClassNameConfig.comboBoxDropdownItem}`}
                 >
                   {option.label}
                 </DropdownItem>
               ))
             ) : (
-              <DropdownItem>No results found</DropdownItem>
+              <DropdownItem
+                className={formClassNameConfig.comboBoxDropdownItem}
+              >
+                No results found
+              </DropdownItem>
             )}
           </DropdownList>
         )}
       </ComboBoxContainer>
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}

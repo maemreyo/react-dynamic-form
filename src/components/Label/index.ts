@@ -1,4 +1,4 @@
-// Filepath: /src/components/Label/index.ts
+// src/components/Label/index.ts
 import styled, { css } from 'styled-components';
 
 /**
@@ -7,6 +7,7 @@ import styled, { css } from 'styled-components';
 export interface LabelProps {
   $horizontalLabel?: boolean;
   $labelWidth?: string | number;
+  className?: string;
 }
 
 /**

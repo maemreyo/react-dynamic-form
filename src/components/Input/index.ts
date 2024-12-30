@@ -1,4 +1,4 @@
-// Filepath: /src/components/Input/index.ts
+// src/components/Input/index.ts
 import styled, { css } from 'styled-components';
 
 /**
@@ -51,7 +51,7 @@ const baseFormElementStyles = css`
 /**
  * Styled input.
  */
-export const Input = styled.input`
+export const Input = styled.input<{ className?: string }>`
   ${baseFormElementStyles}
 
   &[type='number'] {

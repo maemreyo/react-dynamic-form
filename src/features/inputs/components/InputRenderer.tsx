@@ -1,4 +1,4 @@
-// Filepath: /src/features/inputs/components/InputRenderer.tsx
+// src/features/inputs/components/InputRenderer.tsx
 import React from 'react';
 import {
   FormField,
@@ -7,10 +7,12 @@ import {
   RenderLabelProps,
   RenderErrorMessageProps,
   InputComponentMap,
+  FieldClassNameConfig,
 } from '../../dynamic-form/types';
 import { getInputComponent } from '../registry/InputRegistry';
 import { CommonInputProps, CustomInputProps } from '../types';
 import { ErrorMessage } from '../../../styles';
+import { mergeClassNames } from '../../dynamic-form/utils/formUtils'; // Import hàm mergeClassNames
 
 interface InputRendererProps {
   field: FormField;
@@ -44,10 +46,17 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   const RegisteredInputComponent = getInputComponent(type);
   const InputComponent = CustomInputComponent || RegisteredInputComponent;
 
+  // Merge class names
+  const mergedFormClassNameConfig = mergeClassNames(
+    {}, // Default empty object
+    formClassNameConfig,
+    fieldConfig.classNameConfig
+  );
+
   const commonInputProps: CommonInputProps = {
     id,
     fieldConfig,
-    formClassNameConfig,
+    formClassNameConfig: mergedFormClassNameConfig, // Truyền mergedFormClassNameConfig thay vì formClassNameConfig
     showInlineError,
     horizontalLabel,
     labelWidth,
@@ -58,15 +67,13 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   // Render error message using renderErrorMessage prop or default
   const errorMessageElement =
     showInlineError && error && renderErrorMessage
-      ? renderErrorMessage(error, formClassNameConfig)
+      ? renderErrorMessage(error, mergedFormClassNameConfig) // Sử dụng mergedFormClassNameConfig
       : showInlineError && error
-        ? React.createElement(ErrorMessage, {
-            className:
-              fieldConfig.classNameConfig?.errorMessage ||
-              formClassNameConfig?.errorMessage,
-            children: error.message,
-          })
-        : null;
+      ? React.createElement(ErrorMessage, {
+          className: mergedFormClassNameConfig.errorMessage, // Sử dụng mergedFormClassNameConfig
+          children: error.message,
+        })
+      : null;
 
   if (!InputComponent) {
     console.warn(`No input component found for type: ${type}`);

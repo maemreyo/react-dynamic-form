@@ -9,15 +9,13 @@ import { Input, Label, InputWrapper } from '../../../styles';
 const TextInput: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   disableAutocomplete,
   horizontalLabel,
   labelWidth,
 }) => {
   const theme = useTheme();
   const { label } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -30,16 +28,14 @@ const TextInput: React.FC<CommonInputProps> = ({
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
       {label && (
         <Label
           htmlFor={id}
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           {label}
           {fieldConfig.validation?.required &&
@@ -50,7 +46,7 @@ const TextInput: React.FC<CommonInputProps> = ({
       )}
       <Input
         {...field}
-        className={fieldClassNameConfig.input || formClassName.input}
+        className={formClassNameConfig.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />

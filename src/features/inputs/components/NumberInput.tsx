@@ -6,8 +6,9 @@ import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
+import { useTheme } from '../../../theme/ThemeProvider';
 
-const NumberInputContainer = styled.div`
+const NumberInputContainer = styled.div<{ className?: string }>`
   display: flex;
   align-items: center;
   width: fit-content;
@@ -18,7 +19,7 @@ const NumberInputContainer = styled.div`
   }
 `;
 
-const SpinButton = styled.button`
+const SpinButton = styled.button<{ className?: string }>`
   background: none;
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 0 ${({ theme }) => theme.space.xl};
@@ -51,16 +52,15 @@ interface NumberInputProps extends CommonInputProps {}
 const NumberInput: React.FC<NumberInputProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   disableAutocomplete,
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
+  const theme = useTheme();
   const { label } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -100,28 +100,28 @@ const NumberInput: React.FC<NumberInputProps> = ({
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
-      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           {label}
           {fieldConfig.validation?.required && (
-            <span style={{ color: 'red' }}>*</span>
+            <span style={{ color: theme.colors.danger }}>*</span>
           )}
         </Label>
       )}
-      <NumberInputContainer>
+      <NumberInputContainer
+        className={formClassNameConfig.numberInputContainer}
+      >
         <SpinButton
           type="button"
           onClick={handleDecrement}
+          className={formClassNameConfig.numberInputButton}
           disabled={
             fieldConfig.validation?.min !== undefined &&
             typeof fieldConfig.validation.min === 'object' &&
@@ -132,7 +132,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
         </SpinButton>
         <Input
           {...field}
-          className={fieldClassNameConfig.input || formClassName.input}
+          className={formClassNameConfig.number}
           type="number"
           id={id}
           onChange={e => {
@@ -151,6 +151,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
         <SpinButton
           type="button"
           onClick={handleIncrement}
+          className={formClassNameConfig.numberInputButton}
           disabled={
             fieldConfig.validation?.max !== undefined &&
             typeof fieldConfig.validation.max === 'object' &&
@@ -161,11 +162,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
         </SpinButton>
       </NumberInputContainer>
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}

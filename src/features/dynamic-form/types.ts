@@ -67,22 +67,6 @@ export interface DynamicFormProps {
   customInputs?: InputComponentMap;
 }
 
-export interface FormClassNameConfig {
-  formContainer?: string;
-  inputWrapper?: string;
-  label?: string;
-  input?: string;
-  button?: string;
-  errorMessage?: string;
-}
-
-export interface FieldClassNameConfig {
-  inputWrapper?: string;
-  label?: string;
-  input?: string;
-  errorMessage?: string;
-}
-
 export interface FormConfig {
   [key: string]: FieldConfig;
 }
@@ -99,7 +83,7 @@ export interface FormConfig {
  */
 export type CustomValidator<
   TFieldValue = any,
-  TFormValues extends FieldValues = FormValues,
+  TFormValues extends FieldValues = FormValues
 > = (
   value: TFieldValue,
   formValues: TFormValues
@@ -302,3 +286,61 @@ export type RenderFormFooterProps = (props: {
 /**
  * Extended DynamicFormProps with render props.
  */
+
+export interface FormClassNameConfig {
+  formContainer?: string;
+  inputWrapper?: string;
+  label?: string;
+  input?: string;
+  errorMessage?: string;
+  button?: string;
+  select?: string;
+  textarea?: string;
+  checkbox?: string;
+  radio?: string;
+  date?: string;
+  number?: string;
+  switch?: string;
+  time?: string;
+  dateTime?: string;
+  comboBox?: string;
+  radioGroup?: string;
+  radioButton?: string;
+  radioLabel?: string;
+  checkboxInput?: string;
+  switchContainer?: string;
+  switchSlider?: string;
+  numberInputContainer?: string;
+  numberInputButton?: string;
+  comboBoxContainer?: string;
+  comboBoxDropdownList?: string;
+  comboBoxDropdownItem?: string;
+}
+
+export interface FieldClassNameConfig {
+  inputWrapper?: string;
+  label?: string;
+  input?: string;
+  errorMessage?: string;
+
+  select?: string;
+  textarea?: string;
+  checkbox?: string;
+  radio?: string;
+  date?: string;
+  number?: string;
+  switch?: string;
+  time?: string;
+  dateTime?: string;
+  comboBox?: string;
+  radioGroup?: string;
+  radioButton?: string;
+  checkboxInput?: string;
+  switchContainer?: string;
+  switchSlider?: string;
+  numberInputContainer?: string;
+  numberInputButton?: string;
+  comboBoxContainer?: string;
+  comboBoxDropdownList?: string;
+  comboBoxDropdownItem?: string;
+}

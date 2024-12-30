@@ -31,6 +31,7 @@ const FormRenderer: React.FC<FormRendererProps> = ({
 }) => {
   const form = useFormContext<FormValues>();
   const { formState, handleSubmit } = form;
+
   const content = renderFormContent ? (
     renderFormContent({
       fieldsToRender,
