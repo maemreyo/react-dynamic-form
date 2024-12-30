@@ -1,5 +1,21 @@
 {
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maemreyo/react-dynamic-form"
+  },
+  "keywords": [
+    "react",
+    "form",
+    "dynamic-form",
+    "react-hook-form",
+    "form-validation",
+    "storybook"
+  ],
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -19,7 +35,11 @@
     "size": "size-limit",
     "analyze": "size-limit --why",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "semantic-release": "semantic-release",
+    "change": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
   },
   "peerDependencies": {
     "@testing-library/dom": ">=7.21.4",
@@ -40,7 +60,11 @@
     "trailingComma": "es5"
   },
   "name": "react-dynamic-form",
-  "author": "maemreyo",
+  "author": "Matthew Ngo <matthew.ngo1114@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/maemreyo/react-dynamic-form/issues"
+  },
+  "homepage": "https://github.com/maemreyo/react-dynamic-form#readme",
   "module": "dist/react-dynamic-form.esm.js",
   "size-limit": [
     {
@@ -54,7 +78,13 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.26.0",
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.11",
+    "@changesets/git": "^3.0.2",
     "@chromatic-com/storybook": "^3.2.3",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.1",
     "@size-limit/preset-small-lib": "^11.1.6",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-interactions": "^8.4.7",
@@ -81,6 +111,7 @@
     "react-dom": "^19.0.0",
     "react-grid-layout": "^1.5.0",
     "react-is": "^19.0.0",
+    "semantic-release": "^24.2.0",
     "size-limit": "^11.1.6",
     "storybook": "^8.4.7",
     "ts-jest": "^29.2.5",
