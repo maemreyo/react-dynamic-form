@@ -23,7 +23,7 @@ jobs:
           node-version: 'lts/*'
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile # or `npm ci`
+        run: yarn install --immutable # or `npm ci`
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
