@@ -1,5 +1,5 @@
 module.exports = {
-  branches: ['master'], // Hoặc 'master' nếu bạn dùng branch master
+  branches: ['main'],
   plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
@@ -8,7 +8,7 @@ module.exports = {
       '@semantic-release/npm',
       {
         npmPublish: true,
-        pkgRoot: './', // Đường dẫn đến thư mục chứa package.json (nếu khác root)
+        pkgRoot: './',
       },
     ],
     [
@@ -19,7 +19,7 @@ module.exports = {
           'package.json',
           'package-lock.json',
           'yarn.lock',
-        ], // Các file cần commit
+        ],
         message:
           'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
       },
