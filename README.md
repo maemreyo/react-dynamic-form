@@ -193,7 +193,18 @@ export default MyForm;
 
 ### ComparisonOperator
 
-`'is' \| 'isNot' \| 'greaterThan' \| 'lessThan' \| 'greaterThanOrEqual' \| 'lessThanOrEqual' \| 'contains' \| 'startsWith' \| 'endsWith' \| 'custom'`
+```
+'is' 
+| 'isNot' 
+| 'greaterThan' 
+| 'lessThan' 
+| 'greaterThanOrEqual' 
+| 'lessThanOrEqual' 
+| 'contains' 
+| 'startsWith' 
+| 'endsWith' 
+| 'custom'`
+```
 
 ## Contributing
 
