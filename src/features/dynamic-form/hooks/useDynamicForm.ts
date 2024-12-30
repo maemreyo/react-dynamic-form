@@ -48,7 +48,7 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   const { formState, reset, setFocus, watch, control } = form;
   const { isSubmitSuccessful, errors } = formState;
 
-  // @ts-ignore
+  // @ts-expect-error
   const [isLocalStorageLoaded, setIsLocalStorageLoaded] = useState(false);
 
   // Auto-save
@@ -65,10 +65,12 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   }, [autoSave, watch]);
 
   // LocalStorage - Save data
-  // @ts-ignore
+  // @ts-expect-error
   useEffect(() => {
     if (enableLocalStorage) {
-      const subscription = watch(data => saveToLocalStorage('form-data', data));
+      const subscription = watch((data) =>
+        saveToLocalStorage('form-data', data)
+      );
       return () => subscription.unsubscribe();
     }
   }, [enableLocalStorage, watch]);
@@ -92,8 +94,8 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
                 loadedData[key] === 'true'
                   ? true
                   : loadedData[key] === 'false'
-                  ? false
-                  : loadedData[key];
+                    ? false
+                    : loadedData[key];
 
               if (resetData[key] === undefined) {
                 resetData[key] = fieldConfig.defaultValue;
@@ -133,11 +135,11 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   }, [errors, focusFirstError, setFocus]);
 
   // Debounce on change
-  // @ts-ignore
+  // @ts-expect-error
   useEffect(() => {
     if (onChange) {
       const debouncedOnChange = debounce(onChange, debounceOnChange || 0);
-      const subscription = watch(data => debouncedOnChange(data));
+      const subscription = watch((data) => debouncedOnChange(data));
       return () => subscription.unsubscribe();
     }
   }, [watch, onChange, debounceOnChange]);

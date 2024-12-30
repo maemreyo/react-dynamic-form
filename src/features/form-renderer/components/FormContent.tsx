@@ -17,9 +17,9 @@ const FormContent: React.FC<FormContentProps> = ({
   disableAutocomplete,
   showInlineError,
   renderInput,
-  // @ts-ignore
+  // @ts-expect-error
   conditionalFieldsConfig,
-  // @ts-ignore
+  // @ts-expect-error
   customInputs,
 }) => {
   const {
@@ -29,7 +29,7 @@ const FormContent: React.FC<FormContentProps> = ({
   } = useFormContext<FormValues>();
 
   useEffect(() => {
-    fields.forEach(field => {
+    fields.forEach((field) => {
       const fieldConfig = config[field.id] || {};
       if (fieldsToRender.includes(field.id)) {
         register(field.id, fieldConfig.validation);
@@ -42,8 +42,8 @@ const FormContent: React.FC<FormContentProps> = ({
   return (
     <>
       {fields
-        .filter(field => fieldsToRender.includes(field.id))
-        .map(field => {
+        .filter((field) => fieldsToRender.includes(field.id))
+        .map((field) => {
           // Access the nested error object correctly
           const fieldError = errors[field.id] as FieldError | undefined;
 
@@ -68,7 +68,7 @@ const FormContent: React.FC<FormContentProps> = ({
             <InputRenderer
               field={field}
               config={config}
-              // @ts-ignore
+              // @ts-expect-error
               formClassNameConfig={formClassNameConfig}
               disableAutocomplete={disableAutocomplete}
               showInlineError={showInlineError}

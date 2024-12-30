@@ -25,7 +25,9 @@ const RadioInputStyled = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
 
   &:checked {
     background-color: ${({ theme }) => theme.colors.primary};
@@ -91,7 +93,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
         </Label>
       )}
       <RadioGroup>
-        {options?.map(option => (
+        {options?.map((option) => (
           <RadioLabel key={option.value} htmlFor={`${id}-${option.value}`}>
             <RadioInputStyled
               {...field}

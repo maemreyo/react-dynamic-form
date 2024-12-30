@@ -99,7 +99,7 @@ export interface FormConfig {
  */
 export type CustomValidator<
   TFieldValue = any,
-  TFormValues extends FieldValues = FormValues
+  TFormValues extends FieldValues = FormValues,
 > = (
   value: TFieldValue,
   formValues: TFormValues

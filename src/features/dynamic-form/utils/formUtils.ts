@@ -63,7 +63,7 @@ export const flattenConfig = (
  */
 export const debounce = (func: Function, wait: number) => {
   let timeout: NodeJS.Timeout | null;
-  return function(...args: any[]) {
+  return function (...args: any[]) {
     const later = () => {
       timeout = null;
       func(...args);

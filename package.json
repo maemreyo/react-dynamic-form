@@ -31,7 +31,7 @@
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
     "lint": "eslint src ",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "lint:fix": "eslint src --fix",
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why",

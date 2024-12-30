@@ -1,9 +1,7 @@
 // src/features/inputs/components/SelectInput.tsx
 import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
-import {
-  FormValues,
-} from '../../dynamic-form';
+import { FormValues } from '../../dynamic-form';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
@@ -76,7 +74,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         className={fieldClassNameConfig.input || formClassName.input}
         id={id}
       >
-        {options?.map(option => (
+        {options?.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

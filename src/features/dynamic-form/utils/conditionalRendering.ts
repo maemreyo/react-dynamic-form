@@ -14,7 +14,7 @@ export const shouldRenderField = (
   conditionalFieldsConfig: Condition[],
   watchedValues: any[]
 ): boolean => {
-  const isConditionalField = conditionalFieldsConfig.some(condition =>
+  const isConditionalField = conditionalFieldsConfig.some((condition) =>
     condition.fields.includes(fieldId)
   );
 
@@ -22,7 +22,7 @@ export const shouldRenderField = (
     return true;
   }
 
-  return conditionalFieldsConfig.some(condition => {
+  return conditionalFieldsConfig.some((condition) => {
     const conditionIndex = conditionalFieldsConfig.indexOf(condition);
     const watchedValue = watchedValues[conditionIndex];
     let conditionMet = false;
