@@ -636,6 +636,23 @@ ComprehensiveForm.args = {
         number: 'border border-gray-400 p-2 rounded w-20 text-center mx-2',
       },
     },
+    asyncEmail: {
+      label: 'Async Email Validation',
+      type: 'email',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+        validate: async (value: string): Promise<any> => {
+          const isValid = await mockCheckEmailExists(value);
+          console.log('🚀 ~ file: DynamicForm.stories.tsx ~ isValid:', isValid);
+          return isValid || 'Email already exists (async check)';
+        },
+      },
+      classNameConfig: {
+        input: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+        errorMessage: 'text-red-500 text-xs italic',
+      },
+    },
   },
   formClassNameConfig: {
     formContainer: 'p-6 border border-gray-300 rounded-md', // Thêm rounded-md
@@ -643,6 +660,9 @@ ComprehensiveForm.args = {
     errorMessage: 'text-red-600',
     button:
       'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full', // Thêm w-full
+  },
+  validationMessages: {
+    required: 'This is a globally defined required message',
   },
   autoSave: {
     interval: 3000,
@@ -666,6 +686,14 @@ ComprehensiveForm.args = {
 };
 ComprehensiveForm.storyName = 'Comprehensive Form';
 
+// Mock API call for async validation
+const mockCheckEmailExists = async (email: string): Promise<boolean> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(email !== 'test@example.com');
+    }, 1000); // Simulate 1-second delay
+  });
+};
 // --- Interactions for ComprehensiveForm Story ---
 
 // ComprehensiveForm.play = async ({ canvasElement, step }) => {

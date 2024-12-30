@@ -1,5 +1,5 @@
-// src/features/dynamic-form/hooks/validationUtils.ts
-import { FieldConfig, FieldError } from '../types';
+// src/features/dynamic-form/utils/validationUtils.ts
+import { FieldConfig, FieldError, ValidationMessages } from '../types';
 
 /**
  * Retrieves the error message for a field based on its validation messages and error type.
@@ -7,22 +7,30 @@ import { FieldConfig, FieldError } from '../types';
  * @param fieldConfig - The field configuration.
  * @param fieldError - The field error object.
  * @param values - form values
+ * @param globalValidationMessages - Optional global validation messages.
  * @returns The error message string or undefined if no error message is found.
  */
 export const getErrorMessage = (
   fieldConfig: FieldConfig,
   fieldError: FieldError | undefined,
-  values: any
+  values: any,
+  globalValidationMessages?: ValidationMessages
 ): string | undefined => {
   if (!fieldError) {
     return undefined;
   }
 
   const { type } = fieldError;
-  const validationMessages = fieldConfig.validationMessages;
+  const fieldValidationMessages = fieldConfig.validationMessages;
 
-  if (validationMessages && validationMessages[type]) {
-    const template = validationMessages[type];
+  // Merge global and field-level validation messages
+  const mergedValidationMessages = {
+    ...globalValidationMessages,
+    ...fieldValidationMessages,
+  };
+
+  if (mergedValidationMessages && mergedValidationMessages[type]) {
+    const template = mergedValidationMessages[type];
     return typeof template === 'function'
       ? (template({
           ...values,

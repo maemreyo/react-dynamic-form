@@ -3,18 +3,18 @@ import { useMemo } from 'react';
 import { UseFormProps } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createValidationSchema } from '../../validation';
-import { FormConfig, FormValues } from '../types';
+import { FormConfig, FormValues, ValidationMessages } from '../types';
 
 const useRHFOptions = (
   config: FormConfig,
   formOptions: UseFormProps<FormValues> | undefined,
   validateOnSubmit: boolean,
   validateOnChange: boolean,
-  validateOnBlur: boolean
+  validateOnBlur: boolean,
+  globalValidationMessages: ValidationMessages | undefined
 ): UseFormProps<FormValues> => {
-  // Specify the generic type here
   return useMemo(() => {
-    const schema = createValidationSchema(config);
+    const schema = createValidationSchema(config, globalValidationMessages);
     const resolver = yupResolver(schema);
 
     return {
@@ -22,14 +22,21 @@ const useRHFOptions = (
       mode: validateOnSubmit
         ? 'onSubmit'
         : validateOnChange
-          ? 'onChange'
-          : validateOnBlur
-            ? 'onBlur'
-            : 'onSubmit',
+        ? 'onChange'
+        : validateOnBlur
+        ? 'onBlur'
+        : 'onSubmit',
       criteriaMode: 'all',
       resolver,
     } as UseFormProps<FormValues>;
-  }, [config, formOptions, validateOnSubmit, validateOnChange, validateOnBlur]);
+  }, [
+    config,
+    formOptions,
+    validateOnSubmit,
+    validateOnChange,
+    validateOnBlur,
+    globalValidationMessages,
+  ]);
 };
 
 export default useRHFOptions;

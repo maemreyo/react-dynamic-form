@@ -54,14 +54,17 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   renderSubmitButton,
   onError,
   renderErrorSummary,
+  validationMessages,
 }) => {
   const mergedFormOptions = useRHFOptions(
     config,
     formOptions,
     validateOnSubmit,
     validateOnChange,
-    validateOnBlur
+    validateOnBlur,
+    validationMessages
   );
+
   const form = useDynamicForm({
     config,
     formOptions: mergedFormOptions,
@@ -73,13 +76,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     onChange,
     onFormReady,
   });
+
   const { formState, control, handleSubmit } = form;
+
   const { fields, fieldsToRender, conditionalFieldsConfig } = useFormFields(
-    config, // Pass config instead of data
+    config,
     formState,
-    control
+    control,
+    validationMessages
   );
-  
+
   const onSubmitHandler = (): any => {
     handleSubmit(
       data => {

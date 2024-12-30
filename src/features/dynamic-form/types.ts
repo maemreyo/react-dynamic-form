@@ -133,6 +133,9 @@ export interface DynamicFormProps {
   onError?: (errors: FieldErrors) => void;
   /** Optional custom error summary renderer. */
   renderErrorSummary?: RenderErrorSummaryProps;
+
+  /** Optional custom validation messages. */
+  validationMessages?: ValidationMessages;
 }
 
 /**
@@ -464,11 +467,13 @@ export type RenderFormFooterProps = (props: {
   formClassNameConfig?: FormClassNameConfig;
 }) => React.ReactNode;
 
-
 /**
  * Type alias for the renderErrorSummary prop in DynamicFormProps.
  */
-export type RenderErrorSummaryProps = (errors: FieldErrors, formClassNameConfig: FormClassNameConfig | undefined) => React.ReactNode;
+export type RenderErrorSummaryProps = (
+  errors: FieldErrors,
+  formClassNameConfig: FormClassNameConfig | undefined
+) => React.ReactNode;
 
 // --- Re-exported types ---
 
