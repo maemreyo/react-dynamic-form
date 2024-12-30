@@ -60,7 +60,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "react-dynamic-form",
+  "name": "@maemreyo/react-dynamic-form",
   "author": "Matthew Ngo <matthew.ngo1114@gmail.com>",
   "bugs": {
     "url": "https://github.com/maemreyo/react-dynamic-form/issues"
