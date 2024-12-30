@@ -22,8 +22,8 @@ const RadioLabel = styled.label<{ className?: string }>`
 
 const RadioInputStyled = styled.input<{ className?: string }>`
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 18px; /* Giảm kích thước */
+  height: 18px; /* Giảm kích thước */
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 50%;
   cursor: pointer;
@@ -42,8 +42,8 @@ const RadioInputStyled = styled.input<{ className?: string }>`
   &:checked::after {
     content: '';
     display: block;
-    width: 10px;
-    height: 10px;
+    width: 9px; /* Giảm kích thước */
+    height: 9px; /* Giảm kích thước */
     background-color: white;
     border-radius: 50%;
     position: absolute;
@@ -54,7 +54,7 @@ const RadioInputStyled = styled.input<{ className?: string }>`
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.info};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors['info-200']}; /* Hiệu ứng focus */
   }
 
   &:disabled {

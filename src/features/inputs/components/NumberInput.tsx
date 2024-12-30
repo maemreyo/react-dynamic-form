@@ -16,7 +16,7 @@ const NumberInputContainer = styled.div<{ className?: string }>`
   input {
     text-align: center;
     padding-right: 0;
-    width: 80px; /* Giảm chiều rộng */
+    width: 65px; /* Giảm chiều rộng */
   }
 `;
 
@@ -24,9 +24,9 @@ const SpinButton = styled.button<{ className?: string }>`
   background: none;
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 0;
-  height: 38px;
-  width: 38px;
-  font-size: 22px; /* Tăng kích thước */
+  height: 32px; /* Giảm kích thước */
+  width: 32px; /* Giảm kích thước */
+  font-size: 18px; /* Giảm kích thước */
   line-height: 0;
   color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
@@ -41,11 +41,11 @@ const SpinButton = styled.button<{ className?: string }>`
     background-color: #efefef;
   }
   &:first-of-type {
-    border-radius: 10px 0 0 10px; /* Bo tròn */
+    border-radius: 8px 0 0 8px; /* Bo tròn */
     border-right: none;
   }
   &:last-of-type {
-    border-radius: 0 10px 10px 0; /* Bo tròn */
+    border-radius: 0 8px 8px 0; /* Bo tròn */
     border-left: none;
   }
 `;

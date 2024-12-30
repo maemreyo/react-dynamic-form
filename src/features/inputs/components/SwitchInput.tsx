@@ -6,11 +6,12 @@ import { CommonInputProps } from '../types';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import styled from 'styled-components';
 
+
 const SwitchContainer = styled.label<{ className?: string }>`
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 24px;
+  width: 40px; /* Giảm kích thước */
+  height: 20px; /* Giảm kích thước */
   cursor: pointer;
 `;
 
@@ -25,7 +26,7 @@ const SwitchInputStyled = styled.input<{ className?: string }>`
     box-shadow: 0 0 1px ${({ theme }) => theme.colors.info};
   }
   &:checked + .slider:before {
-    transform: translateX(26px);
+    transform: translateX(19px); /* Chỉnh vị trí slider */
   }
   &:disabled + .slider {
     background-color: #f5f5f5;
@@ -49,10 +50,10 @@ const Slider = styled.span<{ className?: string }>`
   &:before {
     position: absolute;
     content: '';
-    height: 18px;
-    width: 18px;
-    left: 4px;
-    bottom: 3px;
+    height: 16px; /* Giảm kích thước slider */
+    width: 16px; /* Giảm kích thước slider */
+    left: 2px; /* Chỉnh vị trí slider */
+    bottom: 2px; /* Chỉnh vị trí slider */
     background-color: white;
     transition: 0.4s;
     border-radius: 50%;

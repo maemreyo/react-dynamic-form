@@ -10,24 +10,24 @@ import { useTheme } from '../../../theme/ThemeProvider';
 
 const StyledSelect = styled.select<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 12px; /* Tăng padding */
-  border-radius: 10px; /* Bo tròn nhiều hơn */
-  font-size: ${({ theme }) => theme.fontSizes.medium};
-  appearance: none; /* Loại bỏ appearance mặc định */
+  padding: 8px 12px; /* Giảm padding */
+  border-radius: 8px; /* Bo tròn */
+  font-size: ${({ theme }) => theme.fontSizes.small}; /* Giảm font-size */
+  appearance: none;
   width: 100%;
   transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   line-height: 1.5;
-  outline: none; /* Loại bỏ outline mặc định */
+  outline: none;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%239CA3AF' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E")
-    no-repeat right 12px center; /* Thêm icon dropdown */
-  background-size: 12px 8px; /* Chỉnh kích thước icon */
+    no-repeat right 12px center;
+  background-size: 12px 8px;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors['info-700']};
   }
 
   &:focus {
-    box-shadow: 0 0 0 4px ${({ theme }) => theme.colors['info-500']}; /* Hiệu ứng focus rõ ràng */
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']}; /* Hiệu ứng focus */
     border-color: ${({ theme }) => theme.colors.info};
   }
 
@@ -51,6 +51,8 @@ const StyledSelect = styled.select<{ className?: string }>`
     max-width: 400px;
   }
 `;
+
+
 
 interface SelectInputProps extends CommonInputProps {}
 

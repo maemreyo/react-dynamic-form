@@ -434,7 +434,7 @@ ComprehensiveForm.args = {
       type: 'date',
       defaultValue: '2023-11-20',
       classNameConfig: {
-        date: 'border border-gray-400 p-2 rounded w-full',
+        date: 'border border-gray-400 p-2 rounded w-full', // Apply the 'date' class here
         label: 'block text-gray-700 text-sm font-bold mb-2',
       },
     },
@@ -443,7 +443,7 @@ ComprehensiveForm.args = {
       type: 'time',
       defaultValue: '09:00',
       classNameConfig: {
-        time: 'border border-gray-400 p-2 rounded w-full',
+        time: 'border border-gray-400 p-2 rounded w-full', // Apply the 'time' class here
         label: 'block text-gray-700 text-sm font-bold mb-2',
       },
     },
@@ -452,7 +452,7 @@ ComprehensiveForm.args = {
       type: 'datetime-local',
       defaultValue: '2023-11-20T09:00',
       classNameConfig: {
-        dateTime: 'border border-gray-400 p-2 rounded w-full',
+        dateTime: 'border border-gray-400 p-2 rounded w-full', // Apply the 'dateTime' class here
         label: 'block text-gray-700 text-sm font-bold mb-2',
       },
     },
@@ -500,9 +500,12 @@ ComprehensiveForm.args = {
       type: 'switch',
       defaultValue: true,
       classNameConfig: {
-        switchContainer: 'relative inline-block w-10 mr-2 align-middle select-none',
-        switch: 'absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer',
-        switchSlider: 'absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-400 transition-all duration-300 rounded-full',
+        switchContainer:
+          'relative inline-block w-10 mr-2 align-middle select-none',
+        switch:
+          'absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer',
+        switchSlider:
+          'absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-400 transition-all duration-300 rounded-full',
         label: 'block text-gray-700 text-sm font-bold mb-2',
       },
     },
@@ -518,7 +521,8 @@ ComprehensiveForm.args = {
       classNameConfig: {
         comboBoxContainer: 'relative',
         comboBox: 'border border-gray-400 p-2 rounded w-full',
-        comboBoxDropdownList: 'absolute z-10 w-full bg-white border border-gray-400 rounded mt-1',
+        comboBoxDropdownList:
+          'absolute z-10 w-full bg-white border border-gray-400 rounded mt-1',
         comboBoxDropdownItem: 'p-2 hover:bg-gray-200',
         label: 'block text-gray-700 text-sm font-bold mb-2',
       },
@@ -612,32 +616,32 @@ ComprehensiveForm.args = {
       classNameConfig: {
         label: 'block text-gray-700 text-sm font-bold mb-2',
         numberInputContainer: 'flex items-center',
-        numberInputButton:
-          'bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded-md',
+        numberInputButton: 'bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded-md',
         number: 'border border-gray-400 p-2 rounded w-20 text-center mx-2',
       },
     },
   },
   formClassNameConfig: {
-    formContainer: 'p-6 border border-gray-300 rounded',
+    formContainer: 'p-6 border border-gray-300 rounded-md', // Thêm rounded-md
     inputWrapper: 'mb-4',
     errorMessage: 'text-red-600',
-    button: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded',
+    button:
+      'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full', // Thêm w-full
   },
   autoSave: {
     interval: 3000,
-    save: (data) => console.log('Auto-saving:', data),
+    save: data => console.log('Auto-saving:', data),
   },
   enableLocalStorage: true,
   resetOnSubmit: true,
   focusFirstError: true,
   debounceOnChange: 300,
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
     alert(JSON.stringify(data));
   },
-  onChange: (data) => console.log('Debounced change:', data),
-  onFormReady: (form) => {
+  onChange: data => console.log('Debounced change:', data),
+  onFormReady: form => {
     console.log('Form is ready:', form);
   },
   showSubmitButton: true,

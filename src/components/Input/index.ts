@@ -6,22 +6,22 @@ import styled, { css } from 'styled-components';
  */
 const baseFormElementStyles = css`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 12px; /* Tăng padding */
-  border-radius: 10px; /* Bo tròn nhiều hơn */
-  font-size: ${({ theme }) => theme.fontSizes.medium};
+  padding: 8px 12px; /* Giảm padding */
+  border-radius: 8px; /* Bo tròn */
+  font-size: ${({ theme }) => theme.fontSizes.small}; /* Giảm font-size */
   width: 100%;
   transition:
     border-color 0.2s ease-in-out,
     box-shadow 0.2s ease-in-out;
   line-height: 1.5;
-  outline: none; /* Loại bỏ outline mặc định */
+  outline: none;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors['info-700']};
   }
 
   &:focus {
-    box-shadow: 0 0 0 4px ${({ theme }) => theme.colors['info-500']}; /* Hiệu ứng focus rõ ràng */
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']}; /* Hiệu ứng focus */
     border-color: ${({ theme }) => theme.colors.info};
   }
 
