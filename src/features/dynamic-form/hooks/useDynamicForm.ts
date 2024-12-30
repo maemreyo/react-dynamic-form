@@ -1,8 +1,12 @@
 // Filepath: /src/features/dynamic-form/hooks/useDynamicForm.ts
-// src/features/dynamic-form/hooks/useDynamicForm.ts
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, UseFormReturn, UseFormProps } from 'react-hook-form';
-import { debounce, saveToLocalStorage, flattenConfig } from '../utils';
+import {
+  debounce,
+  saveToLocalStorage,
+  flattenConfig,
+  loadFromLocalStorage,
+} from '../utils';
 import { DynamicFormProps, FormValues } from '../types';
 
 /**
@@ -43,6 +47,8 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   const { formState, reset, setFocus, watch, control } = form;
   const { isSubmitSuccessful, errors } = formState;
 
+  const [isLocalStorageLoaded, setIsLocalStorageLoaded] = useState(false);
+
   // Auto-save
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
@@ -56,13 +62,24 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
     };
   }, [autoSave, watch]);
 
-  // LocalStorage
+  // LocalStorage - Save data
   useEffect(() => {
     if (enableLocalStorage) {
       const subscription = watch(data => saveToLocalStorage('form-data', data));
       return () => subscription.unsubscribe();
     }
   }, [enableLocalStorage, watch]);
+
+  // LocalStorage - Load data
+  useEffect(() => {
+    if (enableLocalStorage) {
+      const data = loadFromLocalStorage('form-data');
+      if (data) {
+        reset(data);
+      }
+      setIsLocalStorageLoaded(true);
+    }
+  }, [enableLocalStorage, reset]);
 
   // Reset on submit
   useEffect(() => {
