@@ -1,4 +1,5 @@
 // Filepath: /src/features/dynamic-form/hooks/useDynamicForm.ts
+// src/features/dynamic-form/hooks/useDynamicForm.ts
 import { useEffect, useState } from 'react';
 import { useForm, UseFormReturn, UseFormProps } from 'react-hook-form';
 import {
@@ -7,7 +8,12 @@ import {
   flattenConfig,
   loadFromLocalStorage,
 } from '../utils';
-import { DynamicFormProps, FormValues } from '../types';
+import {
+  DynamicFormProps,
+  FormValues,
+  FormConfig,
+  FieldConfig,
+} from '../types';
 
 /**
  * Custom hook to manage form state and behavior.
@@ -25,10 +31,10 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
     debounceOnChange,
     onChange,
     onFormReady,
-    config, // Add config prop
+    config,
   } = props;
 
-  // Flatten the config to access default values easily
+  // Flatten the config to access default values and types easily
   const flattenedConfig = flattenConfig(config);
 
   // Create defaultValues object from flattened config
@@ -41,7 +47,7 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
 
   const form = useForm<FormValues>({
     ...formOptions,
-    defaultValues: defaultValues, // Set defaultValues from config
+    defaultValues: defaultValues,
   } as UseFormProps<FormValues>);
 
   const { formState, reset, setFocus, watch, control } = form;
@@ -73,9 +79,40 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   // LocalStorage - Load data
   useEffect(() => {
     if (enableLocalStorage) {
-      const data = loadFromLocalStorage('form-data');
-      if (data) {
-        reset(data);
+      const loadedData = loadFromLocalStorage('form-data');
+      if (loadedData) {
+        const resetData: FormValues = {};
+        for (const key in flattenedConfig) {
+          const fieldConfig = flattenedConfig[key];
+          if (loadedData[key] !== undefined) {
+            if (
+              fieldConfig.type === 'radio' ||
+              fieldConfig.type === 'checkbox' ||
+              fieldConfig.type === 'switch'
+            ) {
+              // Convert string to boolean for radio, checkbox, and switch types
+              resetData[key] =
+                loadedData[key] === 'true'
+                  ? true
+                  : loadedData[key] === 'false'
+                  ? false
+                  : loadedData[key];
+
+              if (resetData[key] === undefined) {
+                resetData[key] = fieldConfig.defaultValue;
+              }
+            } else if (fieldConfig.type === 'number') {
+              // Convert string to number
+              resetData[key] =
+                loadedData[key] !== ''
+                  ? parseFloat(loadedData[key])
+                  : fieldConfig.defaultValue;
+            } else {
+              resetData[key] = loadedData[key];
+            }
+          }
+        }
+        reset(resetData);
       }
       setIsLocalStorageLoaded(true);
     }

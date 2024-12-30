@@ -1,9 +1,7 @@
-// src/features/inputs/components/RadioInput.tsx
+// Filepath: /src/features/inputs/components/RadioInput.tsx
 import React from 'react';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
-import {
-  FormValues,
-} from '../../dynamic-form';
+import { FormValues } from '../../dynamic-form';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
@@ -101,6 +99,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
               id={`${id}-${option.value}`}
               name={id}
               value={option.value}
+              checked={field.value === option.value}
             />
             {option.label}
           </RadioLabel>
