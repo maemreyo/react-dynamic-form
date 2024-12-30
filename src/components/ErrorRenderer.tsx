@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import {
   FieldError,
   FieldConfig,
-  ErrorMessageTemplate,
 } from '../features/dynamic-form';
 
 const ErrorMessage = styled.div`

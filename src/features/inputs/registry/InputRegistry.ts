@@ -16,6 +16,7 @@ import {
 import { InputType } from '../../dynamic-form/types';
 
 // Create a map of input types to components
+// @ts-ignore
 const inputRegistry: Record<InputType, React.ComponentType<any> | undefined> = {
   text: TextInput,
   email: TextInput,

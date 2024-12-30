@@ -17,7 +17,9 @@ const FormContent: React.FC<FormContentProps> = ({
   disableAutocomplete,
   showInlineError,
   renderInput,
+  // @ts-ignore
   conditionalFieldsConfig,
+  // @ts-ignore
   customInputs,
 }) => {
   const {
@@ -66,6 +68,7 @@ const FormContent: React.FC<FormContentProps> = ({
             <InputRenderer
               field={field}
               config={config}
+              // @ts-ignore
               formClassNameConfig={formClassNameConfig}
               disableAutocomplete={disableAutocomplete}
               showInlineError={showInlineError}

@@ -3,8 +3,8 @@ import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { defaultTheme, DynamicForm } from '.';
-import { useController, useFormContext } from 'react-hook-form';
-import { useTheme } from './theme/ThemeProvider';
+// import { useController, useFormContext } from 'react-hook-form';
+// import { useTheme } from './theme/ThemeProvider';
 import { userEvent, within, expect } from '@storybook/test'; // Updated import
 
 export default {

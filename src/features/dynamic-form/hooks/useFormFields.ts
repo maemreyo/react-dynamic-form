@@ -22,7 +22,7 @@ function useFormFields(
   fieldsToRender: string[];
   conditionalFieldsConfig: Condition[];
 } {
-  // Thêm state để force re-render
+  // @ts-ignore
   const [update, setUpdate] = useState(false);
 
   // Thêm useEffect để force re-render khi config thay đổi

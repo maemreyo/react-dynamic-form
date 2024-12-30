@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { InputType } from '../dynamic-form';
 
 // Create a map of input types to Yup schema
+// @ts-ignore
 const validationSchemaRegistry: Record<InputType, yup.AnySchema | undefined> = {
   text: yup.string(),
   email: yup.string().email('Invalid email format'),

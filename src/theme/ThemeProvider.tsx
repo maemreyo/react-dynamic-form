@@ -2,7 +2,6 @@
 import React, { FC, createContext, useContext } from 'react';
 import {
   ThemeProvider as StyledThemeProvider,
-  ThemeContext,
 } from 'styled-components';
 import { defaultTheme } from './index';
 

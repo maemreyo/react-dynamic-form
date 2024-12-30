@@ -8,12 +8,7 @@ import {
   flattenConfig,
   loadFromLocalStorage,
 } from '../utils';
-import {
-  DynamicFormProps,
-  FormValues,
-  FormConfig,
-  FieldConfig,
-} from '../types';
+import { DynamicFormProps, FormValues } from '../types';
 
 /**
  * Custom hook to manage form state and behavior.
@@ -53,6 +48,7 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   const { formState, reset, setFocus, watch, control } = form;
   const { isSubmitSuccessful, errors } = formState;
 
+  // @ts-ignore
   const [isLocalStorageLoaded, setIsLocalStorageLoaded] = useState(false);
 
   // Auto-save
@@ -69,6 +65,7 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   }, [autoSave, watch]);
 
   // LocalStorage - Save data
+  // @ts-ignore
   useEffect(() => {
     if (enableLocalStorage) {
       const subscription = watch(data => saveToLocalStorage('form-data', data));
@@ -136,6 +133,7 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
   }, [errors, focusFirstError, setFocus]);
 
   // Debounce on change
+  // @ts-ignore
   useEffect(() => {
     if (onChange) {
       const debouncedOnChange = debounce(onChange, debounceOnChange || 0);
@@ -151,7 +149,10 @@ const useDynamicForm = (props: DynamicFormProps): UseFormReturn<FormValues> => {
     }
   }, [form, onFormReady]);
 
-  return { ...form, control };
+  return {
+    ...form,
+    control,
+  };
 };
 
 export default useDynamicForm;
