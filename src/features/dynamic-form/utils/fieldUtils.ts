@@ -1,5 +1,11 @@
-// src/features/dynamic-form/hooks/fieldUtils.ts
-import { FormField, FieldError, FormValues, FieldConfig } from '../types';
+// src/features/dynamic-form/utils/fieldUtils.ts
+import {
+  FormField,
+  FieldError,
+  FormValues,
+  FieldConfig,
+  ValidationMessages,
+} from '../types';
 import { getInputTypeFromValue } from '../../inputs/utils';
 import { getErrorMessage } from './validationUtils';
 import { get } from 'react-hook-form';
@@ -10,11 +16,13 @@ import { FormState } from 'react-hook-form';
  *
  * @param flattenedConfig - The flattened form configuration.
  * @param formState - The `react-hook-form` form state.
+ * @param globalValidationMessages - Optional global validation messages.
  * @returns The form fields array.
  */
 export const getFields = (
   flattenedConfig: any,
-  formState: FormState<FormValues>
+  formState: FormState<FormValues>,
+  globalValidationMessages: ValidationMessages | undefined
 ): FormField[] => {
   return Object.entries(flattenedConfig).map(([key, fieldConfig]) => {
     // Retrieve the default value from fieldConfig
@@ -27,7 +35,8 @@ export const getFields = (
     const errorMessage = getErrorMessage(
       fieldConfig as FieldConfig,
       fieldError,
-      {}
+      {},
+      globalValidationMessages
     );
 
     return {
@@ -39,8 +48,8 @@ export const getFields = (
             ...fieldError,
             message: errorMessage,
             type: fieldError?.type || '',
-          } // Merge errorMessage into fieldError and ensure type is always defined
-        : fieldError, // Use the unwrapped fieldError
+          }
+        : fieldError,
     };
   });
 };

@@ -1,12 +1,11 @@
-// Filepath: /src/components/ErrorSummary.tsx
-
+// src/components/ErrorSummary.tsx
 import React from 'react';
 import ErrorRenderer from './ErrorRenderer';
-import { FieldError } from '../features/dynamic-form';
+import { FieldError, FormClassNameConfig } from '../features/dynamic-form';
 
 interface ErrorSummaryProps {
   errors: Partial<Record<string, FieldError>>;
-  formClassNameConfig?: any;
+  formClassNameConfig?: FormClassNameConfig;
 }
 
 const ErrorSummary: React.FC<ErrorSummaryProps> = ({
@@ -19,7 +18,6 @@ const ErrorSummary: React.FC<ErrorSummaryProps> = ({
       <ul>
         {Object.entries(errors).map(([key, error]) => (
           <li key={key}>
-            {/* Use ErrorRenderer here */}
             <ErrorRenderer
               error={error!}
               formClassNameConfig={formClassNameConfig}

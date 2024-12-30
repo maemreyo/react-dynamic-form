@@ -1,44 +1,72 @@
-// src/features/inputs/components/SelectInput.tsx
+// Filepath: /src/features/inputs/components/SelectInput.tsx
+
 import React from 'react';
-import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FormValues } from '../../dynamic-form';
-import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
+import { Label, ErrorMessage, InputWrapper } from '../../../styles';
+import styled from 'styled-components';
+import { useTheme } from '../../../theme/ThemeProvider';
 
-const StyledSelect = styled.select`
+const StyledSelect = styled.select<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 8px;
-  border-radius: 4px;
-  font-size: ${({ theme }) => theme.fontSizes.medium};
-  appearance: auto; /* Reset default styles */
+  padding: 8px 12px; /* Giảm padding */
+  border-radius: 8px; /* Bo tròn */
+  font-size: ${({ theme }) => theme.fontSizes.small}; /* Giảm font-size */
+  appearance: none;
+  width: 100%;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  line-height: 1.5;
+  outline: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%239CA3AF' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E")
+    no-repeat right 12px center;
+  background-size: 12px 8px;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors['info-700']};
+  }
 
   &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']}; /* Hiệu ứng focus */
+    border-color: ${({ theme }) => theme.colors.info};
+  }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.text};
     opacity: 0.6;
   }
-  width: 100%;
+
+  /* Add responsive styles using media queries */
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
+    max-width: 300px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    max-width: 400px;
+  }
 `;
+
+
 
 interface SelectInputProps extends CommonInputProps {}
 
 const SelectInput: React.FC<SelectInputProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
+  const theme = useTheme();
   const { label, options } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -46,46 +74,34 @@ const SelectInput: React.FC<SelectInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: fieldConfig.defaultValue,
   });
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
-      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           {label}
           {fieldConfig.validation?.required && (
-            <span style={{ color: 'red' }}>*</span>
+            <span style={{ color: theme.colors.danger }}>*</span>
           )}
         </Label>
       )}
-      <StyledSelect
-        {...field}
-        className={fieldClassNameConfig.input || formClassName.input}
-        id={id}
-      >
-        {options?.map((option) => (
+      <StyledSelect {...field} className={formClassNameConfig.select} id={id}>
+        {options?.map(option => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}
       </StyledSelect>
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}

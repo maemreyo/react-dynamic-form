@@ -1,4 +1,4 @@
-// src/theme/ThemeProvider.tsx
+// Filepath: /src/theme/ThemeProvider.tsx
 import React, { FC, createContext, useContext } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { defaultTheme } from './index';

@@ -1,22 +1,67 @@
-// src/features/inputs/components/CheckboxInput.tsx
+// Filepath: /src/features/inputs/components/CheckboxInput.tsx
+
 import React from 'react';
-import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
+import { Label, InputWrapper, ErrorMessage } from '../../../styles';
+import styled from 'styled-components';
+
+const CheckboxInputStyled = styled.input<{ className?: string }>`
+  appearance: none;
+  width: 18px; /* Giảm kích thước */
+  height: 18px; /* Giảm kích thước */
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 4px; /* Bo tròn */
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  position: relative;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors['info-700']};
+  }
+
+  &:checked {
+    background-color: ${({ theme }) => theme.colors.info};
+    border-color: ${({ theme }) => theme.colors.info};
+  }
+
+  &:checked::after {
+    content: '✔';
+    display: block;
+    text-align: center;
+    font-size: 14px; /* Giảm kích thước icon */
+    line-height: 18px; /* Căn giữa icon */
+    color: ${({ theme }) => theme.colors.white};
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors['info-200']}; /* Hiệu ứng focus */
+  }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+`;
 
 const CheckboxInput: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
   const { label } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -24,43 +69,31 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
     rules: fieldConfig.validation as any,
     defaultValue: fieldConfig.defaultValue,
   });
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
-      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
-          <Input
+          <CheckboxInputStyled
             {...field}
-            className={fieldClassNameConfig.input || formClassName.input}
+            className={formClassNameConfig.checkboxInput}
             type="checkbox"
             id={id}
             checked={!!field.value}
           />
           {label}
-          {/* This is handled in InputRenderer now:
-          {fieldConfig.validation?.required && (
-            <span style={{ color: 'red' }}>*</span>
-          )} */}
         </Label>
       )}
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}

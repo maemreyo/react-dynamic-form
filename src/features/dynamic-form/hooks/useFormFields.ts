@@ -1,7 +1,13 @@
 // Filepath: /src/features/dynamic-form/hooks/useFormFields.ts
-// src/features/dynamic-form/hooks/useFormFields.ts
+
 import { useMemo, useState, useEffect } from 'react';
-import { FormField, FormConfig, Condition, FormValues } from '../types';
+import {
+  FormField,
+  FormConfig,
+  Condition,
+  FormValues,
+  ValidationMessages,
+} from '../types';
 import { FormState, useWatch, Control } from 'react-hook-form';
 import { shouldRenderField, getFields, flattenConfig } from '../utils';
 
@@ -11,12 +17,14 @@ import { shouldRenderField, getFields, flattenConfig } from '../utils';
  * @param config - The form configuration.
  * @param formState - The `react-hook-form` form state.
  * @param control - The `react-hook-form` control object.
+ * @param globalValidationMessages - Optional global validation messages.
  * @returns An object containing the form fields and the fields to render.
  */
 function useFormFields(
   config: FormConfig,
   formState: FormState<FormValues>,
-  control: Control<FormValues>
+  control: Control<FormValues>,
+  globalValidationMessages: ValidationMessages | undefined
 ): {
   fields: FormField[];
   fieldsToRender: string[];
@@ -25,9 +33,9 @@ function useFormFields(
   // @ts-expect-error
   const [update, setUpdate] = useState(false);
 
-  // Thêm useEffect để force re-render khi config thay đổi
+  
   useEffect(() => {
-    setUpdate((prev) => !prev);
+    setUpdate(prev => !prev);
   }, [config]);
 
   const flattenedConfig = useMemo(() => flattenConfig(config), [config]);
@@ -36,11 +44,11 @@ function useFormFields(
     () =>
       Object.keys(config)
         .filter(
-          (fieldId) =>
+          fieldId =>
             config[fieldId].conditional &&
             typeof config[fieldId].conditional?.when === 'string'
         )
-        .map((fieldId) => ({
+        .map(fieldId => ({
           when: config[fieldId].conditional!.when,
           operator: config[fieldId].conditional!.operator || 'is',
           value: config[fieldId].conditional?.value,
@@ -52,20 +60,20 @@ function useFormFields(
 
   const watchedValues = useWatch({
     control,
-    name: conditionalFieldsConfig.map((condition) => condition.when),
+    name: conditionalFieldsConfig.map(condition => condition.when),
   });
 
   const fieldsToRender = useMemo(
     () =>
-      Object.keys(config).filter((fieldId) =>
+      Object.keys(config).filter(fieldId =>
         shouldRenderField(fieldId, conditionalFieldsConfig, watchedValues)
       ),
     [config, conditionalFieldsConfig, watchedValues]
   );
 
   const fields = useMemo(
-    () => getFields(flattenedConfig, formState),
-    [flattenedConfig, formState]
+    () => getFields(flattenedConfig, formState, globalValidationMessages),
+    [flattenedConfig, formState, globalValidationMessages]
   );
 
   return { fields, fieldsToRender, conditionalFieldsConfig };

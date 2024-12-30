@@ -1,7 +1,11 @@
 // Filepath: /src/features/validation/validationSchema.ts
 
 import * as yup from 'yup';
-import { FormConfig, CustomValidator } from '../dynamic-form';
+import {
+  FormConfig,
+  CustomValidator,
+  ValidationMessages,
+} from '../dynamic-form';
 import { getValidationSchema } from './ValidationSchemaRegistry';
 
 /**
@@ -203,9 +207,13 @@ const applyCustomValidation = (
  * Creates a Yup validation schema based on the provided form configuration.
  *
  * @param config - The form configuration.
+ * @param globalValidationMessages - Optional global validation messages.
  * @returns The Yup schema.
  */
-export const createValidationSchema = (config: FormConfig) => {
+export const createValidationSchema = (
+  config: FormConfig,
+  globalValidationMessages?: ValidationMessages
+) => {
   const shape: { [key: string]: yup.AnySchema } = {};
 
   const validationHandlers: {
@@ -244,6 +252,12 @@ export const createValidationSchema = (config: FormConfig) => {
     const fieldConfig = config[fieldId];
     const { validation, type, validationMessages } = fieldConfig;
 
+    // Merge global and field-level validation messages
+    const mergedValidationMessages = {
+      ...globalValidationMessages,
+      ...validationMessages,
+    };
+
     if (type === undefined) {
       console.warn(`Field type is undefined for field: ${fieldId}`);
     }
@@ -260,7 +274,11 @@ export const createValidationSchema = (config: FormConfig) => {
           ] as any;
           const handler = validationHandlers[rule];
           if (handler) {
-            fieldSchema = handler(fieldSchema, ruleValue, validationMessages);
+            fieldSchema = handler(
+              fieldSchema,
+              ruleValue,
+              mergedValidationMessages
+            );
           }
         }
       }

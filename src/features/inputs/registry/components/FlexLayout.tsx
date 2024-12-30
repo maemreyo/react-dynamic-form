@@ -1,13 +1,25 @@
-// Filepath: /src/features/core/components/FlexLayout.tsx
+// Filepath: /src/features/inputs/registry/components/FlexLayout.tsx
 
 import React from 'react';
-import { FormContainer, FormContainerProps } from '../../../../styles';
+import styled from 'styled-components';
+import { FormClassNameConfig } from '../../../dynamic-form/types';
 
-interface FlexLayoutProps extends FormContainerProps {
+const StyledFlexLayout = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme, $gap }: { theme: any; $gap: string }) =>
+    $gap || theme.space.md};
+  padding: ${({ theme }) => theme.space['3xl']};
+  background-color: ${({ theme }) => theme.colors.background};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.md};
+`;
+
+interface FlexLayoutProps {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   children: React.ReactNode;
   className?: string;
-  formClassNameConfig?: any;
+  formClassNameConfig?: FormClassNameConfig;
   style?: React.CSSProperties;
   layoutConfig?: any;
   horizontalLabel?: boolean;
@@ -22,21 +34,22 @@ const FlexLayout: React.FC<FlexLayoutProps> = ({
   layoutConfig,
   horizontalLabel,
 }) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onSubmit(event);
+  };
+
   return (
-    <FormContainer
-      onSubmit={onSubmit}
-      className={`${className || ''} ${
-        formClassNameConfig?.formContainer || ''
-      }`}
-      $layout="flex"
-      $layoutConfig={layoutConfig}
-      $horizontalLabel={horizontalLabel}
+    <StyledFlexLayout
+      onSubmit={handleSubmit}
+      className={`${className || ''} ${formClassNameConfig?.formContainer || ''}`}
+      style={style}
+      $gap={layoutConfig?.gap}
       data-layoutconfig={JSON.stringify(layoutConfig)}
       data-horizontallabel={horizontalLabel ? 'true' : 'false'}
-      style={style}
     >
       {children}
-    </FormContainer>
+    </StyledFlexLayout>
   );
 };
 

@@ -1,25 +1,27 @@
+// Filepath: /src/features/inputs/components/ComboBox.tsx
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   FieldConfig,
   FormClassNameConfig,
   FieldError,
 } from '../../dynamic-form';
-import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
+import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
+import styled from 'styled-components';
 
-const ComboBoxContainer = styled.div`
+const ComboBoxContainer = styled.div<{ className?: string }>`
   position: relative;
   width: 100%;
 `;
 
-const DropdownList = styled.ul`
+const DropdownList = styled.ul<{ className?: string }>`
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 4px;
+  border-radius: 8px; /* Bo tròn */
   background-color: white;
   z-index: 10;
   list-style: none;
@@ -27,18 +29,19 @@ const DropdownList = styled.ul`
   margin: 4px 0 0 0;
   max-height: 200px;
   overflow-y: auto;
+  box-shadow:
+    0px 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0px 2px 4px -1px rgba(0, 0, 0, 0.06);
 `;
 
-const DropdownItem = styled.li`
-  padding: 8px;
+const DropdownItem = styled.li<{ className?: string }>`
+  padding: 8px 12px; /* Giảm padding */
   cursor: pointer;
-
   &:hover {
-    background-color: ${({ theme }) => theme.colors.background};
+    background-color: ${({ theme }) => theme.colors['light-500']};
   }
-
   &.selected {
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.info};
     color: white;
   }
 `;
@@ -46,7 +49,7 @@ const DropdownItem = styled.li`
 interface ComboBoxProps {
   id: string;
   fieldConfig: FieldConfig;
-  formClassNameConfig?: FormClassNameConfig;
+  formClassNameConfig: FormClassNameConfig;
   showInlineError?: boolean;
   horizontalLabel?: boolean;
   labelWidth?: string | number;
@@ -56,15 +59,13 @@ interface ComboBoxProps {
 const ComboBox: React.FC<ComboBoxProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
   const { label, options } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
@@ -75,17 +76,14 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     control,
     rules: fieldConfig.validation,
   });
-
   useEffect(() => {
     setInputValue(field.value || '');
   }, [field.value]);
-
   const filteredOptions = options
     ? options.filter((option) =>
         option.label.toLowerCase().includes(inputValue.toLowerCase())
       )
     : [];
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
     setInputValue(val);
@@ -96,21 +94,17 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       setIsOpen(false);
     }
   };
-
   const handleOptionClick = (value: string) => {
     setInputValue(value);
     field.onChange(value); // Update form state
     setIsOpen(false);
   };
-
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
-
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
   }, []);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -120,11 +114,9 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         closeDropdown();
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [closeDropdown]);
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
@@ -151,7 +143,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       setIsOpen(false);
     }
   };
-
   useEffect(() => {
     if (isOpen && highlightedIndex >= 0 && containerRef.current) {
       const item = containerRef.current.querySelector(
@@ -162,21 +153,18 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       }
     }
   }, [isOpen, highlightedIndex]);
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
       {label && (
         <Label
           htmlFor={id}
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           {label}
           {fieldConfig.validation?.required && (
@@ -184,10 +172,13 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           )}
         </Label>
       )}
-      <ComboBoxContainer ref={containerRef}>
+      <ComboBoxContainer
+        ref={containerRef}
+        className={formClassNameConfig.comboBoxContainer}
+      >
         <Input
           {...field}
-          className={fieldClassNameConfig.input || formClassName.input}
+          className={formClassNameConfig.comboBox}
           id={id}
           value={inputValue}
           onChange={handleInputChange}
@@ -196,29 +187,31 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           autoComplete="off"
         />
         {isOpen && (
-          <DropdownList>
+          <DropdownList className={formClassNameConfig.comboBoxDropdownList}>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <DropdownItem
                   key={option.value}
                   onClick={() => handleOptionClick(option.value)}
-                  className={index === highlightedIndex ? 'selected' : ''}
+                  className={`${
+                    index === highlightedIndex ? 'selected' : ''
+                  } ${formClassNameConfig.comboBoxDropdownItem}`}
                 >
                   {option.label}
                 </DropdownItem>
               ))
             ) : (
-              <DropdownItem>No results found</DropdownItem>
+              <DropdownItem
+                className={formClassNameConfig.comboBoxDropdownItem}
+              >
+                No results found
+              </DropdownItem>
             )}
           </DropdownList>
         )}
       </ComboBoxContainer>
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}

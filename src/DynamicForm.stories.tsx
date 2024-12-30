@@ -6,6 +6,7 @@ import { defaultTheme, DynamicForm } from '.';
 // import { useController, useFormContext } from 'react-hook-form';
 // import { useTheme } from './theme/ThemeProvider';
 import { userEvent, within, expect } from '@storybook/test'; // Updated import
+import { FlexLayout } from './features/inputs/registry/components/FlexLayout';
 
 export default {
   title: 'DynamicForm',
@@ -19,9 +20,7 @@ export default {
   },
 } as Meta<typeof DynamicForm>;
 
-const Template: StoryFn<typeof DynamicForm> = (args) => (
-  <DynamicForm {...args} />
-);
+const Template: StoryFn<typeof DynamicForm> = args => <DynamicForm {...args} />;
 
 // --- Examples ---
 
@@ -56,7 +55,7 @@ BasicInputTypes.args = {
       defaultValue: true,
     },
   },
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -124,7 +123,7 @@ AdvancedInputTypes.args = {
       ],
     },
   },
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -206,7 +205,7 @@ ValidationAndSubmission.args = {
       },
     },
   },
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -239,7 +238,7 @@ DynamicConfiguration.args = {
       },
     },
   },
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -281,17 +280,17 @@ AdvancedFeatures.args = {
   },
   autoSave: {
     interval: 5000,
-    save: (data) => console.log('Auto-saving:', data),
+    save: data => console.log('Auto-saving:', data),
   },
   enableLocalStorage: true,
   resetOnSubmit: true,
   focusFirstError: true,
   debounceOnChange: 500,
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
-  onChange: (data) => console.log('Debounced change:', data),
-  onFormReady: (form) => {
+  onChange: data => console.log('Debounced change:', data),
+  onFormReady: form => {
     // Reset button
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset Form';
@@ -312,7 +311,7 @@ AdvancedFeatures.play = async ({ canvasElement, step }) => {
       'Auto-save Test'
     );
     // Wait for auto-save to trigger (5 seconds)
-    await new Promise((resolve) => setTimeout(resolve, 5100));
+    await new Promise(resolve => setTimeout(resolve, 5100));
   });
 
   await step('Simulate Local Storage', async () => {
@@ -352,35 +351,64 @@ AdvancedFeatures.play = async ({ canvasElement, step }) => {
       'Debounce Test'
     );
     // Wait for debounce to trigger (0.5 seconds)
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    await new Promise(resolve => setTimeout(resolve, 600));
   });
 };
+
 // Story 6: Comprehensive Form
+// --- Comprehensive Form Story ---
+
 export const ComprehensiveForm = Template.bind({});
 ComprehensiveForm.args = {
   theme: defaultTheme,
+  renderLayout: ({ children, ...rest }) => (
+    <FlexLayout {...rest}>{children}</FlexLayout>
+  ),
+  onError: errors => {
+    console.log('Form validation errors:', errors);
+  },
+  renderErrorSummary: (errors, formClassNameConfig) => (
+    <div className={formClassNameConfig?.formContainer}>
+      <h3 className={formClassNameConfig?.label}>Validation Errors:</h3>
+      <ul>
+        {Object.entries(errors).map(([key, error]) => (
+          <li key={key} className={formClassNameConfig?.errorMessage}>
+            {key}: {error?.message as string}
+          </li>
+        ))}
+      </ul>
+    </div>
+  ),
   config: {
-    // Basic Inputs
+    // --- Basic Inputs ---
     firstName: {
       label: 'First Name',
       type: 'text',
-      defaultValue: 'Comprehensive',
+      defaultValue: 'John',
       validation: {
         required: { value: true, message: 'This field is required' },
+      },
+      classNameConfig: {
+        input: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
       },
     },
     lastName: {
       label: 'Last Name',
       type: 'text',
-      defaultValue: 'Test',
+      defaultValue: 'Doe',
       validation: {
         required: { value: true, message: 'This field is required' },
+      },
+      classNameConfig: {
+        input: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
       },
     },
     email: {
       label: 'Email',
       type: 'email',
-      defaultValue: 'comprehensive@test.com',
+      defaultValue: 'john.doe@example.com',
       validation: {
         required: { value: true, message: 'This field is required' },
         pattern: {
@@ -388,54 +416,134 @@ ComprehensiveForm.args = {
           message: 'Invalid email address',
         },
       },
+      classNameConfig: {
+        input: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+        errorMessage: 'text-red-500 text-xs italic',
+      },
     },
     age: {
       label: 'Age',
       type: 'number',
-      defaultValue: 25,
+      defaultValue: 30,
       validation: {
-        required: { value: true, message: 'This field is required' },
-        min: { value: 18, message: 'You must be at least 18 years old' },
-        max: { value: 99, message: 'You must be at most 99 years old' },
+        min: { value: 18, message: 'Must be 18 or older' },
+        max: { value: 99, message: 'Must be 99 or younger' },
+      },
+      classNameConfig: {
+        input: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
       },
     },
-    // Advanced Inputs
+    subscribe: {
+      label: 'Subscribe to newsletter?',
+      type: 'checkbox',
+      defaultValue: true,
+      classNameConfig: {
+        checkboxInput: 'mr-2 leading-tight',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
+    },
+    // --- Advanced Inputs ---
     startDate: {
       label: 'Start Date',
       type: 'date',
-      defaultValue: '2023-11-21',
+      defaultValue: '2023-11-20',
+      classNameConfig: {
+        date: 'border border-gray-400 p-2 rounded w-full', // Apply the 'date' class here
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
     },
     startTime: {
       label: 'Start Time',
       type: 'time',
-      defaultValue: '10:00',
+      defaultValue: '09:00',
+      classNameConfig: {
+        time: 'border border-gray-400 p-2 rounded w-full', // Apply the 'time' class here
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
+    },
+    dateTime: {
+      label: 'Date and Time',
+      type: 'datetime-local',
+      defaultValue: '2023-11-20T09:00',
+      classNameConfig: {
+        dateTime: 'border border-gray-400 p-2 rounded w-full', // Apply the 'dateTime' class here
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
     },
     notes: {
       label: 'Notes',
       type: 'textarea',
-      defaultValue: 'Comprehensive test notes',
+      defaultValue: 'Some notes...',
+      classNameConfig: {
+        textarea: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
     },
     country: {
       label: 'Country',
       type: 'select',
-      defaultValue: 'CA',
+      defaultValue: 'US',
       options: [
         { value: 'US', label: 'United States' },
         { value: 'CA', label: 'Canada' },
         { value: 'UK', label: 'United Kingdom' },
       ],
+      classNameConfig: {
+        select: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
     },
     gender: {
       label: 'Gender',
       type: 'radio',
-      defaultValue: 'female',
+      defaultValue: 'male',
       options: [
         { value: 'male', label: 'Male' },
         { value: 'female', label: 'Female' },
         { value: 'other', label: 'Other' },
       ],
+      classNameConfig: {
+        radioGroup: 'flex items-center',
+        radioLabel: 'mr-4',
+        radioButton: 'mr-1',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
     },
-    // Conditional Field
+    notification: {
+      label: 'Enable Notifications',
+      type: 'switch',
+      defaultValue: true,
+      classNameConfig: {
+        switchContainer:
+          'relative inline-block w-10 mr-2 align-middle select-none',
+        switch:
+          'absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer',
+        switchSlider:
+          'absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-400 transition-all duration-300 rounded-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
+    },
+    favoriteFruit: {
+      label: 'Favorite Fruit',
+      type: 'combobox',
+      defaultValue: 'Apple',
+      options: [
+        { value: 'Apple', label: 'Apple' },
+        { value: 'Banana', label: 'Banana' },
+        { value: 'Orange', label: 'Orange' },
+      ],
+      classNameConfig: {
+        comboBoxContainer: 'relative',
+        comboBox: 'border border-gray-400 p-2 rounded w-full',
+        comboBoxDropdownList:
+          'absolute z-10 w-full bg-white border border-gray-400 rounded mt-1',
+        comboBoxDropdownItem: 'p-2 hover:bg-gray-200',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
+    },
+    // --- Conditional Field ---
     dynamicField: {
       label: 'Dynamic Field',
       type: 'text',
@@ -446,11 +554,15 @@ ComprehensiveForm.args = {
         value: 'ShowDynamic',
         fields: ['dynamicField'],
       },
+      classNameConfig: {
+        input: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
     },
-    // Validation
+    // --- Validation ---
     password: {
       label: 'Password',
-      type: 'text',
+      type: 'password',
       validation: {
         required: {
           value: true,
@@ -476,52 +588,138 @@ ComprehensiveForm.args = {
           return undefined;
         },
       },
+      classNameConfig: {
+        input: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+        errorMessage: 'text-red-500 text-xs italic',
+      },
     },
+    // --- Custom Error Message ---
+    customErrorField: {
+      label: 'Custom Error Message',
+      type: 'text',
+      validation: {
+        required: {
+          value: true,
+          message: 'This is a required field.',
+        },
+        minLength: {
+          value: 5,
+          message: 'This field must be at least 5 characters long.',
+        },
+      },
+      validationMessages: {
+        required: 'You must fill in this field.',
+        minLength: ({ minLength }) =>
+          `Please enter at least ${minLength} characters.`,
+      },
+      classNameConfig: {
+        input: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+        errorMessage: 'text-red-500 text-xs italic',
+      },
+    },
+    // --- Number Input with validation ---
+    quantity: {
+      label: 'Quantity',
+      type: 'number',
+      defaultValue: 1,
+      validation: {
+        required: { value: true, message: 'Quantity is required' },
+        min: { value: 1, message: 'Quantity must be at least 1' },
+        max: { value: 10, message: 'Quantity must be no more than 10' },
+      },
+      classNameConfig: {
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+        numberInputContainer: 'flex items-center',
+        numberInputButton: 'bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded-md',
+        number: 'border border-gray-400 p-2 rounded w-20 text-center mx-2',
+      },
+    },
+    asyncEmail: {
+      label: 'Async Email Validation',
+      type: 'email',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+        validate: async (value: string): Promise<any> => {
+          const isValid = await mockCheckEmailExists(value);
+          console.log('🚀 ~ file: DynamicForm.stories.tsx ~ isValid:', isValid);
+          return isValid || 'Email already exists (async check)';
+        },
+      },
+      classNameConfig: {
+        input: 'border border-gray-400 p-2 rounded w-full',
+        label: 'block text-gray-700 text-sm font-bold mb-2',
+        errorMessage: 'text-red-500 text-xs italic',
+      },
+    },
+  },
+  formClassNameConfig: {
+    formContainer: 'p-6 border border-gray-300 rounded-md', // Thêm rounded-md
+    inputWrapper: 'mb-4',
+    errorMessage: 'text-red-600',
+    button:
+      'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full', // Thêm w-full
+  },
+  validationMessages: {
+    required: 'This is a globally defined required message',
   },
   autoSave: {
     interval: 3000,
-    save: (data) => console.log('Auto-saving:', data),
+    save: data => console.log('Auto-saving:', data),
   },
   enableLocalStorage: true,
   resetOnSubmit: true,
   focusFirstError: true,
   debounceOnChange: 300,
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
+    alert(JSON.stringify(data));
   },
-  onChange: (data) => console.log('Debounced change:', data),
-  onFormReady: fn(),
+  onChange: data => console.log('Debounced change:', data),
+  onFormReady: form => {
+    console.log('Form is ready:', form);
+  },
+  showSubmitButton: true,
+  showInlineError: true,
+  showErrorSummary: true,
 };
 ComprehensiveForm.storyName = 'Comprehensive Form';
 
-// // Interactions for ComprehensiveForm Story
+// Mock API call for async validation
+const mockCheckEmailExists = async (email: string): Promise<boolean> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(email !== 'test@example.com');
+    }, 1000); // Simulate 1-second delay
+  });
+};
+// --- Interactions for ComprehensiveForm Story ---
+
 // ComprehensiveForm.play = async ({ canvasElement, step }) => {
 //   const canvas = within(canvasElement);
 
-//   await step('Fill and Submit Form', async () => {
-//     await userEvent.type(canvas.getByLabelText('First Name'), 'John');
-//     await userEvent.type(canvas.getByLabelText('Last Name'), 'Doe');
+//   await step('Test Basic Interactions', async () => {
+//     await userEvent.type(
+//       canvas.getByLabelText('First Name'),
+//       ' - Updated'
+//     );
+//     await userEvent.type(
+//       canvas.getByLabelText('Last Name'),
+//       ' - Updated'
+//     );
 //     await userEvent.type(
 //       canvas.getByLabelText('Email'),
-//       'john.doe@example.com'
+//       ' - Updated'
 //     );
-//     await userEvent.type(canvas.getByLabelText('Age'), '30');
-//     await userEvent.click(canvas.getByLabelText('Start Date'));
-//     await userEvent.type(canvas.getByLabelText('Start Date'), '2023-11-22');
-//     await userEvent.click(canvas.getByLabelText('Start Time'));
-//     await userEvent.type(canvas.getByLabelText('Start Time'), '10:00');
 //     await userEvent.type(
-//       canvas.getByLabelText('Notes'),
-//       'Comprehensive form test notes'
+//       canvas.getByLabelText('Age'),
+//       '1'
 //     );
-//     await userEvent.selectOptions(canvas.getByLabelText('Country'), 'US');
-//     await userEvent.click(canvas.getByLabelText('Male'));
-//     await userEvent.type(canvas.getByLabelText('Password'), 'Pass123!');
-
-//     await userEvent.click(canvas.getByRole('button', { name: 'Submit' }));
+//     await userEvent.click(canvas.getByLabelText('Subscribe to newsletter?'));
 //   });
 
-//   await step('Trigger Conditional Field', async () => {
+//   await step('Test Conditional Field', async () => {
 //     await userEvent.clear(canvas.getByLabelText('First Name'));
 //     await userEvent.type(canvas.getByLabelText('First Name'), 'ShowDynamic');
 //     await expect(canvas.getByLabelText('Dynamic Field')).toBeVisible();
@@ -530,7 +728,7 @@ ComprehensiveForm.storyName = 'Comprehensive Form';
 //   await step('Simulate Auto-save', async () => {
 //     await userEvent.type(canvas.getByLabelText('First Name'), ' - Autosaved');
 //     // Wait for auto-save to trigger (3 seconds)
-//     await new Promise(resolve => setTimeout(resolve, 3100));
+//     await new Promise((resolve) => setTimeout(resolve, 3100));
 //   });
 
 //   await step('Simulate Local Storage', async () => {
@@ -539,7 +737,7 @@ ComprehensiveForm.storyName = 'Comprehensive Form';
 //     window.localStorage.setItem(
 //       'form-data',
 //       JSON.stringify({
-//         email: 'john.doe@example.com - Local Storage',
+//         email: 'john.doe@example.com - Updated - Local Storage',
 //         firstName: 'ShowDynamic - Autosaved',
 //       })
 //     );
@@ -552,7 +750,7 @@ ComprehensiveForm.storyName = 'Comprehensive Form';
 //     await userEvent.click(canvas.getByRole('button', { name: 'Submit' }));
 //     // Expect the notes field to be reset to default value
 //     await expect(canvas.getByLabelText('Notes')).toHaveValue(
-//       'Comprehensive test notes'
+//       'Some notes...'
 //     );
 //   });
 
@@ -566,6 +764,6 @@ ComprehensiveForm.storyName = 'Comprehensive Form';
 //   await step('Simulate Debounce on Change', async () => {
 //     await userEvent.type(canvas.getByLabelText('Age'), '1');
 //     // Wait for debounce to trigger (0.3 seconds)
-//     await new Promise(resolve => setTimeout(resolve, 400));
+//     await new Promise((resolve) => setTimeout(resolve, 400));
 //   });
 // };

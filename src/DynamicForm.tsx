@@ -1,15 +1,21 @@
 // Filepath: /src/DynamicForm.tsx
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   useDynamicForm,
   useRHFOptions,
   useFormFields,
   DynamicFormProvider,
   DynamicFormProps,
+  FormClassNameConfig,
 } from './features/dynamic-form';
 import { FormRenderer } from './features/form-renderer';
 import ThemeProvider from './theme/ThemeProvider';
 import { DefaultTheme } from 'styled-components';
+import { SubmitButton } from './styles';
+import { FlexLayout } from './features/inputs/registry/components/FlexLayout';
+import { GridLayout } from './features/inputs/registry/components/GridLayout';
+import { FieldErrors } from 'react-hook-form';
+import { ErrorSummary } from './components';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   config = {},
@@ -27,8 +33,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   className,
   formClassNameConfig = {},
   style,
-  layout = 'flex',
-  layoutConfig = { gap: '10px', columns: 2 },
+  renderLayout,
+  layout = 'grid',
+  layoutConfig = {
+    minWidth: '300px',
+  }, // Default layoutConfig
   horizontalLabel = false,
   labelWidth,
   enableLocalStorage = false,
@@ -43,13 +52,17 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   customInputs,
   onFormReady,
   renderSubmitButton,
+  onError,
+  renderErrorSummary,
+  validationMessages,
 }) => {
   const mergedFormOptions = useRHFOptions(
     config,
     formOptions,
     validateOnSubmit,
     validateOnChange,
-    validateOnBlur
+    validateOnBlur,
+    validationMessages
   );
 
   const form = useDynamicForm({
@@ -67,23 +80,50 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   const { formState, control, handleSubmit } = form;
 
   const { fields, fieldsToRender, conditionalFieldsConfig } = useFormFields(
-    config, // Pass config instead of data
+    config,
     formState,
-    control
+    control,
+    validationMessages
   );
 
-  const onSubmitHandler = () => {
-    handleSubmit((data) => {
-      if (onSubmit) {
-        onSubmit(data);
+  const onSubmitHandler = (): any => {
+    handleSubmit(
+      data => {
+        if (onSubmit) {
+          onSubmit(data);
+        }
+      },
+      (errors: FieldErrors) => {
+        if (onError) {
+          onError(errors);
+        }
       }
-    })();
+    )();
   };
+
+  const defaultRenderErrorSummary = (
+    errors: FieldErrors,
+    formClassNameConfig: FormClassNameConfig | undefined
+  ) => {
+    return (
+      <ErrorSummary errors={errors} formClassNameConfig={formClassNameConfig} />
+    );
+  };
+
+  const LayoutComponent = useMemo(() => {
+    if (renderLayout) {
+      return renderLayout;
+    }
+    if (layout === 'flex') {
+      return FlexLayout;
+    }
+    return GridLayout;
+  }, [renderLayout, layout]);
 
   return (
     <ThemeProvider theme={theme || ({} as DefaultTheme)}>
       <DynamicFormProvider form={form}>
-        <FormRenderer
+        <LayoutComponent
           onSubmit={onSubmitHandler}
           className={className}
           formClassNameConfig={formClassNameConfig}
@@ -91,24 +131,48 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           layout={layout}
           layoutConfig={layoutConfig}
           horizontalLabel={horizontalLabel}
-          theme={theme}
-          header={header}
-          fieldsToRender={fieldsToRender}
-          fields={fields}
-          config={config}
-          footer={footer}
-          readOnly={readOnly}
-          disableForm={disableForm}
-          showSubmitButton={showSubmitButton}
-          renderSubmitButton={renderSubmitButton}
-          formOptions={formOptions}
-          showErrorSummary={showErrorSummary}
-          labelWidth={labelWidth}
-          disableAutocomplete={disableAutocomplete}
-          showInlineError={showInlineError}
-          conditionalFieldsConfig={conditionalFieldsConfig}
-          customInputs={customInputs}
-        />
+        >
+          <FormRenderer
+            onSubmit={onSubmitHandler}
+            className={className}
+            formClassNameConfig={formClassNameConfig}
+            style={style}
+            layout={layout}
+            layoutConfig={layoutConfig}
+            horizontalLabel={horizontalLabel}
+            theme={theme}
+            header={header}
+            fieldsToRender={fieldsToRender}
+            fields={fields}
+            config={config}
+            footer={footer}
+            readOnly={readOnly}
+            disableForm={disableForm}
+            showSubmitButton={showSubmitButton}
+            renderSubmitButton={renderSubmitButton}
+            formOptions={formOptions}
+            showErrorSummary={showErrorSummary}
+            labelWidth={labelWidth}
+            disableAutocomplete={disableAutocomplete}
+            showInlineError={showInlineError}
+            conditionalFieldsConfig={conditionalFieldsConfig}
+            customInputs={customInputs}
+            renderErrorSummary={renderErrorSummary || defaultRenderErrorSummary}
+          />
+        </LayoutComponent>
+        {showSubmitButton &&
+          (renderSubmitButton ? (
+            renderSubmitButton(onSubmitHandler, formState.isSubmitting)
+          ) : (
+            <SubmitButton
+              type="submit"
+              onClick={onSubmitHandler}
+              disabled={formState.isSubmitting}
+              className={formClassNameConfig?.button}
+            >
+              Submit
+            </SubmitButton>
+          ))}
       </DynamicFormProvider>
     </ThemeProvider>
   );

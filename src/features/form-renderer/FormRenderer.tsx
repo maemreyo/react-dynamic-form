@@ -7,7 +7,6 @@ import { FormLayout, FormContent, FormFooter } from './components';
 import { FormRendererProps } from './types';
 
 const FormRenderer: React.FC<FormRendererProps> = ({
-  onSubmit,
   className,
   formClassNameConfig = {},
   style,
@@ -21,14 +20,16 @@ const FormRenderer: React.FC<FormRendererProps> = ({
   config,
   footer,
   showSubmitButton = true,
-  renderSubmitButton,
   showErrorSummary = false,
   labelWidth,
   disableAutocomplete,
   showInlineError,
+  customInputs,
+  onSubmit,
+  renderSubmitButton,
   renderFormContent,
   renderFormFooter,
-  customInputs,
+  renderErrorSummary,
 }) => {
   const form = useFormContext<FormValues>();
   const { formState, handleSubmit } = form;
@@ -57,10 +58,9 @@ const FormRenderer: React.FC<FormRendererProps> = ({
       disableAutocomplete={disableAutocomplete}
       showInlineError={showInlineError}
       conditionalFieldsConfig={[]}
-      customInputs={customInputs} // Pass customInputs to FormContent
+      customInputs={customInputs}
     />
   );
-
   const footerContent = renderFormFooter ? (
     renderFormFooter({
       footer,
@@ -84,20 +84,11 @@ const FormRenderer: React.FC<FormRendererProps> = ({
   );
 
   return (
-    <FormLayout
-      onSubmit={handleSubmit(onSubmit)}
-      className={className}
-      formClassNameConfig={formClassNameConfig}
-      style={style}
-      layout={layout}
-      layoutConfig={layoutConfig}
-      horizontalLabel={horizontalLabel}
-      theme={theme}
-    >
+    <>
       {header}
       {content}
       {footerContent}
-    </FormLayout>
+    </>
   );
 };
 

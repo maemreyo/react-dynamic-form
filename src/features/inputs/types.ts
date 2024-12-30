@@ -4,23 +4,36 @@ import {
   FormClassNameConfig,
   FieldError,
 } from '../dynamic-form/types';
+
+// --- Common Input Props ---
+
 /**
- * Common props for all input components.
+ * Interface for common props shared by all input components.
  */
 export interface CommonInputProps {
+  /** The ID of the input. */
   id: string;
+  /** The field configuration. */
   fieldConfig: FieldConfig;
-  formClassNameConfig?: FormClassNameConfig;
+  /** Optional CSS class names for form elements. */
+  formClassNameConfig: FormClassNameConfig;
+  /** Whether to show inline error messages. */
   showInlineError?: boolean;
+  /** Whether to use a horizontal label. */
   horizontalLabel?: boolean;
+  /** Optional label width (for horizontal labels). */
   labelWidth?: string | number;
+  /** The field error (if any). */
   error?: FieldError;
+  /** Whether to disable autocomplete for the input. */
   disableAutocomplete?: boolean;
 }
 
+// --- Custom Input Props ---
+
 /**
- * Props for custom input components.
+ * Interface for props of custom input components.
  */
 export interface CustomInputProps extends CommonInputProps {
-  // Add any custom props here if needed
+  // You can add any custom props specific to custom input components here.
 }

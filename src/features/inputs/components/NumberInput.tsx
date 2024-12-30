@@ -1,65 +1,69 @@
-// src/features/inputs/components/NumberInput.tsx
+// Filepath: /src/features/inputs/components/NumberInput.tsx
+
 import React, { useState, useEffect, useCallback } from 'react';
-import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FormValues } from '../../dynamic-form';
-import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
+import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
+import styled from 'styled-components';
+import { useTheme } from '../../../theme/ThemeProvider';
 
-const NumberInputContainer = styled.div`
+
+const NumberInputContainer = styled.div<{ className?: string }>`
   display: flex;
   align-items: center;
   width: fit-content;
-
   input {
     text-align: center;
     padding-right: 0;
-    width: 100px;
+    width: 65px; /* Giảm chiều rộng */
   }
 `;
 
-const SpinButton = styled.button`
+const SpinButton = styled.button<{ className?: string }>`
   background: none;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 0 8px;
-  height: 100%;
-  font-size: 1rem;
+  padding: 0;
+  height: 32px; /* Giảm kích thước */
+  width: 32px; /* Giảm kích thước */
+  font-size: 18px; /* Giảm kích thước */
   line-height: 0;
   color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &:hover {
-    background-color: ${({ theme }) => theme.colors.background};
+    background-color: ${({ theme }) => theme.colors['light-500']};
   }
   &:disabled {
     cursor: default;
     background-color: #efefef;
   }
   &:first-of-type {
-    border-radius: 4px 0 0 4px;
+    border-radius: 8px 0 0 8px; /* Bo tròn */
     border-right: none;
   }
-
   &:last-of-type {
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 8px 8px 0; /* Bo tròn */
     border-left: none;
   }
 `;
+
 interface NumberInputProps extends CommonInputProps {}
 
 const NumberInput: React.FC<NumberInputProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig,
+  formClassNameConfig = {},
   disableAutocomplete,
   showInlineError,
   horizontalLabel,
   labelWidth,
   error,
 }) => {
+  const theme = useTheme();
   const { label } = fieldConfig;
-  const fieldClassNameConfig = fieldConfig.classNameConfig || {};
-  const formClassName = formClassNameConfig || {};
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -68,7 +72,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   const [internalValue, setInternalValue] = useState<number>(+field.value || 0);
-
   const clampValue = useCallback(
     (value: number) => {
       const { min, max } = fieldConfig.validation || {};
@@ -83,49 +86,45 @@ const NumberInput: React.FC<NumberInputProps> = ({
     },
     [fieldConfig.validation]
   );
-
   useEffect(() => {
     setInternalValue(+field.value || 0);
   }, [field.value]);
-
   const handleIncrement = () => {
     const newValue = clampValue(internalValue + 1);
     setInternalValue(newValue);
     field.onChange(newValue);
   };
-
   const handleDecrement = () => {
     const newValue = clampValue(internalValue - 1);
     setInternalValue(newValue);
     field.onChange(newValue);
   };
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
       $labelWidth={labelWidth}
-      className={
-        fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
-      }
+      className={formClassNameConfig.inputWrapper}
     >
-      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}
           $horizontalLabel={horizontalLabel}
           $labelWidth={labelWidth}
-          className={fieldClassNameConfig.label || formClassName.label}
+          className={formClassNameConfig.label}
         >
           {label}
           {fieldConfig.validation?.required && (
-            <span style={{ color: 'red' }}>*</span>
+            <span style={{ color: theme.colors.danger }}>*</span>
           )}
         </Label>
       )}
-      <NumberInputContainer>
+      <NumberInputContainer
+        className={formClassNameConfig.numberInputContainer}
+      >
         <SpinButton
           type="button"
           onClick={handleDecrement}
+          className={formClassNameConfig.numberInputButton}
           disabled={
             fieldConfig.validation?.min !== undefined &&
             typeof fieldConfig.validation.min === 'object' &&
@@ -136,14 +135,14 @@ const NumberInput: React.FC<NumberInputProps> = ({
         </SpinButton>
         <Input
           {...field}
-          className={fieldClassNameConfig.input || formClassName.input}
+          className={formClassNameConfig.number}
           type="number"
           id={id}
-          onChange={(e) => {
+          onChange={e => {
             field.onChange(e);
             setInternalValue(+e.target.value);
           }}
-          onBlur={(e) => {
+          onBlur={e => {
             field.onBlur();
             const clampedValue = clampValue(+e.target.value);
             setInternalValue(clampedValue);
@@ -155,6 +154,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
         <SpinButton
           type="button"
           onClick={handleIncrement}
+          className={formClassNameConfig.numberInputButton}
           disabled={
             fieldConfig.validation?.max !== undefined &&
             typeof fieldConfig.validation.max === 'object' &&
@@ -165,11 +165,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
         </SpinButton>
       </NumberInputContainer>
       {showInlineError && error && (
-        <ErrorMessage
-          className={
-            fieldClassNameConfig.errorMessage || formClassName.errorMessage
-          }
-        >
+        <ErrorMessage className={formClassNameConfig.errorMessage}>
           {error.message}
         </ErrorMessage>
       )}
