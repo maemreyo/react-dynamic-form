@@ -9,7 +9,10 @@ import {
   DynamicFormProps,
   FieldErrors,
   FormValues,
+  FormContainerProps,
+  LayoutType,
 } from '../dynamic-form/types';
+import { GridFormContainerProps } from '../../styles';
 
 /**
  * Props for FormRenderer component.
@@ -52,4 +55,20 @@ export interface FormFooterProps {
   showErrorSummary: boolean;
   errors: FieldErrors;
   formClassNameConfig?: FormClassNameConfig;
+}
+
+
+export type LayoutComponentProps = FormContainerProps &
+  Partial<Omit<GridFormContainerProps, keyof FormContainerProps>>;
+
+export interface FormLayoutProps {
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  children: React.ReactNode;
+  theme?: any;
+  className?: string;
+  formClassNameConfig?: FormClassNameConfig;
+  style?: React.CSSProperties;
+  layout: LayoutType;
+  layoutConfig?: any;
+  horizontalLabel?: boolean;
 }

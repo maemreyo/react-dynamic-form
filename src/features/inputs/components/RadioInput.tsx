@@ -1,23 +1,22 @@
 // Filepath: /src/features/inputs/components/RadioInput.tsx
+
 import React from 'react';
-import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FormValues } from '../../dynamic-form';
-import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
+import { Label, InputWrapper, ErrorMessage } from '../../../styles';
+import styled from 'styled-components';
 
 const RadioGroup = styled.div`
   display: flex;
   gap: 16px;
 `;
-
 const RadioLabel = styled.label`
   display: flex;
   align-items: center;
   gap: 6px;
   cursor: pointer;
 `;
-
 const RadioInputStyled = styled.input`
   appearance: none;
   width: 16px;
@@ -25,15 +24,14 @@ const RadioInputStyled = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 50%;
   cursor: pointer;
-  transition:
-    background-color 0.2s,
-    border-color 0.2s;
-
-  &:checked {
-    background-color: ${({ theme }) => theme.colors.primary};
-    border-color: ${({ theme }) => theme.colors.primary};
+  transition: background-color 0.2s, border-color 0.2s;
+  &:hover {
+    border-color: ${({ theme }) => theme.colors['info-700']};
   }
-
+  &:checked {
+    background-color: ${({ theme }) => theme.colors.info};
+    border-color: ${({ theme }) => theme.colors.info};
+  }
   &:checked::after {
     content: '';
     display: block;
@@ -43,12 +41,17 @@ const RadioInputStyled = styled.input`
     border-radius: 50%;
     margin: 3px auto;
   }
-
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.info};
+  }
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 `;
+
 interface RadioInputProps extends CommonInputProps {}
 
 const RadioInput: React.FC<RadioInputProps> = ({
@@ -70,7 +73,6 @@ const RadioInput: React.FC<RadioInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: fieldConfig.defaultValue,
   });
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -93,7 +95,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
         </Label>
       )}
       <RadioGroup>
-        {options?.map((option) => (
+        {options?.map(option => (
           <RadioLabel key={option.value} htmlFor={`${id}-${option.value}`}>
             <RadioInputStyled
               {...field}

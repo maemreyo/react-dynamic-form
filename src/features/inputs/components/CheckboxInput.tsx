@@ -1,9 +1,45 @@
-// src/features/inputs/components/CheckboxInput.tsx
+// Filepath: /src/features/inputs/components/CheckboxInput.tsx
+
 import React from 'react';
-import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
+import { Label, InputWrapper, ErrorMessage } from '../../../styles';
+import styled from 'styled-components';
+
+const CheckboxInputStyled = styled.input`
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.sm};
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  &:hover {
+    border-color: ${({ theme }) => theme.colors['info-700']};
+  }
+  &:checked {
+    background-color: ${({ theme }) => theme.colors.info};
+    border-color: ${({ theme }) => theme.colors.info};
+  }
+  &:checked::after {
+    content: '✔';
+    display: block;
+    text-align: center;
+    font-size: ${({ theme }) => theme.fontSizes.small};
+    line-height: 16px;
+    color: ${({ theme }) => theme.colors.white};
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.info};
+  }
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+`;
 
 const CheckboxInput: React.FC<CommonInputProps> = ({
   id,
@@ -24,7 +60,6 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
     rules: fieldConfig.validation as any,
     defaultValue: fieldConfig.defaultValue,
   });
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -41,7 +76,7 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
           $labelWidth={labelWidth}
           className={fieldClassNameConfig.label || formClassName.label}
         >
-          <Input
+          <CheckboxInputStyled
             {...field}
             className={fieldClassNameConfig.input || formClassName.input}
             type="checkbox"
@@ -49,10 +84,6 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
             checked={!!field.value}
           />
           {label}
-          {/* This is handled in InputRenderer now:
-          {fieldConfig.validation?.required && (
-            <span style={{ color: 'red' }}>*</span>
-          )} */}
         </Label>
       )}
       {showInlineError && error && (

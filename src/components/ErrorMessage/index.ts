@@ -1,0 +1,11 @@
+// Filepath: /src/components/ErrorMessage/index.ts
+import styled from 'styled-components';
+
+/**
+ * Styled error message.
+ */
+export const ErrorMessage = styled.div`
+  color: ${({ theme }) => theme.colors.danger};
+  font-size: ${({ theme }) => theme.fontSizes.small};
+  margin-top: ${({ theme }) => theme.space.xs};
+`;

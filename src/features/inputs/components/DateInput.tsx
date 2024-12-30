@@ -1,9 +1,10 @@
-// src/features/inputs/components/DateInput.tsx
+// Filepath: /src/features/inputs/components/DateInput.tsx
+
 import React from 'react';
-import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
+import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 
 const DateInput: React.FC<CommonInputProps> = ({
   id,
@@ -24,7 +25,6 @@ const DateInput: React.FC<CommonInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: fieldConfig.defaultValue,
   });
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -33,7 +33,6 @@ const DateInput: React.FC<CommonInputProps> = ({
         fieldClassNameConfig.inputWrapper || formClassName.inputWrapper
       }
     >
-      {/* Render label here */}
       {label && (
         <Label
           htmlFor={id}

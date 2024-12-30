@@ -1,10 +1,10 @@
-// src/features/inputs/components/SwitchInput.tsx
+// Filepath: /src/features/inputs/components/SwitchInput.tsx
 import React from 'react';
-import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FormValues } from '../../dynamic-form';
-import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
+import { Label, ErrorMessage, InputWrapper } from '../../../styles';
+import styled from 'styled-components';
 
 const SwitchContainer = styled.label`
   position: relative;
@@ -13,22 +13,26 @@ const SwitchContainer = styled.label`
   height: 24px;
   cursor: pointer;
 `;
-
 const SwitchInputStyled = styled.input`
   opacity: 0;
   width: 0;
   height: 0;
-
+  &:hover + .slider {
+    background-color: #ccc;
+  }
   &:checked + .slider {
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.info};
   }
-
   &:focus + .slider {
-    box-shadow: 0 0 1px ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 1px ${({ theme }) => theme.colors.info};
   }
-
   &:checked + .slider:before {
     transform: translateX(24px);
+  }
+  &:disabled + .slider {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 `;
 
@@ -41,7 +45,6 @@ const Slider = styled.span`
   background-color: #ccc;
   transition: 0.4s;
   border-radius: 24px;
-
   &:before {
     position: absolute;
     content: '';
@@ -54,6 +57,7 @@ const Slider = styled.span`
     border-radius: 50%;
   }
 `;
+
 interface SwitchInputProps extends CommonInputProps {}
 
 const SwitchInput: React.FC<SwitchInputProps> = ({
@@ -75,7 +79,6 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: fieldConfig.defaultValue,
   });
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}

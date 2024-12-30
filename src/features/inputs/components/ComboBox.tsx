@@ -1,12 +1,14 @@
+// Filepath: /src/features/inputs/components/ComboBox.tsx
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import {
   FieldConfig,
   FormClassNameConfig,
   FieldError,
 } from '../../dynamic-form';
-import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
+import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
+import styled from 'styled-components';
 
 const ComboBoxContainer = styled.div`
   position: relative;
@@ -19,7 +21,7 @@ const DropdownList = styled.ul`
   left: 0;
   width: 100%;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 4px;
+  border-radius: ${({ theme }) => theme.radii.md};
   background-color: white;
   z-index: 10;
   list-style: none;
@@ -30,15 +32,13 @@ const DropdownList = styled.ul`
 `;
 
 const DropdownItem = styled.li`
-  padding: 8px;
+  padding: ${({ theme }) => theme.space.xl};
   cursor: pointer;
-
   &:hover {
-    background-color: ${({ theme }) => theme.colors.background};
+    background-color: ${({ theme }) => theme.colors['light-500']};
   }
-
   &.selected {
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.info};
     color: white;
   }
 `;
@@ -75,17 +75,14 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     control,
     rules: fieldConfig.validation,
   });
-
   useEffect(() => {
     setInputValue(field.value || '');
   }, [field.value]);
-
   const filteredOptions = options
     ? options.filter((option) =>
         option.label.toLowerCase().includes(inputValue.toLowerCase())
       )
     : [];
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
     setInputValue(val);
@@ -96,21 +93,17 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       setIsOpen(false);
     }
   };
-
   const handleOptionClick = (value: string) => {
     setInputValue(value);
     field.onChange(value); // Update form state
     setIsOpen(false);
   };
-
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
-
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
   }, []);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -120,11 +113,9 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         closeDropdown();
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [closeDropdown]);
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
@@ -151,7 +142,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       setIsOpen(false);
     }
   };
-
   useEffect(() => {
     if (isOpen && highlightedIndex >= 0 && containerRef.current) {
       const item = containerRef.current.querySelector(
@@ -162,7 +152,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       }
     }
   }, [isOpen, highlightedIndex]);
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}

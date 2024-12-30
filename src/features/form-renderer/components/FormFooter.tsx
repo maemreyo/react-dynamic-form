@@ -1,12 +1,10 @@
-// src/features/form-renderer/components/FormFooter.tsx
+// Filepath: /src/features/form-renderer/components/FormFooter.tsx
 import React from 'react';
-import { SubmitButton } from '../../../styles';
 import { ErrorSummary } from '../../../components';
 import { FormFooterProps } from '../types';
 
 const FormFooter: React.FC<FormFooterProps> = ({
   footer,
-  showSubmitButton,
   renderSubmitButton,
   isSubmitting,
   showErrorSummary,
@@ -15,8 +13,7 @@ const FormFooter: React.FC<FormFooterProps> = ({
 }) => {
   return (
     <>
-      {footer}
-      {showSubmitButton &&
+      {/* {showSubmitButton &&
         (renderSubmitButton ? (
           renderSubmitButton(() => {}, isSubmitting)
         ) : (
@@ -27,7 +24,8 @@ const FormFooter: React.FC<FormFooterProps> = ({
           >
             Submit
           </SubmitButton>
-        ))}
+        ))} */}
+      {footer}
       {showErrorSummary && Object.keys(errors).length > 0 && (
         <ErrorSummary
           errors={errors}

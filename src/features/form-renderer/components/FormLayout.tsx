@@ -1,9 +1,19 @@
-// src/features/form-renderer/components/FormLayout.tsx
+// Filepath: /src/features/form-renderer/components/FormLayout.tsx
 import React, { useMemo } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { defaultTheme } from '../../../theme';
 import { FormClassNameConfig, LayoutType } from '../../dynamic-form/types';
-import { getLayoutComponent } from '../../inputs/registry/LayoutRegistry';
+import {
+  FormContainer,
+  GridFormContainer,
+  FormContainerProps,
+  GridFormContainerProps,
+} from '../../../styles';
+
+type LayoutComponentProps = FormContainerProps &
+  Partial<Omit<GridFormContainerProps, keyof FormContainerProps>> & {
+    children?: React.ReactNode;
+  };
 
 interface FormLayoutProps {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -37,26 +47,23 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     onSubmit(event);
   };
 
-  // Get the layout component from the registry
-  const LayoutComponent = getLayoutComponent(layout);
-
-  if (!LayoutComponent) {
-    console.warn(`No layout component found for type: ${layout}`);
-    return null; // Or return a default layout component
-  }
-
+  const LayoutComponent: React.ComponentType<LayoutComponentProps> =
+    layout === 'grid' ? GridFormContainer : FormContainer;
+  const layoutComponentProps: LayoutComponentProps = {
+    onSubmit: handleSubmit,
+    className: `${className || ''} ${formClassNameConfig?.formContainer || ''}`,
+    style,
+    $layout: layout,
+    $layoutConfig: layoutConfig,
+    $horizontalLabel: horizontalLabel,
+    $minWidth: layoutConfig?.minWidth,
+    $gap: layoutConfig?.gap,
+    $breakpoints: layoutConfig?.breakpoints,
+    children: children,
+  };
   return (
     <ThemeProvider theme={mergedTheme}>
-      <LayoutComponent
-        onSubmit={handleSubmit}
-        className={className}
-        formClassNameConfig={formClassNameConfig}
-        style={style}
-        layoutConfig={layoutConfig}
-        horizontalLabel={horizontalLabel}
-      >
-        {children}
-      </LayoutComponent>
+      <LayoutComponent {...layoutComponentProps} />
     </ThemeProvider>
   );
 };

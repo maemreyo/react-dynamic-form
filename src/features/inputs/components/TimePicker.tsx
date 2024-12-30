@@ -1,9 +1,10 @@
-// src/features/inputs/components/TimePicker.tsx
+// Filepath: /src/features/inputs/components/TimePicker.tsx
+
 import React from 'react';
-import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
+import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 
 const TimePicker: React.FC<CommonInputProps> = ({
   id,
@@ -24,7 +25,6 @@ const TimePicker: React.FC<CommonInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: fieldConfig.defaultValue,
   });
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}

@@ -1,16 +1,16 @@
-// src/features/inputs/components/NumberInput.tsx
+// Filepath: /src/features/inputs/components/NumberInput.tsx
+
 import React, { useState, useEffect, useCallback } from 'react';
-import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import { FormValues } from '../../dynamic-form';
-import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
+import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
+import styled from 'styled-components';
 
 const NumberInputContainer = styled.div`
   display: flex;
   align-items: center;
   width: fit-content;
-
   input {
     text-align: center;
     padding-right: 0;
@@ -21,30 +21,31 @@ const NumberInputContainer = styled.div`
 const SpinButton = styled.button`
   background: none;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 0 8px;
+  padding: 0 ${({ theme }) => theme.space.xl};
   height: 100%;
-  font-size: 1rem;
+  font-size: ${({ theme }) => theme.fontSizes.large};
   line-height: 0;
   color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
-
   &:hover {
-    background-color: ${({ theme }) => theme.colors.background};
+    background-color: ${({ theme }) => theme.colors['light-500']};
   }
   &:disabled {
     cursor: default;
     background-color: #efefef;
   }
   &:first-of-type {
-    border-radius: 4px 0 0 4px;
+    border-radius: ${({ theme }) => theme.radii.md} 0 0
+      ${({ theme }) => theme.radii.md};
     border-right: none;
   }
-
   &:last-of-type {
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 ${({ theme }) => theme.radii.md}
+      ${({ theme }) => theme.radii.md} 0;
     border-left: none;
   }
 `;
+
 interface NumberInputProps extends CommonInputProps {}
 
 const NumberInput: React.FC<NumberInputProps> = ({
@@ -68,7 +69,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   const [internalValue, setInternalValue] = useState<number>(+field.value || 0);
-
   const clampValue = useCallback(
     (value: number) => {
       const { min, max } = fieldConfig.validation || {};
@@ -83,23 +83,19 @@ const NumberInput: React.FC<NumberInputProps> = ({
     },
     [fieldConfig.validation]
   );
-
   useEffect(() => {
     setInternalValue(+field.value || 0);
   }, [field.value]);
-
   const handleIncrement = () => {
     const newValue = clampValue(internalValue + 1);
     setInternalValue(newValue);
     field.onChange(newValue);
   };
-
   const handleDecrement = () => {
     const newValue = clampValue(internalValue - 1);
     setInternalValue(newValue);
     field.onChange(newValue);
   };
-
   return (
     <InputWrapper
       $horizontalLabel={horizontalLabel}
@@ -139,11 +135,11 @@ const NumberInput: React.FC<NumberInputProps> = ({
           className={fieldClassNameConfig.input || formClassName.input}
           type="number"
           id={id}
-          onChange={(e) => {
+          onChange={e => {
             field.onChange(e);
             setInternalValue(+e.target.value);
           }}
-          onBlur={(e) => {
+          onBlur={e => {
             field.onBlur();
             const clampedValue = clampValue(+e.target.value);
             setInternalValue(clampedValue);

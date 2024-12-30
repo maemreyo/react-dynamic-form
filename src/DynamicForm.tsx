@@ -10,6 +10,7 @@ import {
 import { FormRenderer } from './features/form-renderer';
 import ThemeProvider from './theme/ThemeProvider';
 import { DefaultTheme } from 'styled-components';
+import { SubmitButton } from './styles';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   config = {},
@@ -27,8 +28,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   className,
   formClassNameConfig = {},
   style,
-  layout = 'flex',
-  layoutConfig = { gap: '10px', columns: 2 },
+  layout = 'grid',
+  layoutConfig = {
+    minWidth: '300px',
+  }, // Default layoutConfig
   horizontalLabel = false,
   labelWidth,
   enableLocalStorage = false,
@@ -51,7 +54,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     validateOnChange,
     validateOnBlur
   );
-
   const form = useDynamicForm({
     config,
     formOptions: mergedFormOptions,
@@ -63,17 +65,14 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     onChange,
     onFormReady,
   });
-
   const { formState, control, handleSubmit } = form;
-
   const { fields, fieldsToRender, conditionalFieldsConfig } = useFormFields(
     config, // Pass config instead of data
     formState,
     control
   );
-
-  const onSubmitHandler = () => {
-    handleSubmit((data) => {
+  const onSubmitHandler = (): any => {
+    handleSubmit(data => {
       if (onSubmit) {
         onSubmit(data);
       }
@@ -109,9 +108,21 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           conditionalFieldsConfig={conditionalFieldsConfig}
           customInputs={customInputs}
         />
+        {showSubmitButton &&
+          (renderSubmitButton ? (
+            renderSubmitButton(onSubmitHandler, formState.isSubmitting)
+          ) : (
+            <SubmitButton
+              type="submit"
+              onClick={onSubmitHandler}
+              disabled={formState.isSubmitting}
+              className={formClassNameConfig?.button}
+            >
+              Submit
+            </SubmitButton>
+          ))}
       </DynamicFormProvider>
     </ThemeProvider>
   );
 };
-
 export default DynamicForm;
