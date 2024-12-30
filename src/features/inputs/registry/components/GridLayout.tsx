@@ -25,8 +25,9 @@ const GridLayout: React.FC<GridLayoutProps> = ({
   return (
     <FormContainer
       onSubmit={onSubmit}
-      className={`${className || ''} ${formClassNameConfig?.formContainer ||
-        ''}`}
+      className={`${className || ''} ${
+        formClassNameConfig?.formContainer || ''
+      }`}
       $layout="grid"
       $layoutConfig={layoutConfig}
       $horizontalLabel={horizontalLabel}

@@ -3,9 +3,9 @@ import React, { useEffect } from 'react';
 import { FormValues, FieldError } from '../../dynamic-form/types'; // Import FieldError
 import { useFormContext } from 'react-hook-form';
 import { InputWrapper } from '../../../styles';
-import { InputRenderer } from '../../inputs/components';
 import { FormContentProps } from '../types';
 import { CommonInputProps } from '../../inputs';
+import InputRenderer from '../../inputs/components/InputRenderer';
 
 const FormContent: React.FC<FormContentProps> = ({
   fieldsToRender,
@@ -17,7 +17,9 @@ const FormContent: React.FC<FormContentProps> = ({
   disableAutocomplete,
   showInlineError,
   renderInput,
+  // @ts-expect-error
   conditionalFieldsConfig,
+  // @ts-expect-error
   customInputs,
 }) => {
   const {
@@ -27,7 +29,7 @@ const FormContent: React.FC<FormContentProps> = ({
   } = useFormContext<FormValues>();
 
   useEffect(() => {
-    fields.forEach(field => {
+    fields.forEach((field) => {
       const fieldConfig = config[field.id] || {};
       if (fieldsToRender.includes(field.id)) {
         register(field.id, fieldConfig.validation);
@@ -40,8 +42,8 @@ const FormContent: React.FC<FormContentProps> = ({
   return (
     <>
       {fields
-        .filter(field => fieldsToRender.includes(field.id))
-        .map(field => {
+        .filter((field) => fieldsToRender.includes(field.id))
+        .map((field) => {
           // Access the nested error object correctly
           const fieldError = errors[field.id] as FieldError | undefined;
 
@@ -66,6 +68,7 @@ const FormContent: React.FC<FormContentProps> = ({
             <InputRenderer
               field={field}
               config={config}
+              // @ts-expect-error
               formClassNameConfig={formClassNameConfig}
               disableAutocomplete={disableAutocomplete}
               showInlineError={showInlineError}

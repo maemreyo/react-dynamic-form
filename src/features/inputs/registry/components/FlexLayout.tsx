@@ -25,8 +25,9 @@ const FlexLayout: React.FC<FlexLayoutProps> = ({
   return (
     <FormContainer
       onSubmit={onSubmit}
-      className={`${className || ''} ${formClassNameConfig?.formContainer ||
-        ''}`}
+      className={`${className || ''} ${
+        formClassNameConfig?.formContainer || ''
+      }`}
       $layout="flex"
       $layoutConfig={layoutConfig}
       $horizontalLabel={horizontalLabel}

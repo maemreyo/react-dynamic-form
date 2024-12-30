@@ -1,3 +1,4 @@
+# .github/workflows/size.yml
 name: size
 on: [pull_request]
 jobs:

@@ -6,13 +6,11 @@ import { GridLayout } from './components/GridLayout';
 import { LayoutType } from '../../dynamic-form';
 
 // Create a map of layout types to components
-const layoutRegistry: Record<
-  LayoutType,
-  React.ComponentType<any> | undefined
-> = {
-  flex: FlexLayout,
-  grid: GridLayout,
-};
+const layoutRegistry: Record<LayoutType, React.ComponentType<any> | undefined> =
+  {
+    flex: FlexLayout,
+    grid: GridLayout,
+  };
 
 /**
  * Registers a new layout component for a given type.

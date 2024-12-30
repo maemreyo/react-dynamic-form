@@ -4,7 +4,6 @@ import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { useTheme } from '../../../theme/ThemeProvider';
 
 const CheckboxInput: React.FC<CommonInputProps> = ({
   id,

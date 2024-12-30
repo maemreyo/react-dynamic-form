@@ -19,7 +19,7 @@ module.exports = {
   docs: {
     autodocs: true,
   },
-  webpackFinal: async config => {
+  webpackFinal: async (config) => {
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
       exclude: /node_modules/,

@@ -11,7 +11,6 @@ import {
 import { getInputComponent } from '../registry/InputRegistry';
 import { CommonInputProps, CustomInputProps } from '../types';
 import { ErrorMessage } from '../../../styles';
-import { useFormContext } from 'react-hook-form';
 
 interface InputRendererProps {
   field: FormField;
@@ -39,7 +38,7 @@ const InputRenderer: React.FC<InputRendererProps> = ({
 }) => {
   const { id, type, error } = field;
   const fieldConfig = config[id] || {};
-  const { getValues } = useFormContext();
+
   // Prioritize custom input components
   const CustomInputComponent = customInputs?.[type];
   const RegisteredInputComponent = getInputComponent(type);
@@ -61,13 +60,13 @@ const InputRenderer: React.FC<InputRendererProps> = ({
     showInlineError && error && renderErrorMessage
       ? renderErrorMessage(error, formClassNameConfig)
       : showInlineError && error
-      ? React.createElement(ErrorMessage, {
-          className:
-            fieldConfig.classNameConfig?.errorMessage ||
-            formClassNameConfig?.errorMessage,
-          children: error.message,
-        })
-      : null;
+        ? React.createElement(ErrorMessage, {
+            className:
+              fieldConfig.classNameConfig?.errorMessage ||
+              formClassNameConfig?.errorMessage,
+            children: error.message,
+          })
+        : null;
 
   if (!InputComponent) {
     console.warn(`No input component found for type: ${type}`);

@@ -1,5 +1,5 @@
 // src/features/dynamic-form/hooks/fieldUtils.ts
-import { FormField, FormConfig, FieldError, FormValues, FieldConfig } from '../types';
+import { FormField, FieldError, FormValues, FieldConfig } from '../types';
 import { getInputTypeFromValue } from '../../inputs/utils';
 import { getErrorMessage } from './validationUtils';
 import { get } from 'react-hook-form';

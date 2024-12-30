@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import { FieldConfig, FormClassNameConfig, FieldError } from '../../dynamic-form';
+import {
+  FieldConfig,
+  FormClassNameConfig,
+  FieldError,
+} from '../../dynamic-form';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 
@@ -77,7 +81,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   }, [field.value]);
 
   const filteredOptions = options
-    ? options.filter(option =>
+    ? options.filter((option) =>
         option.label.toLowerCase().includes(inputValue.toLowerCase())
       )
     : [];
@@ -124,14 +128,14 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
-      setHighlightedIndex(prevIndex =>
+      setHighlightedIndex((prevIndex) =>
         filteredOptions.length > 0
           ? Math.min(prevIndex + 1, filteredOptions.length - 1)
           : -1
       );
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();
-      setHighlightedIndex(prevIndex =>
+      setHighlightedIndex((prevIndex) =>
         prevIndex > 0 ? prevIndex - 1 : filteredOptions.length - 1
       );
     } else if (event.key === 'Enter') {

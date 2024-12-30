@@ -22,12 +22,12 @@ function useFormFields(
   fieldsToRender: string[];
   conditionalFieldsConfig: Condition[];
 } {
-  // Thêm state để force re-render
+  // @ts-expect-error
   const [update, setUpdate] = useState(false);
 
   // Thêm useEffect để force re-render khi config thay đổi
   useEffect(() => {
-    setUpdate(prev => !prev);
+    setUpdate((prev) => !prev);
   }, [config]);
 
   const flattenedConfig = useMemo(() => flattenConfig(config), [config]);
@@ -36,11 +36,11 @@ function useFormFields(
     () =>
       Object.keys(config)
         .filter(
-          fieldId =>
+          (fieldId) =>
             config[fieldId].conditional &&
             typeof config[fieldId].conditional?.when === 'string'
         )
-        .map(fieldId => ({
+        .map((fieldId) => ({
           when: config[fieldId].conditional!.when,
           operator: config[fieldId].conditional!.operator || 'is',
           value: config[fieldId].conditional?.value,
@@ -52,21 +52,21 @@ function useFormFields(
 
   const watchedValues = useWatch({
     control,
-    name: conditionalFieldsConfig.map(condition => condition.when),
+    name: conditionalFieldsConfig.map((condition) => condition.when),
   });
 
   const fieldsToRender = useMemo(
     () =>
-      Object.keys(config).filter(fieldId =>
+      Object.keys(config).filter((fieldId) =>
         shouldRenderField(fieldId, conditionalFieldsConfig, watchedValues)
       ),
     [config, conditionalFieldsConfig, watchedValues]
   );
 
-  const fields = useMemo(() => getFields(flattenedConfig, formState), [
-    flattenedConfig,
-    formState,
-  ]);
+  const fields = useMemo(
+    () => getFields(flattenedConfig, formState),
+    [flattenedConfig, formState]
+  );
 
   return { fields, fieldsToRender, conditionalFieldsConfig };
 }

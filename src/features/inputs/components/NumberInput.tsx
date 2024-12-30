@@ -1,9 +1,7 @@
 // src/features/inputs/components/NumberInput.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
-import {
-  FormValues,
-} from '../../dynamic-form';
+import { FormValues } from '../../dynamic-form';
 import styled from 'styled-components';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
@@ -141,11 +139,11 @@ const NumberInput: React.FC<NumberInputProps> = ({
           className={fieldClassNameConfig.input || formClassName.input}
           type="number"
           id={id}
-          onChange={e => {
+          onChange={(e) => {
             field.onChange(e);
             setInternalValue(+e.target.value);
           }}
-          onBlur={e => {
+          onBlur={(e) => {
             field.onBlur();
             const clampedValue = clampValue(+e.target.value);
             setInternalValue(clampedValue);
