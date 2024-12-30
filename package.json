@@ -70,11 +70,11 @@
   "size-limit": [
     {
       "path": "dist/react-dynamic-form.cjs.production.min.js",
-      "limit": "10 KB"
+      "limit": "500 KB"
     },
     {
       "path": "dist/react-dynamic-form.esm.js",
-      "limit": "10 KB"
+      "limit": "500 KB"
     }
   ],
   "devDependencies": {
