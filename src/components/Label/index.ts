@@ -1,4 +1,4 @@
-// src/components/Label/index.ts
+// Filepath: /src/components/Label/index.ts
 import styled, { css } from 'styled-components';
 
 /**
@@ -28,6 +28,7 @@ const labelCommonStyles = css<LabelProps>`
       : 'auto'};
   flex-shrink: 0;
   font-size: ${({ theme }) => theme.fontSizes.medium};
+  display: block; /* Thêm display block */
 `;
 
 /**

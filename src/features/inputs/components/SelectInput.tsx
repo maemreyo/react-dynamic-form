@@ -10,36 +10,43 @@ import { useTheme } from '../../../theme/ThemeProvider';
 
 const StyledSelect = styled.select<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 8px;
-  border-radius: 4px;
+  padding: 12px; /* Tăng padding */
+  border-radius: 10px; /* Bo tròn nhiều hơn */
   font-size: ${({ theme }) => theme.fontSizes.medium};
-  appearance: auto; /* Reset default styles */
-  width: 100%; /* Set default width to 100% */
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Add transition */
+  appearance: none; /* Loại bỏ appearance mặc định */
+  width: 100%;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   line-height: 1.5;
+  outline: none; /* Loại bỏ outline mặc định */
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%239CA3AF' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E")
+    no-repeat right 12px center; /* Thêm icon dropdown */
+  background-size: 12px 8px; /* Chỉnh kích thước icon */
+
   &:hover {
-    border-color: ${({ theme }) =>
-      theme.colors['info-700']}; /* Change border color on hover */
+    border-color: ${({ theme }) => theme.colors['info-700']};
   }
+
   &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.info};
-    border-color: ${({ theme }) =>
-      theme.colors.info}; /* Change border color on focus */
+    box-shadow: 0 0 0 4px ${({ theme }) => theme.colors['info-500']}; /* Hiệu ứng focus rõ ràng */
+    border-color: ${({ theme }) => theme.colors.info};
   }
+
   &:disabled {
     background-color: #f5f5f5;
     cursor: not-allowed;
     opacity: 0.7;
   }
+
   &::placeholder {
     color: ${({ theme }) => theme.colors.text};
     opacity: 0.6;
   }
+
   /* Add responsive styles using media queries */
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
     max-width: 300px;
   }
+
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     max-width: 400px;
   }

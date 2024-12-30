@@ -9,7 +9,7 @@ import styled from 'styled-components';
 const SwitchContainer = styled.label<{ className?: string }>`
   position: relative;
   display: inline-block;
-  width: 48px;
+  width: 50px;
   height: 24px;
   cursor: pointer;
 `;
@@ -18,9 +18,6 @@ const SwitchInputStyled = styled.input<{ className?: string }>`
   opacity: 0;
   width: 0;
   height: 0;
-  &:hover + .slider {
-    background-color: #ccc;
-  }
   &:checked + .slider {
     background-color: ${({ theme }) => theme.colors.info};
   }
@@ -28,7 +25,7 @@ const SwitchInputStyled = styled.input<{ className?: string }>`
     box-shadow: 0 0 1px ${({ theme }) => theme.colors.info};
   }
   &:checked + .slider:before {
-    transform: translateX(24px);
+    transform: translateX(26px);
   }
   &:disabled + .slider {
     background-color: #f5f5f5;
@@ -45,14 +42,17 @@ const Slider = styled.span<{ className?: string }>`
   bottom: 0;
   background-color: #ccc;
   transition: 0.4s;
-  border-radius: 24px;
+  border-radius: 34px;
+  &:hover {
+    background-color: #979797;
+  }
   &:before {
     position: absolute;
     content: '';
-    height: 20px;
-    width: 20px;
-    left: 2px;
-    bottom: 2px;
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
     background-color: white;
     transition: 0.4s;
     border-radius: 50%;

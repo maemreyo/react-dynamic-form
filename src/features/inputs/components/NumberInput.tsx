@@ -8,6 +8,7 @@ import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
 import { useTheme } from '../../../theme/ThemeProvider';
 
+
 const NumberInputContainer = styled.div<{ className?: string }>`
   display: flex;
   align-items: center;
@@ -15,19 +16,23 @@ const NumberInputContainer = styled.div<{ className?: string }>`
   input {
     text-align: center;
     padding-right: 0;
-    width: 100px;
+    width: 80px; /* Giảm chiều rộng */
   }
 `;
 
 const SpinButton = styled.button<{ className?: string }>`
   background: none;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 0 ${({ theme }) => theme.space.xl};
-  height: 100%;
-  font-size: ${({ theme }) => theme.fontSizes.large};
+  padding: 0;
+  height: 38px;
+  width: 38px;
+  font-size: 22px; /* Tăng kích thước */
   line-height: 0;
   color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &:hover {
     background-color: ${({ theme }) => theme.colors['light-500']};
   }
@@ -36,13 +41,11 @@ const SpinButton = styled.button<{ className?: string }>`
     background-color: #efefef;
   }
   &:first-of-type {
-    border-radius: ${({ theme }) => theme.radii.md} 0 0
-      ${({ theme }) => theme.radii.md};
+    border-radius: 10px 0 0 10px; /* Bo tròn */
     border-right: none;
   }
   &:last-of-type {
-    border-radius: 0 ${({ theme }) => theme.radii.md}
-      ${({ theme }) => theme.radii.md} 0;
+    border-radius: 0 10px 10px 0; /* Bo tròn */
     border-left: none;
   }
 `;

@@ -10,6 +10,7 @@ import { useFormContext, useController } from 'react-hook-form';
 import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
 import styled from 'styled-components';
 
+
 const ComboBoxContainer = styled.div<{ className?: string }>`
   position: relative;
   width: 100%;
@@ -21,7 +22,7 @@ const DropdownList = styled.ul<{ className?: string }>`
   left: 0;
   width: 100%;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.md};
+  border-radius: 10px; /* Bo tròn */
   background-color: white;
   z-index: 10;
   list-style: none;
@@ -29,10 +30,13 @@ const DropdownList = styled.ul<{ className?: string }>`
   margin: 4px 0 0 0;
   max-height: 200px;
   overflow-y: auto;
+  box-shadow:
+    0px 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0px 2px 4px -1px rgba(0, 0, 0, 0.06); /* Thêm đổ bóng */
 `;
 
 const DropdownItem = styled.li<{ className?: string }>`
-  padding: ${({ theme }) => theme.space.xl};
+  padding: 12px; /* Tăng padding */
   cursor: pointer;
   &:hover {
     background-color: ${({ theme }) => theme.colors['light-500']};

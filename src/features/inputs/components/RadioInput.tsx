@@ -22,32 +22,41 @@ const RadioLabel = styled.label<{ className?: string }>`
 
 const RadioInputStyled = styled.input<{ className?: string }>`
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
+  position: relative;
+
   &:hover {
     border-color: ${({ theme }) => theme.colors['info-700']};
   }
+
   &:checked {
     background-color: ${({ theme }) => theme.colors.info};
     border-color: ${({ theme }) => theme.colors.info};
   }
+
   &:checked::after {
     content: '';
     display: block;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     background-color: white;
     border-radius: 50%;
-    margin: 3px auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
+
   &:focus {
     outline: none;
     box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.info};
   }
+
   &:disabled {
     background-color: #f5f5f5;
     cursor: not-allowed;

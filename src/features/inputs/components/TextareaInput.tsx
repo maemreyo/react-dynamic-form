@@ -9,40 +9,46 @@ import { useTheme } from '../../../theme/ThemeProvider';
 
 const StyledTextarea = styled.textarea<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: ${({ theme }) => theme.space.xl};
-  border-radius: ${({ theme }) => theme.radii.md};
+  padding: 12px; /* Tăng padding */
+  border-radius: 10px; /* Bo tròn nhiều hơn */
   font-size: ${({ theme }) => theme.fontSizes.medium};
-  width: 100%; /* Set default width to 100% */
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Add transition */
+  width: 100%;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   line-height: 1.5;
+  outline: none; /* Loại bỏ outline mặc định */
+
   &:hover {
-    border-color: ${({ theme }) =>
-      theme.colors['info-700']}; /* Change border color on hover */
+    border-color: ${({ theme }) => theme.colors['info-700']};
   }
+
   &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.info};
-    border-color: ${({ theme }) =>
-      theme.colors.info}; /* Change border color on focus */
+    box-shadow: 0 0 0 4px ${({ theme }) => theme.colors['info-500']}; /* Hiệu ứng focus rõ ràng */
+    border-color: ${({ theme }) => theme.colors.info};
   }
+
   &:disabled {
     background-color: #f5f5f5;
     cursor: not-allowed;
     opacity: 0.7;
   }
+
   &::placeholder {
     color: ${({ theme }) => theme.colors.text};
     opacity: 0.6;
   }
+
   /* Add responsive styles using media queries */
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
     max-width: 300px;
   }
+
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     max-width: 400px;
   }
+
   min-height: 120px;
 `;
+
 
 interface TextareaInputProps extends CommonInputProps {}
 

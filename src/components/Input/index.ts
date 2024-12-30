@@ -1,4 +1,4 @@
-// src/components/Input/index.ts
+// Filepath: /src/components/Input/index.ts
 import styled, { css } from 'styled-components';
 
 /**
@@ -6,25 +6,23 @@ import styled, { css } from 'styled-components';
  */
 const baseFormElementStyles = css`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: ${({ theme }) => theme.space.sm} ${({ theme }) => theme.space.xl};
-  border-radius: ${({ theme }) => theme.radii.md};
+  padding: 12px; /* Tăng padding */
+  border-radius: 10px; /* Bo tròn nhiều hơn */
   font-size: ${({ theme }) => theme.fontSizes.medium};
-  width: 100%; /* Set default width to 100% */
+  width: 100%;
   transition:
     border-color 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out; /* Add transition */
+    box-shadow 0.2s ease-in-out;
   line-height: 1.5;
+  outline: none; /* Loại bỏ outline mặc định */
 
   &:hover {
-    border-color: ${({ theme }) =>
-      theme.colors['info-700']}; /* Change border color on hover */
+    border-color: ${({ theme }) => theme.colors['info-700']};
   }
 
   &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.info};
-    border-color: ${({ theme }) =>
-      theme.colors.info}; /* Change border color on focus */
+    box-shadow: 0 0 0 4px ${({ theme }) => theme.colors['info-500']}; /* Hiệu ứng focus rõ ràng */
+    border-color: ${({ theme }) => theme.colors.info};
   }
 
   &:disabled {

@@ -9,31 +9,42 @@ import styled from 'styled-components';
 
 const CheckboxInputStyled = styled.input<{ className?: string }>`
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.sm};
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
+  position: relative;
+
   &:hover {
     border-color: ${({ theme }) => theme.colors['info-700']};
   }
+
   &:checked {
     background-color: ${({ theme }) => theme.colors.info};
     border-color: ${({ theme }) => theme.colors.info};
   }
+
   &:checked::after {
     content: '✔';
     display: block;
     text-align: center;
-    font-size: ${({ theme }) => theme.fontSizes.small};
-    line-height: 16px;
+    font-size: 16px;
+    line-height: 20px;
     color: ${({ theme }) => theme.colors.white};
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
   }
+
   &:focus {
     outline: none;
     box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.info};
   }
+
   &:disabled {
     background-color: #f5f5f5;
     cursor: not-allowed;
