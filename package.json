@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.0.0",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -60,7 +60,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@maemreyo/react-dynamic-form",
+  "name": "@matthew.ngo/react-dynamic-form",
   "author": "Matthew Ngo <matthew.ngo1114@gmail.com>",
   "bugs": {
     "url": "https://github.com/maemreyo/react-dynamic-form/issues"
