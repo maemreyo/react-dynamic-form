@@ -3,9 +3,9 @@ import React, { useEffect } from 'react';
 import { FormValues, FieldError } from '../../dynamic-form/types'; // Import FieldError
 import { useFormContext } from 'react-hook-form';
 import { InputWrapper } from '../../../styles';
-import { InputRenderer } from '../../inputs/components';
 import { FormContentProps } from '../types';
 import { CommonInputProps } from '../../inputs';
+import InputRenderer from '../../inputs/components/InputRenderer';
 
 const FormContent: React.FC<FormContentProps> = ({
   fieldsToRender,

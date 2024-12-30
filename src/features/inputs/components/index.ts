@@ -10,4 +10,3 @@ export { default as SwitchInput } from './SwitchInput';
 export { default as TimePicker } from './TimePicker';
 export { default as DateTimePicker } from './DateTimePicker';
 export { default as ComboBox } from './ComboBox';
-export { default as InputRenderer } from './InputRenderer';
