@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { FormValues } from '../dynamic-form';
 import { FormLayout, FormContent, FormFooter } from './components';
 import { FormRendererProps } from './types';
+
 const FormRenderer: React.FC<FormRendererProps> = ({
   onSubmit,
   className,
@@ -82,19 +83,8 @@ const FormRenderer: React.FC<FormRendererProps> = ({
   );
   return (
     <>
-      <FormLayout
-        onSubmit={handleSubmit(onSubmit)}
-        className={className}
-        formClassNameConfig={formClassNameConfig}
-        style={style}
-        layout={layout}
-        layoutConfig={layoutConfig}
-        horizontalLabel={horizontalLabel}
-        theme={theme}
-      >
-        {header}
-        {content}
-      </FormLayout>
+      {header}
+      {content}
       {footerContent}
     </>
   );

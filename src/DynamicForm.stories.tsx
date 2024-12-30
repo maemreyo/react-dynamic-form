@@ -6,6 +6,7 @@ import { defaultTheme, DynamicForm } from '.';
 // import { useController, useFormContext } from 'react-hook-form';
 // import { useTheme } from './theme/ThemeProvider';
 import { userEvent, within, expect } from '@storybook/test'; // Updated import
+import { FlexLayout } from './features/inputs/registry/components/FlexLayout';
 
 export default {
   title: 'DynamicForm',
@@ -19,9 +20,7 @@ export default {
   },
 } as Meta<typeof DynamicForm>;
 
-const Template: StoryFn<typeof DynamicForm> = (args) => (
-  <DynamicForm {...args} />
-);
+const Template: StoryFn<typeof DynamicForm> = args => <DynamicForm {...args} />;
 
 // --- Examples ---
 
@@ -56,7 +55,7 @@ BasicInputTypes.args = {
       defaultValue: true,
     },
   },
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -124,7 +123,7 @@ AdvancedInputTypes.args = {
       ],
     },
   },
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -206,7 +205,7 @@ ValidationAndSubmission.args = {
       },
     },
   },
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -239,7 +238,7 @@ DynamicConfiguration.args = {
       },
     },
   },
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -281,17 +280,17 @@ AdvancedFeatures.args = {
   },
   autoSave: {
     interval: 5000,
-    save: (data) => console.log('Auto-saving:', data),
+    save: data => console.log('Auto-saving:', data),
   },
   enableLocalStorage: true,
   resetOnSubmit: true,
   focusFirstError: true,
   debounceOnChange: 500,
-  onSubmit: (data) => {
+  onSubmit: data => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
-  onChange: (data) => console.log('Debounced change:', data),
-  onFormReady: (form) => {
+  onChange: data => console.log('Debounced change:', data),
+  onFormReady: form => {
     // Reset button
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset Form';
@@ -312,7 +311,7 @@ AdvancedFeatures.play = async ({ canvasElement, step }) => {
       'Auto-save Test'
     );
     // Wait for auto-save to trigger (5 seconds)
-    await new Promise((resolve) => setTimeout(resolve, 5100));
+    await new Promise(resolve => setTimeout(resolve, 5100));
   });
 
   await step('Simulate Local Storage', async () => {
@@ -352,10 +351,9 @@ AdvancedFeatures.play = async ({ canvasElement, step }) => {
       'Debounce Test'
     );
     // Wait for debounce to trigger (0.5 seconds)
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    await new Promise(resolve => setTimeout(resolve, 600));
   });
 };
-
 
 // Story 6: Comprehensive Form
 // --- Comprehensive Form Story ---
@@ -363,6 +361,9 @@ AdvancedFeatures.play = async ({ canvasElement, step }) => {
 export const ComprehensiveForm = Template.bind({});
 ComprehensiveForm.args = {
   theme: defaultTheme,
+  renderLayout: ({ children, ...rest }) => (
+    <FlexLayout {...rest}>{children}</FlexLayout>
+  ),
   config: {
     // --- Basic Inputs ---
     firstName: {
@@ -674,7 +675,7 @@ ComprehensiveForm.storyName = 'Comprehensive Form';
 //     );
 //     await userEvent.click(canvas.getByLabelText('Subscribe to newsletter?'));
 //   });
-    
+
 //   await step('Test Conditional Field', async () => {
 //     await userEvent.clear(canvas.getByLabelText('First Name'));
 //     await userEvent.type(canvas.getByLabelText('First Name'), 'ShowDynamic');

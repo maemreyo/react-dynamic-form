@@ -1,5 +1,5 @@
 // Filepath: /src/DynamicForm.tsx
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   useDynamicForm,
   useRHFOptions,
@@ -11,6 +11,8 @@ import { FormRenderer } from './features/form-renderer';
 import ThemeProvider from './theme/ThemeProvider';
 import { DefaultTheme } from 'styled-components';
 import { SubmitButton } from './styles';
+import { FlexLayout } from './features/inputs/registry/components/FlexLayout';
+import { GridLayout } from './features/inputs/registry/components/GridLayout';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   config = {},
@@ -28,6 +30,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   className,
   formClassNameConfig = {},
   style,
+  renderLayout,
   layout = 'grid',
   layoutConfig = {
     minWidth: '300px',
@@ -79,10 +82,20 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     })();
   };
 
+  const LayoutComponent = useMemo(() => {
+    if (renderLayout) {
+      return renderLayout;
+    }
+    if (layout === 'flex') {
+      return FlexLayout;
+    }
+    return GridLayout;
+  }, [renderLayout, layout]);
+
   return (
     <ThemeProvider theme={theme || ({} as DefaultTheme)}>
       <DynamicFormProvider form={form}>
-        <FormRenderer
+        <LayoutComponent
           onSubmit={onSubmitHandler}
           className={className}
           formClassNameConfig={formClassNameConfig}
@@ -90,24 +103,34 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           layout={layout}
           layoutConfig={layoutConfig}
           horizontalLabel={horizontalLabel}
-          theme={theme}
-          header={header}
-          fieldsToRender={fieldsToRender}
-          fields={fields}
-          config={config}
-          footer={footer}
-          readOnly={readOnly}
-          disableForm={disableForm}
-          showSubmitButton={showSubmitButton}
-          renderSubmitButton={renderSubmitButton}
-          formOptions={formOptions}
-          showErrorSummary={showErrorSummary}
-          labelWidth={labelWidth}
-          disableAutocomplete={disableAutocomplete}
-          showInlineError={showInlineError}
-          conditionalFieldsConfig={conditionalFieldsConfig}
-          customInputs={customInputs}
-        />
+        >
+          <FormRenderer
+            onSubmit={onSubmitHandler}
+            className={className}
+            formClassNameConfig={formClassNameConfig}
+            style={style}
+            layout={layout}
+            layoutConfig={layoutConfig}
+            horizontalLabel={horizontalLabel}
+            theme={theme}
+            header={header}
+            fieldsToRender={fieldsToRender}
+            fields={fields}
+            config={config}
+            footer={footer}
+            readOnly={readOnly}
+            disableForm={disableForm}
+            showSubmitButton={showSubmitButton}
+            renderSubmitButton={renderSubmitButton}
+            formOptions={formOptions}
+            showErrorSummary={showErrorSummary}
+            labelWidth={labelWidth}
+            disableAutocomplete={disableAutocomplete}
+            showInlineError={showInlineError}
+            conditionalFieldsConfig={conditionalFieldsConfig}
+            customInputs={customInputs}
+          />
+        </LayoutComponent>
         {showSubmitButton &&
           (renderSubmitButton ? (
             renderSubmitButton(onSubmitHandler, formState.isSubmitting)
@@ -125,4 +148,5 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     </ThemeProvider>
   );
 };
+
 export default DynamicForm;

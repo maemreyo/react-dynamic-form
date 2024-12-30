@@ -22,6 +22,22 @@ import { FormContentProps } from '../form-renderer';
  */
 export type LayoutType = 'flex' | 'grid';
 
+export type LayoutComponent = React.FC<any>;
+
+/**
+ * Type alias for the renderLayout prop in DynamicFormProps.
+ */
+export type RenderLayoutProps = (props: {
+  children: React.ReactNode;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  className?: string;
+  formClassNameConfig?: FormClassNameConfig;
+  style?: React.CSSProperties;
+  layout: LayoutType;
+  layoutConfig?: any;
+  horizontalLabel?: boolean;
+}) => React.ReactNode;
+
 // --- Form Config ---
 
 /**
@@ -68,6 +84,8 @@ export interface DynamicFormProps {
   layout?: LayoutType;
   /** Optional layout configuration. */
   layoutConfig?: any;
+  /** Optional custom layout renderer. */
+  renderLayout?: RenderLayoutProps;
   /** Whether to use horizontal labels. */
   horizontalLabel?: boolean;
   /** Optional label width (for horizontal labels). */
