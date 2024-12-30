@@ -3,39 +3,161 @@ import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { defaultTheme, DynamicForm } from '.';
-import { CustomInputProps } from './features/inputs';
 import { useController, useFormContext } from 'react-hook-form';
 import { useTheme } from './theme/ThemeProvider';
+import { userEvent, within, expect } from '@storybook/test'; // Updated import
 
 export default {
   title: 'DynamicForm',
   component: DynamicForm,
+  argTypes: {
+    // Control for 'onSubmit'
+    onSubmit: {
+      action: 'onSubmit',
+      control: false, // Hide default control
+    },
+  },
 } as Meta<typeof DynamicForm>;
 
 const Template: StoryFn<typeof DynamicForm> = args => <DynamicForm {...args} />;
 
 // --- Examples ---
-export const BasicForm = Template.bind({});
-BasicForm.args = {
+
+// Story 1: Basic Input Types
+export const BasicInputTypes = Template.bind({});
+BasicInputTypes.args = {
   theme: defaultTheme,
   config: {
     firstName: {
       label: 'First Name',
       type: 'text',
-      defaultValue: 'default first name',
-      validation: {
-        required: { value: true, message: 'This field is required' },
-      },
+      defaultValue: 'John',
     },
     lastName: {
       label: 'Last Name',
       type: 'text',
-      defaultValue: 'default last name',
+      defaultValue: 'Doe',
     },
     email: {
       label: 'Email',
       type: 'email',
-      defaultValue: 'email@default.com',
+      defaultValue: 'john.doe@example.com',
+    },
+    age: {
+      label: 'Age',
+      type: 'number',
+      defaultValue: 30,
+    },
+    subscribe: {
+      label: 'Subscribe to newsletter?',
+      type: 'checkbox',
+      defaultValue: true,
+    },
+  },
+  onSubmit: data => {
+    console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
+  },
+  onFormReady: fn(),
+};
+BasicInputTypes.storyName = 'Basic Input Types';
+
+// Story 2: Advanced Input Types
+export const AdvancedInputTypes = Template.bind({});
+AdvancedInputTypes.args = {
+  theme: defaultTheme,
+  config: {
+    startDate: {
+      label: 'Start Date',
+      type: 'date',
+      defaultValue: '2023-11-20',
+    },
+    startTime: {
+      label: 'Start Time',
+      type: 'time',
+      defaultValue: '09:00',
+    },
+    dateTime: {
+      label: 'Date and Time',
+      type: 'datetime-local',
+      defaultValue: '2023-11-20T09:00',
+    },
+    notes: {
+      label: 'Notes',
+      type: 'textarea',
+      defaultValue: 'Some notes...',
+    },
+    country: {
+      label: 'Country',
+      type: 'select',
+      defaultValue: 'US',
+      options: [
+        { value: 'US', label: 'United States' },
+        { value: 'CA', label: 'Canada' },
+        { value: 'UK', label: 'United Kingdom' },
+      ],
+    },
+    gender: {
+      label: 'Gender',
+      type: 'radio',
+      defaultValue: 'male',
+      options: [
+        { value: 'male', label: 'Male' },
+        { value: 'female', label: 'Female' },
+        { value: 'other', label: 'Other' },
+      ],
+    },
+    notification: {
+      label: 'Enable Notifications',
+      type: 'switch',
+      defaultValue: true,
+    },
+    favoriteFruit: {
+      label: 'Favorite Fruit',
+      type: 'combobox',
+      defaultValue: 'Apple',
+      options: [
+        { value: 'Apple', label: 'Apple' },
+        { value: 'Banana', label: 'Banana' },
+        { value: 'Orange', label: 'Orange' },
+      ],
+    },
+  },
+  onSubmit: data => {
+    console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
+  },
+  onFormReady: fn(),
+};
+AdvancedInputTypes.storyName = 'Advanced Input Types';
+
+// Story 3: Validation and Form Submission
+export const ValidationAndSubmission = Template.bind({});
+ValidationAndSubmission.args = {
+  theme: defaultTheme,
+  config: {
+    requiredField: {
+      label: 'Required Field',
+      type: 'text',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
+    },
+    minLengthField: {
+      label: 'Min Length (3)',
+      type: 'text',
+      validation: {
+        minLength: { value: 3, message: 'Minimum length is 3' },
+      },
+    },
+    maxLengthField: {
+      label: 'Max Length (5)',
+      type: 'text',
+      validation: {
+        maxLength: { value: 5, message: 'Maximum length is 5' },
+      },
+    },
+    email: {
+      label: 'Email',
+      type: 'email',
       validation: {
         required: { value: true, message: 'This field is required' },
         pattern: {
@@ -47,193 +169,14 @@ BasicForm.args = {
     age: {
       label: 'Age',
       type: 'number',
-      defaultValue: 19,
       validation: {
-        required: { value: true, message: 'This field is required' },
-        min: { value: 18, message: 'You must be at least 18 years old' },
-      },
-    },
-    agree: {
-      type: 'checkbox',
-      label: 'I agree to the terms and conditions',
-      defaultValue: true,
-      validation: {
-        required: {
-          value: true,
-          message: 'You must agree to the terms and conditions',
-        },
-      },
-    },
-  },
-  onSubmit: data => {
-    console.log('🚀 ~ file: DynamicForm.stories.tsx:55 ~ data:', data);
-  },
-  onFormReady: fn(), // Keep fn() here for other stories
-};
-BasicForm.storyName = 'Basic Form';
-
-// other stories ...
-export const FormWithNestedObject = Template.bind({});
-FormWithNestedObject.args = {
-  theme: defaultTheme,
-  config: {
-    firstName: {
-      label: 'First Name',
-      type: 'text',
-      defaultValue: 'nested first name',
-      validation: {
-        required: { value: true, message: 'This field is required' },
-      },
-    },
-    lastName: {
-      label: 'Last Name',
-      type: 'text',
-      defaultValue: 'nested last name',
-      validation: {
-        required: { value: true, message: 'This field is required' },
-      },
-    },
-    address: {
-      // Nested form
-      label: 'Address',
-      fields: {
-        street: {
-          label: 'Street',
-          type: 'text',
-          defaultValue: 'nested street',
-          validation: {
-            required: { value: true, message: 'This field is required' },
-          },
-        },
-        city: {
-          label: 'City',
-          type: 'text',
-          defaultValue: 'nested city',
-          validation: {
-            required: { value: true, message: 'This field is required' },
-          },
-        },
-        state: {
-          label: 'State',
-          type: 'text',
-          defaultValue: 'nested state',
-          validation: {
-            required: { value: true, message: 'This field is required' },
-          },
-        },
-        zip: {
-          label: 'Zip',
-          type: 'text',
-          defaultValue: '123',
-          validation: {
-            required: { value: true, message: 'This field is required' },
-            pattern: {
-              value: /^\d{5}$/,
-              message: 'Invalid zip code',
-            },
-          },
-        },
-      },
-    },
-  },
-  onFormReady: fn(),
-};
-FormWithNestedObject.storyName = 'Form with Nested Object';
-
-export const FormWithConditionalFields = Template.bind({});
-FormWithConditionalFields.args = {
-  theme: defaultTheme,
-  config: {
-    country: {
-      label: 'Country',
-      type: 'select',
-      defaultValue: 'US',
-      options: [
-        { value: '', label: 'Select Country' },
-        { value: 'US', label: 'United States' },
-        { value: 'CA', label: 'Canada' },
-      ],
-      validation: {
-        required: true,
-        requiredMessage: 'This field is required',
-      },
-    },
-    state: {
-      label: 'State',
-      type: 'text',
-      // defaultValue: 'nested state',
-      conditional: {
-        when: 'country',
-        operator: 'is',
-        value: 'US',
-        fields: ['state'],
-      },
-      validation: {
-        required: {
-          value: true,
-          message: 'This field is required when country is US',
-        },
-      },
-    },
-    age: {
-      label: 'Age',
-      type: 'number',
-      // defaultValue: 20,
-      validation: {
-        min: {
-          value: 0,
-          message: 'Age must be greater than or equal to 0',
-        },
-      },
-    },
-    drivingLicense: {
-      label: 'Driving License',
-      type: 'text',
-      // defaultValue: 'nested drivingLicense',
-      conditional: {
-        when: 'age',
-        operator: 'greaterThanOrEqual',
-        value: 18,
-        fields: ['drivingLicense'],
-      },
-      validation: {
-        required: {
-          value: true,
-          message: 'This field is required when age is 18 or older',
-        },
-      },
-    },
-    subscribe: {
-      label: 'Subscribe to newsletter?',
-      type: 'checkbox',
-      defaultValue: true,
-    },
-    newsletterType: {
-      label: 'Newsletter Type',
-      type: 'select',
-      // defaultValue: 'daily',
-      options: [
-        { value: '', label: 'Select Type' },
-        { value: 'daily', label: 'Daily' },
-        { value: 'weekly', label: 'Weekly' },
-      ],
-      conditional: {
-        when: 'subscribe',
-        operator: 'is',
-        value: true,
-        fields: ['newsletterType'],
-      },
-      validation: {
-        required: {
-          value: true,
-          message: 'This field is required when subscribed to newsletter',
-        },
+        min: { value: 18, message: 'Must be 18 or older' },
+        max: { value: 100, message: 'Must be 100 or younger' },
       },
     },
     password: {
       label: 'Password',
       type: 'text',
-      // defaultValue: 'Pass123!',
       validation: {
         required: {
           value: true,
@@ -261,104 +204,366 @@ FormWithConditionalFields.args = {
       },
     },
   },
+  onSubmit: data => {
+    console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
+  },
   onFormReady: fn(),
 };
-FormWithConditionalFields.storyName = 'Form with Conditional Fields';
+ValidationAndSubmission.storyName = 'Validation and Form Submission';
 
-// Example custom input component
-const MyCustomInput: React.FC<CustomInputProps> = ({
-  id,
-  fieldConfig,
-  error,
-  formClassNameConfig,
-  showInlineError,
-  horizontalLabel,
-  labelWidth,
-  disableAutocomplete,
-}) => {
-  const theme = useTheme();
-  const { control } = useFormContext();
-
-  const { field } = useController({
-    name: id,
-    control,
-    rules: fieldConfig.validation,
-    defaultValue: fieldConfig.defaultValue,
-  });
-
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: horizontalLabel ? 'row' : 'column',
-        marginBottom: '10px',
-        alignItems: horizontalLabel ? 'center' : 'flex-start',
-      }}
-    >
-      <label
-        htmlFor={id}
-        style={{
-          marginRight: horizontalLabel ? '10px' : '0',
-          width: labelWidth ? labelWidth : 'auto',
-          fontWeight: 'bold',
-        }}
-      >
-        {fieldConfig.label}
-        {fieldConfig.validation?.required && (
-          <span style={{ color: theme.colors.error }}>*</span>
-        )}
-      </label>
-      <input
-        {...field}
-        type="text"
-        id={id}
-        style={{
-          border: `1px solid ${
-            error ? theme.colors.error : theme.colors.border
-          }`,
-          borderRadius: theme.radii.md,
-          padding: theme.space.sm,
-        }}
-        autoComplete={disableAutocomplete ? 'off' : 'on'}
-      />
-      {error && showInlineError && (
-        <div style={{ color: theme.colors.error, marginTop: theme.space.xs }}>
-          {error.message}
-        </div>
-      )}
-    </div>
-  );
-};
-
-// Story demonstrating custom input
-export const FormWithCustomInput = Template.bind({});
-FormWithCustomInput.args = {
+// Story 4: Dynamic Form Configuration
+export const DynamicConfiguration = Template.bind({});
+DynamicConfiguration.args = {
   theme: defaultTheme,
   config: {
-    customField: {
-      label: 'Custom Field',
-      type: 'custom',
-      defaultValue: '',
-      validation: {
-        required: { value: true, message: 'This field is required' },
-      },
+    firstName: {
+      label: 'First Name',
+      type: 'text',
+      defaultValue: 'John',
       classNameConfig: {
-        input: 'custom-input',
         label: 'custom-label',
-        errorMessage: 'custom-error',
+        input: 'custom-input',
+      },
+    },
+    dynamicField: {
+      label: 'Dynamic Field',
+      type: 'text',
+      defaultValue: '',
+      conditional: {
+        when: 'firstName',
+        operator: 'is',
+        value: 'Show',
+        fields: ['dynamicField'],
       },
     },
   },
-  customInputs: {
-    custom: MyCustomInput,
-  },
   onSubmit: data => {
-    console.log('🚀 ~ file: DynamicForm.stories.tsx:55 ~ data:', data);
+    console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
-  showInlineError: true,
-  horizontalLabel: false,
-  labelWidth: '150px',
-  disableAutocomplete: false,
 };
-FormWithCustomInput.storyName = 'Form with Custom Input';
+DynamicConfiguration.storyName = 'Dynamic Form Configuration';
+
+// Story 5: Advanced Features (Auto-save, Local Storage, Reset, Focus Error, Debounce)
+export const AdvancedFeatures = Template.bind({});
+AdvancedFeatures.args = {
+  theme: defaultTheme,
+  config: {
+    autoSaveField: {
+      label: 'Auto-save Field',
+      type: 'text',
+      defaultValue: '',
+    },
+    localStorageField: {
+      label: 'Local Storage Field',
+      type: 'text',
+      defaultValue: '',
+    },
+    resetField: {
+      label: 'Reset Field',
+      type: 'text',
+      defaultValue: 'Initial Value',
+    },
+    errorField: {
+      label: 'Error Field',
+      type: 'text',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
+    },
+    debounceField: {
+      label: 'Debounce Field',
+      type: 'text',
+      defaultValue: '',
+    },
+  },
+  autoSave: {
+    interval: 5000,
+    save: data => console.log('Auto-saving:', data),
+  },
+  enableLocalStorage: true,
+  resetOnSubmit: true,
+  focusFirstError: true,
+  debounceOnChange: 500,
+  onSubmit: data => {
+    console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
+  },
+  onChange: data => console.log('Debounced change:', data),
+  onFormReady: form => {
+    // Reset button
+    const resetButton = document.createElement('button');
+    resetButton.textContent = 'Reset Form';
+    resetButton.onclick = () => form.reset();
+    document.body.appendChild(resetButton);
+  },
+};
+AdvancedFeatures.storyName =
+  'Advanced Features (Auto-save, Local Storage, Reset, Focus Error, Debounce)';
+
+// Interactions for AdvancedFeatures Story
+AdvancedFeatures.play = async ({ canvasElement, step }) => {
+  const canvas = within(canvasElement);
+
+  await step('Simulate Auto-save', async () => {
+    await userEvent.type(
+      canvas.getByLabelText('Auto-save Field'),
+      'Auto-save Test'
+    );
+    // Wait for auto-save to trigger (5 seconds)
+    await new Promise(resolve => setTimeout(resolve, 5100));
+  });
+
+  await step('Simulate Local Storage', async () => {
+    await userEvent.type(
+      canvas.getByLabelText('Local Storage Field'),
+      'Local Storage Test'
+    );
+    // Manually trigger saving to local storage (for demonstration)
+    window.localStorage.setItem(
+      'form-data',
+      JSON.stringify({ localStorageField: 'Local Storage Test' })
+    );
+    // Reload the page to simulate reading from local storage
+    window.location.reload();
+  });
+
+  await step('Simulate Reset on Submit', async () => {
+    await userEvent.type(canvas.getByLabelText('Reset Field'), 'New Value');
+    await userEvent.click(canvas.getByRole('button', { name: 'Submit' }));
+    // Expect the field to be reset to 'Initial Value'
+    await expect(canvas.getByLabelText('Reset Field')).toHaveValue(
+      'Initial Value'
+    );
+  });
+
+  await step('Simulate Focus First Error on Submit', async () => {
+    // Clear the required field to trigger an error
+    await userEvent.clear(canvas.getByLabelText('Error Field'));
+    await userEvent.click(canvas.getByRole('button', { name: 'Submit' }));
+    // Expect the focus to be on the Error Field
+    await expect(canvas.getByLabelText('Error Field')).toHaveFocus();
+  });
+
+  await step('Simulate Debounce on Change', async () => {
+    await userEvent.type(
+      canvas.getByLabelText('Debounce Field'),
+      'Debounce Test'
+    );
+    // Wait for debounce to trigger (0.5 seconds)
+    await new Promise(resolve => setTimeout(resolve, 600));
+  });
+};
+// Story 6: Comprehensive Form
+export const ComprehensiveForm = Template.bind({});
+ComprehensiveForm.args = {
+  theme: defaultTheme,
+  config: {
+    // Basic Inputs
+    firstName: {
+      label: 'First Name',
+      type: 'text',
+      defaultValue: 'Comprehensive',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
+    },
+    lastName: {
+      label: 'Last Name',
+      type: 'text',
+      defaultValue: 'Test',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
+    },
+    email: {
+      label: 'Email',
+      type: 'email',
+      defaultValue: 'comprehensive@test.com',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+          message: 'Invalid email address',
+        },
+      },
+    },
+    age: {
+      label: 'Age',
+      type: 'number',
+      defaultValue: 25,
+      validation: {
+        required: { value: true, message: 'This field is required' },
+        min: { value: 18, message: 'You must be at least 18 years old' },
+        max: { value: 99, message: 'You must be at most 99 years old' },
+      },
+    },
+    // Advanced Inputs
+    startDate: {
+      label: 'Start Date',
+      type: 'date',
+      defaultValue: '2023-11-21',
+    },
+    startTime: {
+      label: 'Start Time',
+      type: 'time',
+      defaultValue: '10:00',
+    },
+    notes: {
+      label: 'Notes',
+      type: 'textarea',
+      defaultValue: 'Comprehensive test notes',
+    },
+    country: {
+      label: 'Country',
+      type: 'select',
+      defaultValue: 'CA',
+      options: [
+        { value: 'US', label: 'United States' },
+        { value: 'CA', label: 'Canada' },
+        { value: 'UK', label: 'United Kingdom' },
+      ],
+    },
+    gender: {
+      label: 'Gender',
+      type: 'radio',
+      defaultValue: 'female',
+      options: [
+        { value: 'male', label: 'Male' },
+        { value: 'female', label: 'Female' },
+        { value: 'other', label: 'Other' },
+      ],
+    },
+    // Conditional Field
+    dynamicField: {
+      label: 'Dynamic Field',
+      type: 'text',
+      defaultValue: '',
+      conditional: {
+        when: 'firstName',
+        operator: 'is',
+        value: 'ShowDynamic',
+        fields: ['dynamicField'],
+      },
+    },
+    // Validation
+    password: {
+      label: 'Password',
+      type: 'text',
+      validation: {
+        required: {
+          value: true,
+          message: 'This field is required',
+        },
+        minLength: {
+          value: 8,
+          message: 'Password must be at least 8 characters long',
+        },
+        validate: (value: string) => {
+          if (!/[A-Z]/.test(value)) {
+            return 'Password must contain at least one uppercase letter';
+          }
+          if (!/[a-z]/.test(value)) {
+            return 'Password must contain at least one lowercase letter';
+          }
+          if (!/[0-9]/.test(value)) {
+            return 'Password must contain at least one number';
+          }
+          if (!/[^A-Za-z0-9]/.test(value)) {
+            return 'Password must contain at least one special character';
+          }
+          return undefined;
+        },
+      },
+    },
+  },
+  autoSave: {
+    interval: 3000,
+    save: data => console.log('Auto-saving:', data),
+  },
+  enableLocalStorage: true,
+  resetOnSubmit: true,
+  focusFirstError: true,
+  debounceOnChange: 300,
+  onSubmit: data => {
+    console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
+  },
+  onChange: data => console.log('Debounced change:', data),
+  onFormReady: fn(),
+};
+ComprehensiveForm.storyName = 'Comprehensive Form';
+
+// // Interactions for ComprehensiveForm Story
+// ComprehensiveForm.play = async ({ canvasElement, step }) => {
+//   const canvas = within(canvasElement);
+
+//   await step('Fill and Submit Form', async () => {
+//     await userEvent.type(canvas.getByLabelText('First Name'), 'John');
+//     await userEvent.type(canvas.getByLabelText('Last Name'), 'Doe');
+//     await userEvent.type(
+//       canvas.getByLabelText('Email'),
+//       'john.doe@example.com'
+//     );
+//     await userEvent.type(canvas.getByLabelText('Age'), '30');
+//     await userEvent.click(canvas.getByLabelText('Start Date'));
+//     await userEvent.type(canvas.getByLabelText('Start Date'), '2023-11-22');
+//     await userEvent.click(canvas.getByLabelText('Start Time'));
+//     await userEvent.type(canvas.getByLabelText('Start Time'), '10:00');
+//     await userEvent.type(
+//       canvas.getByLabelText('Notes'),
+//       'Comprehensive form test notes'
+//     );
+//     await userEvent.selectOptions(canvas.getByLabelText('Country'), 'US');
+//     await userEvent.click(canvas.getByLabelText('Male'));
+//     await userEvent.type(canvas.getByLabelText('Password'), 'Pass123!');
+
+//     await userEvent.click(canvas.getByRole('button', { name: 'Submit' }));
+//   });
+
+//   await step('Trigger Conditional Field', async () => {
+//     await userEvent.clear(canvas.getByLabelText('First Name'));
+//     await userEvent.type(canvas.getByLabelText('First Name'), 'ShowDynamic');
+//     await expect(canvas.getByLabelText('Dynamic Field')).toBeVisible();
+//   });
+
+//   await step('Simulate Auto-save', async () => {
+//     await userEvent.type(canvas.getByLabelText('First Name'), ' - Autosaved');
+//     // Wait for auto-save to trigger (3 seconds)
+//     await new Promise(resolve => setTimeout(resolve, 3100));
+//   });
+
+//   await step('Simulate Local Storage', async () => {
+//     await userEvent.type(canvas.getByLabelText('Email'), ' - Local Storage');
+//     // Manually trigger saving to local storage
+//     window.localStorage.setItem(
+//       'form-data',
+//       JSON.stringify({
+//         email: 'john.doe@example.com - Local Storage',
+//         firstName: 'ShowDynamic - Autosaved',
+//       })
+//     );
+//     // Reload the page to simulate reading from local storage
+//     window.location.reload();
+//   });
+
+//   await step('Simulate Reset on Submit', async () => {
+//     await userEvent.type(canvas.getByLabelText('Notes'), ' - Updated');
+//     await userEvent.click(canvas.getByRole('button', { name: 'Submit' }));
+//     // Expect the notes field to be reset to default value
+//     await expect(canvas.getByLabelText('Notes')).toHaveValue(
+//       'Comprehensive test notes'
+//     );
+//   });
+
+//   await step('Simulate Focus First Error on Submit', async () => {
+//     await userEvent.clear(canvas.getByLabelText('Password'));
+//     await userEvent.click(canvas.getByRole('button', { name: 'Submit' }));
+//     // Expect the focus to be on the Password field
+//     await expect(canvas.getByLabelText('Password')).toHaveFocus();
+//   });
+
+//   await step('Simulate Debounce on Change', async () => {
+//     await userEvent.type(canvas.getByLabelText('Age'), '1');
+//     // Wait for debounce to trigger (0.3 seconds)
+//     await new Promise(resolve => setTimeout(resolve, 400));
+//   });
+// };
