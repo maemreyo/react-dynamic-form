@@ -1,6 +1,6 @@
 # Dynamic Form
 
-[![npm version](https://badge.fury.io/js/react-dynamic-form.svg)](https://www.npmjs.com/package/react-dynamic-form)
+[![npm version](https://badge.fury.io/js/react-dynamic-form.svg)](https://www.npmjs.com/package/@matthew.ngo/react-dynamic-form)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 A dynamic form library for React, built with React Hook Form and Styled Components.
