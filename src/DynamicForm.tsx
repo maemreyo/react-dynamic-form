@@ -6,6 +6,7 @@ import {
   useFormFields,
   DynamicFormProvider,
   DynamicFormProps,
+  FormClassNameConfig,
 } from './features/dynamic-form';
 import { FormRenderer } from './features/form-renderer';
 import ThemeProvider from './theme/ThemeProvider';
@@ -13,6 +14,8 @@ import { DefaultTheme } from 'styled-components';
 import { SubmitButton } from './styles';
 import { FlexLayout } from './features/inputs/registry/components/FlexLayout';
 import { GridLayout } from './features/inputs/registry/components/GridLayout';
+import { FieldErrors } from 'react-hook-form';
+import { ErrorSummary } from './components';
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
   config = {},
@@ -49,6 +52,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   customInputs,
   onFormReady,
   renderSubmitButton,
+  onError,
+  renderErrorSummary,
 }) => {
   const mergedFormOptions = useRHFOptions(
     config,
@@ -74,12 +79,29 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     formState,
     control
   );
+  
   const onSubmitHandler = (): any => {
-    handleSubmit(data => {
-      if (onSubmit) {
-        onSubmit(data);
+    handleSubmit(
+      data => {
+        if (onSubmit) {
+          onSubmit(data);
+        }
+      },
+      (errors: FieldErrors) => {
+        if (onError) {
+          onError(errors);
+        }
       }
-    })();
+    )();
+  };
+
+  const defaultRenderErrorSummary = (
+    errors: FieldErrors,
+    formClassNameConfig: FormClassNameConfig | undefined
+  ) => {
+    return (
+      <ErrorSummary errors={errors} formClassNameConfig={formClassNameConfig} />
+    );
   };
 
   const LayoutComponent = useMemo(() => {
@@ -129,6 +151,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             showInlineError={showInlineError}
             conditionalFieldsConfig={conditionalFieldsConfig}
             customInputs={customInputs}
+            renderErrorSummary={renderErrorSummary || defaultRenderErrorSummary}
           />
         </LayoutComponent>
         {showSubmitButton &&

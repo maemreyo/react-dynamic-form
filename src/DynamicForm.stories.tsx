@@ -364,6 +364,21 @@ ComprehensiveForm.args = {
   renderLayout: ({ children, ...rest }) => (
     <FlexLayout {...rest}>{children}</FlexLayout>
   ),
+  onError: errors => {
+    console.log('Form validation errors:', errors);
+  },
+  renderErrorSummary: (errors, formClassNameConfig) => (
+    <div className={formClassNameConfig?.formContainer}>
+      <h3 className={formClassNameConfig?.label}>Validation Errors:</h3>
+      <ul>
+        {Object.entries(errors).map(([key, error]) => (
+          <li key={key} className={formClassNameConfig?.errorMessage}>
+            {key}: {error?.message as string}
+          </li>
+        ))}
+      </ul>
+    </div>
+  ),
   config: {
     // --- Basic Inputs ---
     firstName: {

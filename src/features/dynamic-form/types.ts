@@ -128,6 +128,11 @@ export interface DynamicFormProps {
   };
   /** Optional custom input components. */
   customInputs?: InputComponentMap;
+
+  /** Optional error handler function. */
+  onError?: (errors: FieldErrors) => void;
+  /** Optional custom error summary renderer. */
+  renderErrorSummary?: RenderErrorSummaryProps;
 }
 
 /**
@@ -458,6 +463,12 @@ export type RenderFormFooterProps = (props: {
   errors: FieldErrors;
   formClassNameConfig?: FormClassNameConfig;
 }) => React.ReactNode;
+
+
+/**
+ * Type alias for the renderErrorSummary prop in DynamicFormProps.
+ */
+export type RenderErrorSummaryProps = (errors: FieldErrors, formClassNameConfig: FormClassNameConfig | undefined) => React.ReactNode;
 
 // --- Re-exported types ---
 

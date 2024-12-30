@@ -18,10 +18,10 @@ import { GridFormContainerProps } from '../../styles';
 // --- Form Renderer ---
 
 /**
- * Props for the FormRenderer component.
+ * Props for FormRenderer component.
  */
-export interface FormRendererProps extends DynamicFormProps {
-  /** List of field IDs to render. */
+export interface FormRendererProps
+  extends Omit<DynamicFormProps, 'renderLayout' | 'onError'> {
   fieldsToRender: string[];
   /** List of form fields. */
   fields: FormField[];

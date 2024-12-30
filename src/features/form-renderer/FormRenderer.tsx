@@ -7,7 +7,6 @@ import { FormLayout, FormContent, FormFooter } from './components';
 import { FormRendererProps } from './types';
 
 const FormRenderer: React.FC<FormRendererProps> = ({
-  onSubmit,
   className,
   formClassNameConfig = {},
   style,
@@ -21,14 +20,16 @@ const FormRenderer: React.FC<FormRendererProps> = ({
   config,
   footer,
   showSubmitButton = true,
-  renderSubmitButton,
   showErrorSummary = false,
   labelWidth,
   disableAutocomplete,
   showInlineError,
+  customInputs,
+  onSubmit,
+  renderSubmitButton,
   renderFormContent,
   renderFormFooter,
-  customInputs,
+  renderErrorSummary,
 }) => {
   const form = useFormContext<FormValues>();
   const { formState, handleSubmit } = form;
@@ -81,6 +82,7 @@ const FormRenderer: React.FC<FormRendererProps> = ({
       errors={formState.errors}
     />
   );
+
   return (
     <>
       {header}
