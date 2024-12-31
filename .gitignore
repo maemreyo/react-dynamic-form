@@ -86,6 +86,5 @@ storybook-static/
 
 # Project-specific
 dist/
-/.yarn/install-state.gz
 
 .DS_Store

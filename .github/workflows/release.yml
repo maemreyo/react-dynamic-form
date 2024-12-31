@@ -13,7 +13,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # Thêm dòng này để cấp quyền write cho repository
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
