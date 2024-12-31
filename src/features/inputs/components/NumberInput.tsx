@@ -8,7 +8,6 @@ import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
 import { useTheme } from '../../../theme/ThemeProvider';
 
-
 const NumberInputContainer = styled.div<{ className?: string }>`
   display: flex;
   align-items: center;
@@ -16,7 +15,7 @@ const NumberInputContainer = styled.div<{ className?: string }>`
   input {
     text-align: center;
     padding-right: 0;
-    width: 65px; /* Giảm chiều rộng */
+    width: 65px;
   }
 `;
 
@@ -24,9 +23,9 @@ const SpinButton = styled.button<{ className?: string }>`
   background: none;
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 0;
-  height: 32px; /* Giảm kích thước */
-  width: 32px; /* Giảm kích thước */
-  font-size: 18px; /* Giảm kích thước */
+  height: 32px;
+  width: 32px;
+  font-size: 18px;
   line-height: 0;
   color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
@@ -41,11 +40,11 @@ const SpinButton = styled.button<{ className?: string }>`
     background-color: #efefef;
   }
   &:first-of-type {
-    border-radius: 8px 0 0 8px; /* Bo tròn */
+    border-radius: 8px 0 0 8px;
     border-right: none;
   }
   &:last-of-type {
-    border-radius: 0 8px 8px 0; /* Bo tròn */
+    border-radius: 0 8px 8px 0;
     border-left: none;
   }
 `;
@@ -138,11 +137,11 @@ const NumberInput: React.FC<NumberInputProps> = ({
           className={formClassNameConfig.number}
           type="number"
           id={id}
-          onChange={e => {
+          onChange={(e) => {
             field.onChange(e);
             setInternalValue(+e.target.value);
           }}
-          onBlur={e => {
+          onBlur={(e) => {
             field.onBlur();
             const clampedValue = clampValue(+e.target.value);
             setInternalValue(clampedValue);

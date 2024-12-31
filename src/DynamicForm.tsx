@@ -88,7 +88,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
   const onSubmitHandler = (): any => {
     handleSubmit(
-      data => {
+      (data) => {
         if (onSubmit) {
           onSubmit(data);
         }

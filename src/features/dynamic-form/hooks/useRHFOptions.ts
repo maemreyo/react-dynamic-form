@@ -22,10 +22,10 @@ const useRHFOptions = (
       mode: validateOnSubmit
         ? 'onSubmit'
         : validateOnChange
-        ? 'onChange'
-        : validateOnBlur
-        ? 'onBlur'
-        : 'onSubmit',
+          ? 'onChange'
+          : validateOnBlur
+            ? 'onBlur'
+            : 'onSubmit',
       criteriaMode: 'all',
       resolver,
     } as UseFormProps<FormValues>;

@@ -28,7 +28,7 @@ const labelCommonStyles = css<LabelProps>`
       : 'auto'};
   flex-shrink: 0;
   font-size: ${({ theme }) => theme.fontSizes.medium};
-  display: block; /* Thêm display block */
+  display: block;
 `;
 
 /**

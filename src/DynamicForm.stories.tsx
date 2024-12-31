@@ -20,7 +20,9 @@ export default {
   },
 } as Meta<typeof DynamicForm>;
 
-const Template: StoryFn<typeof DynamicForm> = args => <DynamicForm {...args} />;
+const Template: StoryFn<typeof DynamicForm> = (args) => (
+  <DynamicForm {...args} />
+);
 
 // --- Examples ---
 
@@ -55,7 +57,7 @@ BasicInputTypes.args = {
       defaultValue: true,
     },
   },
-  onSubmit: data => {
+  onSubmit: (data) => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -123,7 +125,7 @@ AdvancedInputTypes.args = {
       ],
     },
   },
-  onSubmit: data => {
+  onSubmit: (data) => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -205,7 +207,7 @@ ValidationAndSubmission.args = {
       },
     },
   },
-  onSubmit: data => {
+  onSubmit: (data) => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -238,7 +240,7 @@ DynamicConfiguration.args = {
       },
     },
   },
-  onSubmit: data => {
+  onSubmit: (data) => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
   onFormReady: fn(),
@@ -280,17 +282,17 @@ AdvancedFeatures.args = {
   },
   autoSave: {
     interval: 5000,
-    save: data => console.log('Auto-saving:', data),
+    save: (data) => console.log('Auto-saving:', data),
   },
   enableLocalStorage: true,
   resetOnSubmit: true,
   focusFirstError: true,
   debounceOnChange: 500,
-  onSubmit: data => {
+  onSubmit: (data) => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
-  onChange: data => console.log('Debounced change:', data),
-  onFormReady: form => {
+  onChange: (data) => console.log('Debounced change:', data),
+  onFormReady: (form) => {
     // Reset button
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset Form';
@@ -311,7 +313,7 @@ AdvancedFeatures.play = async ({ canvasElement, step }) => {
       'Auto-save Test'
     );
     // Wait for auto-save to trigger (5 seconds)
-    await new Promise(resolve => setTimeout(resolve, 5100));
+    await new Promise((resolve) => setTimeout(resolve, 5100));
   });
 
   await step('Simulate Local Storage', async () => {
@@ -351,7 +353,7 @@ AdvancedFeatures.play = async ({ canvasElement, step }) => {
       'Debounce Test'
     );
     // Wait for debounce to trigger (0.5 seconds)
-    await new Promise(resolve => setTimeout(resolve, 600));
+    await new Promise((resolve) => setTimeout(resolve, 600));
   });
 };
 
@@ -364,7 +366,7 @@ ComprehensiveForm.args = {
   renderLayout: ({ children, ...rest }) => (
     <FlexLayout {...rest}>{children}</FlexLayout>
   ),
-  onError: errors => {
+  onError: (errors) => {
     console.log('Form validation errors:', errors);
   },
   renderErrorSummary: (errors, formClassNameConfig) => (
@@ -610,7 +612,7 @@ ComprehensiveForm.args = {
       },
       validationMessages: {
         required: 'You must fill in this field.',
-        minLength: ({ minLength }) =>
+        minLength: ({ minLength }: { minLength: number }) =>
           `Please enter at least ${minLength} characters.`,
       },
       classNameConfig: {
@@ -666,18 +668,18 @@ ComprehensiveForm.args = {
   },
   autoSave: {
     interval: 3000,
-    save: data => console.log('Auto-saving:', data),
+    save: (data) => console.log('Auto-saving:', data),
   },
   enableLocalStorage: true,
   resetOnSubmit: true,
   focusFirstError: true,
   debounceOnChange: 300,
-  onSubmit: data => {
+  onSubmit: (data) => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
     alert(JSON.stringify(data));
   },
-  onChange: data => console.log('Debounced change:', data),
-  onFormReady: form => {
+  onChange: (data) => console.log('Debounced change:', data),
+  onFormReady: (form) => {
     console.log('Form is ready:', form);
   },
   showSubmitButton: true,
@@ -688,7 +690,7 @@ ComprehensiveForm.storyName = 'Comprehensive Form';
 
 // Mock API call for async validation
 const mockCheckEmailExists = async (email: string): Promise<boolean> => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve(email !== 'test@example.com');
     }, 1000); // Simulate 1-second delay

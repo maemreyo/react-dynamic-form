@@ -6,9 +6,9 @@ import styled, { css } from 'styled-components';
  */
 const baseFormElementStyles = css`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 8px 12px; /* Giảm padding */
-  border-radius: 8px; /* Bo tròn */
-  font-size: ${({ theme }) => theme.fontSizes.small}; /* Giảm font-size */
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: ${({ theme }) => theme.fontSizes.small};
   width: 100%;
   transition:
     border-color 0.2s ease-in-out,
@@ -21,7 +21,7 @@ const baseFormElementStyles = css`
   }
 
   &:focus {
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']}; /* Hiệu ứng focus */
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']};
     border-color: ${({ theme }) => theme.colors.info};
   }
 
@@ -36,7 +36,6 @@ const baseFormElementStyles = css`
     opacity: 0.6;
   }
 
-  /* Add responsive styles using media queries */
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
     max-width: 300px;
   }
@@ -53,12 +52,12 @@ export const Input = styled.input<{ className?: string }>`
   ${baseFormElementStyles}
 
   &[type='number'] {
-    -moz-appearance: textfield; /* Firefox */
+    -moz-appearance: textfield;
   }
 
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
-    -webkit-appearance: none; /* Chrome, Safari, Edge */
+    -webkit-appearance: none;
     margin: 0;
   }
 `;

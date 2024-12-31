@@ -6,7 +6,6 @@ import { FormLayoutProps } from '../../features/form-renderer';
 /**
  * Props for the FormContainer component.
  */
-// Update FormContainerProps
 export type FormContainerProps = Pick<
   FormLayoutProps,
   | 'children'
@@ -32,5 +31,5 @@ export const FormContainer = styled.form<FormContainerProps>`
   padding: ${({ theme }) => theme.space['3xl']};
   background-color: ${({ theme }) => theme.colors.background};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.md};
+  border-radius: ${({ theme }) => theme.radius.md};
 `;

@@ -1,6 +1,6 @@
 // Filepath: /src/features/form-renderer/components/FormContent.tsx
 import React, { useEffect } from 'react';
-import { FormValues, FieldError } from '../../dynamic-form/types'; // Import FieldError
+import { FormValues, FieldError } from '../../dynamic-form/types';
 import { useFormContext } from 'react-hook-form';
 import { InputWrapper } from '../../../styles';
 import { FormContentProps } from '../types';
@@ -11,15 +11,12 @@ const FormContent: React.FC<FormContentProps> = ({
   fieldsToRender,
   fields,
   config,
-  formClassNameConfig,
+  formClassNameConfig = {},
   horizontalLabel,
   labelWidth,
   disableAutocomplete,
   showInlineError,
   renderInput,
-  // @ts-expect-error
-  conditionalFieldsConfig,
-  // @ts-expect-error
   customInputs,
 }) => {
   const {
@@ -68,7 +65,6 @@ const FormContent: React.FC<FormContentProps> = ({
             <InputRenderer
               field={field}
               config={config}
-              // @ts-expect-error
               formClassNameConfig={formClassNameConfig}
               disableAutocomplete={disableAutocomplete}
               showInlineError={showInlineError}

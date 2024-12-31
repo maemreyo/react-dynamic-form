@@ -1,5 +1,9 @@
 // src/features/dynamic-form/utils/formUtils.ts
-import { FieldClassNameConfig, FormClassNameConfig, FormConfig } from '../types';
+import {
+  FieldClassNameConfig,
+  FormClassNameConfig,
+  FormConfig,
+} from '../types';
 
 /**
  * Flattens a nested object into a single-level object.
@@ -93,7 +97,6 @@ export const loadFromLocalStorage = (key: string): any | null => {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : null;
 };
-
 
 /**
  * Merges multiple classNameConfig objects into a single object.

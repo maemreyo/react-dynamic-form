@@ -9,12 +9,14 @@ import styled from 'styled-components';
 
 const CheckboxInputStyled = styled.input<{ className?: string }>`
   appearance: none;
-  width: 18px; /* Giảm kích thước */
-  height: 18px; /* Giảm kích thước */
+  width: 18px;
+  height: 18px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 4px; /* Bo tròn */
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
   position: relative;
 
   &:hover {
@@ -30,8 +32,8 @@ const CheckboxInputStyled = styled.input<{ className?: string }>`
     content: '✔';
     display: block;
     text-align: center;
-    font-size: 14px; /* Giảm kích thước icon */
-    line-height: 18px; /* Căn giữa icon */
+    font-size: 14px;
+    line-height: 18px;
     color: ${({ theme }) => theme.colors.white};
     position: absolute;
     left: 0;
@@ -42,7 +44,7 @@ const CheckboxInputStyled = styled.input<{ className?: string }>`
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors['info-200']}; /* Hiệu ứng focus */
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors['info-200']};
   }
 
   &:disabled {

@@ -33,9 +33,8 @@ function useFormFields(
   // @ts-expect-error
   const [update, setUpdate] = useState(false);
 
-  
   useEffect(() => {
-    setUpdate(prev => !prev);
+    setUpdate((prev) => !prev);
   }, [config]);
 
   const flattenedConfig = useMemo(() => flattenConfig(config), [config]);
@@ -44,11 +43,11 @@ function useFormFields(
     () =>
       Object.keys(config)
         .filter(
-          fieldId =>
+          (fieldId) =>
             config[fieldId].conditional &&
             typeof config[fieldId].conditional?.when === 'string'
         )
-        .map(fieldId => ({
+        .map((fieldId) => ({
           when: config[fieldId].conditional!.when,
           operator: config[fieldId].conditional!.operator || 'is',
           value: config[fieldId].conditional?.value,
@@ -60,12 +59,12 @@ function useFormFields(
 
   const watchedValues = useWatch({
     control,
-    name: conditionalFieldsConfig.map(condition => condition.when),
+    name: conditionalFieldsConfig.map((condition) => condition.when),
   });
 
   const fieldsToRender = useMemo(
     () =>
-      Object.keys(config).filter(fieldId =>
+      Object.keys(config).filter((fieldId) =>
         shouldRenderField(fieldId, conditionalFieldsConfig, watchedValues)
       ),
     [config, conditionalFieldsConfig, watchedValues]

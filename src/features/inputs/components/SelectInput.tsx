@@ -10,12 +10,14 @@ import { useTheme } from '../../../theme/ThemeProvider';
 
 const StyledSelect = styled.select<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 8px 12px; /* Giảm padding */
-  border-radius: 8px; /* Bo tròn */
-  font-size: ${({ theme }) => theme.fontSizes.small}; /* Giảm font-size */
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: ${({ theme }) => theme.fontSizes.small};
   appearance: none;
   width: 100%;
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
   line-height: 1.5;
   outline: none;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%239CA3AF' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E")
@@ -27,7 +29,7 @@ const StyledSelect = styled.select<{ className?: string }>`
   }
 
   &:focus {
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']}; /* Hiệu ứng focus */
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']};
     border-color: ${({ theme }) => theme.colors.info};
   }
 
@@ -42,7 +44,6 @@ const StyledSelect = styled.select<{ className?: string }>`
     opacity: 0.6;
   }
 
-  /* Add responsive styles using media queries */
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
     max-width: 300px;
   }
@@ -51,8 +52,6 @@ const StyledSelect = styled.select<{ className?: string }>`
     max-width: 400px;
   }
 `;
-
-
 
 interface SelectInputProps extends CommonInputProps {}
 
@@ -94,7 +93,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         </Label>
       )}
       <StyledSelect {...field} className={formClassNameConfig.select} id={id}>
-        {options?.map(option => (
+        {options?.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

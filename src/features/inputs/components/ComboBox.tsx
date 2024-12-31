@@ -21,7 +21,7 @@ const DropdownList = styled.ul<{ className?: string }>`
   left: 0;
   width: 100%;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 8px; /* Bo tròn */
+  border-radius: 8px;
   background-color: white;
   z-index: 10;
   list-style: none;
@@ -35,7 +35,7 @@ const DropdownList = styled.ul<{ className?: string }>`
 `;
 
 const DropdownItem = styled.li<{ className?: string }>`
-  padding: 8px 12px; /* Giảm padding */
+  padding: 8px 12px;
   cursor: pointer;
   &:hover {
     background-color: ${({ theme }) => theme.colors['light-500']};

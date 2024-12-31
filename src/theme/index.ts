@@ -1,4 +1,5 @@
 // Filepath: /src/theme/index.ts
+// [CONTINUE-1]
 import { DefaultTheme } from 'styled-components';
 
 /**
@@ -227,7 +228,7 @@ export const defaultTheme: DefaultTheme = {
     bold: 700,
     bolder: 'bolder',
   },
-  radii: {
+  radius: {
     sm: '3px',
     md: '4px',
     lg: '5px',
@@ -275,9 +276,9 @@ export const createTheme = (customTheme: any): DefaultTheme => {
       ...defaultTheme.fontWeights,
       ...(customTheme.fontWeights || {}),
     },
-    radii: {
-      ...defaultTheme.radii,
-      ...(customTheme.radii || {}),
+    radius: {
+      ...defaultTheme.radius,
+      ...(customTheme.radius || {}),
     },
     breakpoints: {
       ...defaultTheme.breakpoints,

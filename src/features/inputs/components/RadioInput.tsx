@@ -22,12 +22,14 @@ const RadioLabel = styled.label<{ className?: string }>`
 
 const RadioInputStyled = styled.input<{ className?: string }>`
   appearance: none;
-  width: 18px; /* Giảm kích thước */
-  height: 18px; /* Giảm kích thước */
+  width: 18px;
+  height: 18px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
   position: relative;
 
   &:hover {
@@ -42,8 +44,8 @@ const RadioInputStyled = styled.input<{ className?: string }>`
   &:checked::after {
     content: '';
     display: block;
-    width: 9px; /* Giảm kích thước */
-    height: 9px; /* Giảm kích thước */
+    width: 9px;
+    height: 9px;
     background-color: white;
     border-radius: 50%;
     position: absolute;
@@ -54,7 +56,7 @@ const RadioInputStyled = styled.input<{ className?: string }>`
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors['info-200']}; /* Hiệu ứng focus */
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors['info-200']};
   }
 
   &:disabled {
@@ -103,7 +105,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
         </Label>
       )}
       <RadioGroup className={formClassNameConfig.radioGroup}>
-        {options?.map(option => (
+        {options?.map((option) => (
           <RadioLabel
             key={option.value}
             htmlFor={`${id}-${option.value}`}

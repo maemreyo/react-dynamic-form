@@ -1,25 +1,36 @@
-// Filepath: /src/features/inputs/registry/components/GridLayout.tsx
-
 import React from 'react';
 import styled from 'styled-components';
 import { FormClassNameConfig } from '../../../dynamic-form/types';
+import { DefaultTheme } from 'styled-components';
 
-const StyledGridLayout = styled.form`
+interface StyledGridLayoutProps {
+  $minWidth?: string;
+  $gap?: string;
+  $breakpoints?: { [key: string]: number };
+  theme: DefaultTheme;
+  className?: string;
+  style?: React.CSSProperties;
+  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
+  children?: React.ReactNode;
+  'data-layoutconfig'?: string;
+  'data-horizontallabel'?: string;
+}
+
+const StyledGridLayout = styled.form<StyledGridLayoutProps>`
   display: grid;
   grid-template-columns: repeat(
     auto-fit,
     minmax(${(props) => props.$minWidth || '250px'}, 1fr)
   );
-  gap: ${({ theme, $gap }: { theme: any; $gap: string }) =>
-    $gap || theme.space.md};
+  gap: ${({ theme, $gap }) => $gap || theme.space.md};
   padding: ${({ theme }) => theme.space['3xl']};
   background-color: ${({ theme }) => theme.colors.background};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.md};
+  border-radius: ${({ theme }) => theme.radius.md};
   ${(props) => {
     const { $breakpoints = props.theme.breakpoints } = props;
     return Object.entries($breakpoints)
-      .sort(([, a], [, b]) => Number(a) - Number(b)) // Sort breakpoints in ascending order
+      .sort(([, a], [, b]) => Number(a) - Number(b))
       .map(
         ([, value]: any) => `
           @media (min-width: ${value}px) {
