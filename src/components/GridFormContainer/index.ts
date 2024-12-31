@@ -1,5 +1,4 @@
 // Filepath: /src/components/GridFormContainer/index.ts
-// [CONTINUE-2]
 import styled, { css } from 'styled-components';
 import { FormContainer } from '../FormContainer';
 import { FormLayoutProps } from '../../features/form-renderer';
@@ -17,7 +16,7 @@ export type GridFormContainerProps = Pick<
 > & {
   $minWidth?: string;
   $gap?: string;
-  $breakpoints?: { [key: string]: number }; // Define breakpoints type
+  $breakpoints?: { [key: string]: number };
   $layoutConfig?: any;
   $horizontalLabel?: boolean;
 };
@@ -34,7 +33,7 @@ export const GridFormContainer = styled(FormContainer)<GridFormContainerProps>`
   ${(props) => {
     const { $breakpoints = props.theme.breakpoints } = props;
     return Object.entries($breakpoints)
-      .sort(([, a], [, b]) => Number(a) - Number(b)) // Sort breakpoints in ascending order
+      .sort(([, a], [, b]) => Number(a) - Number(b))
       .map(
         ([, value]: any) => css`
           @media (min-width: ${value}px) {

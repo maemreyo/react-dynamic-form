@@ -10,9 +10,9 @@ import { useTheme } from '../../../theme/ThemeProvider';
 
 const StyledSelect = styled.select<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 8px 12px; /* Giảm padding */
-  border-radius: 8px; /* Bo tròn */
-  font-size: ${({ theme }) => theme.fontSizes.small}; /* Giảm font-size */
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: ${({ theme }) => theme.fontSizes.small};
   appearance: none;
   width: 100%;
   transition:
@@ -29,7 +29,7 @@ const StyledSelect = styled.select<{ className?: string }>`
   }
 
   &:focus {
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']}; /* Hiệu ứng focus */
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']};
     border-color: ${({ theme }) => theme.colors.info};
   }
 
@@ -44,7 +44,6 @@ const StyledSelect = styled.select<{ className?: string }>`
     opacity: 0.6;
   }
 
-  /* Add responsive styles using media queries */
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
     max-width: 300px;
   }

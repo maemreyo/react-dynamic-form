@@ -6,7 +6,6 @@ import { FormLayoutProps } from '../../features/form-renderer';
 /**
  * Props for the FormContainer component.
  */
-// Update FormContainerProps
 export type FormContainerProps = Pick<
   FormLayoutProps,
   | 'children'
