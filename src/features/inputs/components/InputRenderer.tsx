@@ -7,12 +7,11 @@ import {
   RenderLabelProps,
   RenderErrorMessageProps,
   InputComponentMap,
-  FieldClassNameConfig,
 } from '../../dynamic-form/types';
 import { getInputComponent } from '../registry/InputRegistry';
 import { CommonInputProps, CustomInputProps } from '../types';
 import { ErrorMessage } from '../../../styles';
-import { mergeClassNames } from '../../dynamic-form/utils/formUtils'; // Import hàm mergeClassNames
+import { mergeClassNames } from '../../dynamic-form/utils/formUtils';
 
 interface InputRendererProps {
   field: FormField;
@@ -41,14 +40,12 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   const { id, type, error } = field;
   const fieldConfig = config[id] || {};
 
-  // Prioritize custom input components
   const CustomInputComponent = customInputs?.[type];
   const RegisteredInputComponent = getInputComponent(type);
   const InputComponent = CustomInputComponent || RegisteredInputComponent;
 
-  // Merge class names
   const mergedFormClassNameConfig = mergeClassNames(
-    {}, // Default empty object
+    {},
     formClassNameConfig,
     fieldConfig.classNameConfig
   );
@@ -56,7 +53,7 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   const commonInputProps: CommonInputProps = {
     id,
     fieldConfig,
-    formClassNameConfig: mergedFormClassNameConfig, // Truyền mergedFormClassNameConfig thay vì formClassNameConfig
+    formClassNameConfig: mergedFormClassNameConfig,
     showInlineError,
     horizontalLabel,
     labelWidth,
@@ -64,13 +61,12 @@ const InputRenderer: React.FC<InputRendererProps> = ({
     disableAutocomplete,
   };
 
-  // Render error message using renderErrorMessage prop or default
   const errorMessageElement =
     showInlineError && error && renderErrorMessage
-      ? renderErrorMessage(error, mergedFormClassNameConfig) // Sử dụng mergedFormClassNameConfig
+      ? renderErrorMessage(error, mergedFormClassNameConfig)
       : showInlineError && error
         ? React.createElement(ErrorMessage, {
-            className: mergedFormClassNameConfig.errorMessage, // Sử dụng mergedFormClassNameConfig
+            className: mergedFormClassNameConfig.errorMessage,
             children: error.message,
           })
         : null;
