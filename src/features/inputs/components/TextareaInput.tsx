@@ -13,7 +13,9 @@ const StyledTextarea = styled.textarea<{ className?: string }>`
   border-radius: 8px; /* Bo tròn */
   font-size: ${({ theme }) => theme.fontSizes.small}; /* Giảm font-size */
   width: 100%;
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
   line-height: 1.5;
   outline: none;
 
@@ -48,7 +50,6 @@ const StyledTextarea = styled.textarea<{ className?: string }>`
 
   min-height: 100px; /* Giảm chiều cao */
 `;
-
 
 interface TextareaInputProps extends CommonInputProps {}
 

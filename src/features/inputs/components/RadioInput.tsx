@@ -27,7 +27,9 @@ const RadioInputStyled = styled.input<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
   position: relative;
 
   &:hover {
@@ -103,7 +105,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
         </Label>
       )}
       <RadioGroup className={formClassNameConfig.radioGroup}>
-        {options?.map(option => (
+        {options?.map((option) => (
           <RadioLabel
             key={option.value}
             htmlFor={`${id}-${option.value}`}

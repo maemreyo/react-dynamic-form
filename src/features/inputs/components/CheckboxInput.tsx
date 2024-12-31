@@ -14,7 +14,9 @@ const CheckboxInputStyled = styled.input<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 4px; /* Bo tròn */
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
   position: relative;
 
   &:hover {

@@ -6,7 +6,6 @@ import { CommonInputProps } from '../types';
 import { Label, ErrorMessage, InputWrapper } from '../../../styles';
 import styled from 'styled-components';
 
-
 const SwitchContainer = styled.label<{ className?: string }>`
   position: relative;
   display: inline-block;

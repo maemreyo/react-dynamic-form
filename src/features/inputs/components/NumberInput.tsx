@@ -8,7 +8,6 @@ import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
 import { useTheme } from '../../../theme/ThemeProvider';
 
-
 const NumberInputContainer = styled.div<{ className?: string }>`
   display: flex;
   align-items: center;
@@ -138,11 +137,11 @@ const NumberInput: React.FC<NumberInputProps> = ({
           className={formClassNameConfig.number}
           type="number"
           id={id}
-          onChange={e => {
+          onChange={(e) => {
             field.onChange(e);
             setInternalValue(+e.target.value);
           }}
-          onBlur={e => {
+          onBlur={(e) => {
             field.onBlur();
             const clampedValue = clampValue(+e.target.value);
             setInternalValue(clampedValue);

@@ -69,11 +69,11 @@ const InputRenderer: React.FC<InputRendererProps> = ({
     showInlineError && error && renderErrorMessage
       ? renderErrorMessage(error, mergedFormClassNameConfig) // Sử dụng mergedFormClassNameConfig
       : showInlineError && error
-      ? React.createElement(ErrorMessage, {
-          className: mergedFormClassNameConfig.errorMessage, // Sử dụng mergedFormClassNameConfig
-          children: error.message,
-        })
-      : null;
+        ? React.createElement(ErrorMessage, {
+            className: mergedFormClassNameConfig.errorMessage, // Sử dụng mergedFormClassNameConfig
+            children: error.message,
+          })
+        : null;
 
   if (!InputComponent) {
     console.warn(`No input component found for type: ${type}`);

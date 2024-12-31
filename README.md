@@ -248,46 +248,46 @@ export default App;
 
 The `DynamicForm` component accepts the following props:
 
-| Prop                  | Type                                                                 | Default     | Description                                                                                                                                                  |
-| :-------------------- | :------------------------------------------------------------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `config`              | `FormConfig`                                                         | `{}`        | The configuration object for the form.                                                                                                                    |
-| `onChange`            | `(formData: FormValues) => void`                                     | `undefined` | Callback function called when the form data changes (debounced if `debounceOnChange` is set).                                                              |
-| `onSubmit`            | `SubmitHandler<FieldValues>`                                        | `undefined` | Callback function called when the form is submitted.                                                                                                        |
-| `formOptions`         | `UseFormProps`                                                       | `{}`        | Options for `react-hook-form`'s `useForm` hook.                                                                                                           |
-| `header`              | `React.ReactNode`                                                    | `undefined` | Header element for the form.                                                                                                                                |
-| `footer`              | `React.ReactNode`                                                    | `undefined` | Footer element for the form.                                                                                                                                |
-| `readOnly`            | `boolean`                                                            | `false`     | Whether the form is read-only.                                                                                                                            |
-| `disableForm`         | `boolean`                                                            | `false`     | Whether the form is disabled.                                                                                                                              |
-| `showSubmitButton`    | `boolean`                                                            | `true`      | Whether to show the submit button.                                                                                                                          |
-| `autoSave`            | `{ interval: number; save: (data: Record<string, any>) => void }`   | `undefined` | Auto-save configuration.                                                                                                                                 |
-| `resetOnSubmit`       | `boolean`                                                            | `false`     | Whether to reset the form on submit.                                                                                                                       |
-| `focusFirstError`     | `boolean`                                                            | `false`     | Whether to focus on the first error field on submit.                                                                                                      |
-| `layout`              | `'flex' \| 'grid'`                                                   | `'grid'`    | The layout type for the form.                                                                                                                             |
-| `layoutConfig`        | `any`                                                                | `{}`        | Layout configuration. For `grid`, it can be `{ minWidth: '300px' }`. For `flex`, it can be `{ gap: '10px' }`.                                              |
-| `renderLayout`        | `RenderLayoutProps`                                                  | `undefined` | Custom layout renderer.                                                                                                                                   |
-| `horizontalLabel`     | `boolean`                                                            | `false`     | Whether to use horizontal labels.                                                                                                                        |
-| `labelWidth`          | `string \| number`                                                   | `undefined` | Label width (for horizontal labels).                                                                                                                      |
-| `enableLocalStorage`  | `boolean`                                                            | `false`     | Whether to enable local storage for the form data.                                                                                                       |
-| `debounceOnChange`    | `number`                                                             | `0`         | Debounce time (in ms) for the `onChange` callback.                                                                                                         |
-| `disableAutocomplete` | `boolean`                                                            | `false`     | Whether to disable autocomplete for the form.                                                                                                             |
-| `showInlineError`     | `boolean`                                                            | `true`      | Whether to show inline error messages.                                                                                                                    |
-| `showErrorSummary`    | `boolean`                                                            | `false`     | Whether to show an error summary.                                                                                                                          |
-| `validateOnBlur`      | `boolean`                                                            | `false`     | Whether to validate on blur.                                                                                                                              |
-| `validateOnChange`    | `boolean`                                                            | `true`      | Whether to validate on change.                                                                                                                            |
-| `validateOnSubmit`    | `boolean`                                                            | `true`      | Whether to validate on submit.                                                                                                                           |
-| `className`           | `string`                                                             | `undefined` | CSS class name for the form container.                                                                                                                    |
-| `formClassNameConfig` | `FormClassNameConfig`                                                | `{}`        | CSS class names for form elements.                                                                                                                        |
-| `style`               | `React.CSSProperties`                                                | `undefined` | Inline styles for the form container.                                                                                                                      |
-| `theme`               | `any`                                                                | `undefined` | Theme object. You can provide custom theme. Please refer to `ThemeProvider` component for more information.                                              |
-| `onFormReady`         | `(form: UseFormReturn<any>) => void`                                | `undefined` | Callback function called when the form is ready.                                                                                                           |
-| `renderSubmitButton`  | `(handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>, isSubmitting: boolean) => React.ReactNode` | `undefined` | Custom submit button renderer.                                                                                                                            |
-| `renderFormContent`   | `RenderFormContentProps`                                             | `undefined` | Custom form content renderer.                                                                                                                              |
-| `renderFormFooter`    | `RenderFormFooterProps`                                              | `undefined` | Custom form footer renderer.                                                                                                                               |
-| `customValidators`    | `{ [key: string]: (value: any, context: any) => string \| undefined }` | `undefined` | Custom validators.                                                                                                                                      |
-| `customInputs`        | `{ [key: string]: React.ComponentType<CustomInputProps> }`            | `undefined` | Custom input components.                                                                                                                                   |
-| `onError`             | `(errors: FieldErrors) => void`                                      | `undefined` | Error handler function.                                                                                                                                   |
-| `renderErrorSummary`  | `(errors: FieldErrors, formClassNameConfig: FormClassNameConfig \| undefined) => React.ReactNode` | `undefined` | Custom error summary renderer.                                                                                                                              |
-| `validationMessages`  | `ValidationMessages`                                                 | `undefined` | Custom validation messages. Use to override default validation messages. More detail at `Validation` section                                                 |
+| Prop                  | Type                                                                                                        | Default     | Description                                                                                                   |
+| :-------------------- | :---------------------------------------------------------------------------------------------------------- | :---------- | :------------------------------------------------------------------------------------------------------------ |
+| `config`              | `FormConfig`                                                                                                | `{}`        | The configuration object for the form.                                                                        |
+| `onChange`            | `(formData: FormValues) => void`                                                                            | `undefined` | Callback function called when the form data changes (debounced if `debounceOnChange` is set).                 |
+| `onSubmit`            | `SubmitHandler<FieldValues>`                                                                                | `undefined` | Callback function called when the form is submitted.                                                          |
+| `formOptions`         | `UseFormProps`                                                                                              | `{}`        | Options for `react-hook-form`'s `useForm` hook.                                                               |
+| `header`              | `React.ReactNode`                                                                                           | `undefined` | Header element for the form.                                                                                  |
+| `footer`              | `React.ReactNode`                                                                                           | `undefined` | Footer element for the form.                                                                                  |
+| `readOnly`            | `boolean`                                                                                                   | `false`     | Whether the form is read-only.                                                                                |
+| `disableForm`         | `boolean`                                                                                                   | `false`     | Whether the form is disabled.                                                                                 |
+| `showSubmitButton`    | `boolean`                                                                                                   | `true`      | Whether to show the submit button.                                                                            |
+| `autoSave`            | `{ interval: number; save: (data: Record<string, any>) => void }`                                           | `undefined` | Auto-save configuration.                                                                                      |
+| `resetOnSubmit`       | `boolean`                                                                                                   | `false`     | Whether to reset the form on submit.                                                                          |
+| `focusFirstError`     | `boolean`                                                                                                   | `false`     | Whether to focus on the first error field on submit.                                                          |
+| `layout`              | `'flex' \| 'grid'`                                                                                          | `'grid'`    | The layout type for the form.                                                                                 |
+| `layoutConfig`        | `any`                                                                                                       | `{}`        | Layout configuration. For `grid`, it can be `{ minWidth: '300px' }`. For `flex`, it can be `{ gap: '10px' }`. |
+| `renderLayout`        | `RenderLayoutProps`                                                                                         | `undefined` | Custom layout renderer.                                                                                       |
+| `horizontalLabel`     | `boolean`                                                                                                   | `false`     | Whether to use horizontal labels.                                                                             |
+| `labelWidth`          | `string \| number`                                                                                          | `undefined` | Label width (for horizontal labels).                                                                          |
+| `enableLocalStorage`  | `boolean`                                                                                                   | `false`     | Whether to enable local storage for the form data.                                                            |
+| `debounceOnChange`    | `number`                                                                                                    | `0`         | Debounce time (in ms) for the `onChange` callback.                                                            |
+| `disableAutocomplete` | `boolean`                                                                                                   | `false`     | Whether to disable autocomplete for the form.                                                                 |
+| `showInlineError`     | `boolean`                                                                                                   | `true`      | Whether to show inline error messages.                                                                        |
+| `showErrorSummary`    | `boolean`                                                                                                   | `false`     | Whether to show an error summary.                                                                             |
+| `validateOnBlur`      | `boolean`                                                                                                   | `false`     | Whether to validate on blur.                                                                                  |
+| `validateOnChange`    | `boolean`                                                                                                   | `true`      | Whether to validate on change.                                                                                |
+| `validateOnSubmit`    | `boolean`                                                                                                   | `true`      | Whether to validate on submit.                                                                                |
+| `className`           | `string`                                                                                                    | `undefined` | CSS class name for the form container.                                                                        |
+| `formClassNameConfig` | `FormClassNameConfig`                                                                                       | `{}`        | CSS class names for form elements.                                                                            |
+| `style`               | `React.CSSProperties`                                                                                       | `undefined` | Inline styles for the form container.                                                                         |
+| `theme`               | `any`                                                                                                       | `undefined` | Theme object. You can provide custom theme. Please refer to `ThemeProvider` component for more information.   |
+| `onFormReady`         | `(form: UseFormReturn<any>) => void`                                                                        | `undefined` | Callback function called when the form is ready.                                                              |
+| `renderSubmitButton`  | `(handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>, isSubmitting: boolean) => React.ReactNode` | `undefined` | Custom submit button renderer.                                                                                |
+| `renderFormContent`   | `RenderFormContentProps`                                                                                    | `undefined` | Custom form content renderer.                                                                                 |
+| `renderFormFooter`    | `RenderFormFooterProps`                                                                                     | `undefined` | Custom form footer renderer.                                                                                  |
+| `customValidators`    | `{ [key: string]: (value: any, context: any) => string \| undefined }`                                      | `undefined` | Custom validators.                                                                                            |
+| `customInputs`        | `{ [key: string]: React.ComponentType<CustomInputProps> }`                                                  | `undefined` | Custom input components.                                                                                      |
+| `onError`             | `(errors: FieldErrors) => void`                                                                             | `undefined` | Error handler function.                                                                                       |
+| `renderErrorSummary`  | `(errors: FieldErrors, formClassNameConfig: FormClassNameConfig \| undefined) => React.ReactNode`           | `undefined` | Custom error summary renderer.                                                                                |
+| `validationMessages`  | `ValidationMessages`                                                                                        | `undefined` | Custom validation messages. Use to override default validation messages. More detail at `Validation` section  |
 
 ### `FormConfig`
 
@@ -295,25 +295,25 @@ The `FormConfig` object defines the structure and behavior of the form. Each key
 
 ### `FieldConfig`
 
-| Prop               | Type                                                       | Default     | Description                                                                                                                                                       |
-| :----------------- | :--------------------------------------------------------- | :---------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `type`             | `InputType`                                                | `'text'`    | The input type of the field.                                                                                                                                      |
-| `label`            | `string`                                                   | `undefined` | The label text for the field.                                                                                                                                     |
-| `placeholder`      | `string`                                                   | `undefined` | The placeholder text for the field.                                                                                                                                  |
-| `validation`       | `ValidationConfig`                                         | `undefined` | The validation configuration for the field.                                                                                                                          |
-| `component`        | `React.ComponentType<any>`                                 | `undefined` | A custom component to use for rendering the field.                                                                                                                 |
-| `style`            | `React.CSSProperties`                                      | `undefined` | Inline styles for the input element.                                                                                                                               |
-| `readOnly`         | `boolean`                                                  | `false`     | Whether the field is read-only.                                                                                                                                   |
-| `clearable`        | `boolean`                                                  | `false`     | Whether the field can be cleared.                                                                                                                                 |
-| `showCounter`      | `boolean`                                                  | `false`     | Whether to show a character counter for the field (for text, textarea).                                                                                             |
-| `copyToClipboard`  | `boolean`                                                  | `false`     | Whether to enable copy-to-clipboard functionality for the field (for text, textarea).                                                                                |
-| `tooltip`          | `string`                                                   | `undefined` | Tooltip text for the field.                                                                                                                                       |
-| `classNameConfig`  | `FieldClassNameConfig`                                     | `undefined` | CSS class names for the field's elements.                                                                                                                          |
-| `options`          | `{ value: string; label: string }[]`                       | `undefined` | Options for select, radio, or combobox inputs.                                                                                                                    |
-| `conditional`      | `Condition`                                                | `undefined` | Conditional logic for the field.                                                                                                                                  |
-| `fields`           | `FormConfig`                                               | `undefined` | Nested fields (for complex inputs).                                                                                                                                 |
+| Prop                 | Type                                                                                                                  | Default     | Description                                                                                                                                                   |
+| :------------------- | :-------------------------------------------------------------------------------------------------------------------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `type`               | `InputType`                                                                                                           | `'text'`    | The input type of the field.                                                                                                                                  |
+| `label`              | `string`                                                                                                              | `undefined` | The label text for the field.                                                                                                                                 |
+| `placeholder`        | `string`                                                                                                              | `undefined` | The placeholder text for the field.                                                                                                                           |
+| `validation`         | `ValidationConfig`                                                                                                    | `undefined` | The validation configuration for the field.                                                                                                                   |
+| `component`          | `React.ComponentType<any>`                                                                                            | `undefined` | A custom component to use for rendering the field.                                                                                                            |
+| `style`              | `React.CSSProperties`                                                                                                 | `undefined` | Inline styles for the input element.                                                                                                                          |
+| `readOnly`           | `boolean`                                                                                                             | `false`     | Whether the field is read-only.                                                                                                                               |
+| `clearable`          | `boolean`                                                                                                             | `false`     | Whether the field can be cleared.                                                                                                                             |
+| `showCounter`        | `boolean`                                                                                                             | `false`     | Whether to show a character counter for the field (for text, textarea).                                                                                       |
+| `copyToClipboard`    | `boolean`                                                                                                             | `false`     | Whether to enable copy-to-clipboard functionality for the field (for text, textarea).                                                                         |
+| `tooltip`            | `string`                                                                                                              | `undefined` | Tooltip text for the field.                                                                                                                                   |
+| `classNameConfig`    | `FieldClassNameConfig`                                                                                                | `undefined` | CSS class names for the field's elements.                                                                                                                     |
+| `options`            | `{ value: string; label: string }[]`                                                                                  | `undefined` | Options for select, radio, or combobox inputs.                                                                                                                |
+| `conditional`        | `Condition`                                                                                                           | `undefined` | Conditional logic for the field.                                                                                                                              |
+| `fields`             | `FormConfig`                                                                                                          | `undefined` | Nested fields (for complex inputs).                                                                                                                           |
 | `validationMessages` | `{ [key: string]: string \| ((values: { label?: string; value: any; error: any; config: FieldConfig; }) => string) }` | `undefined` | Custom validation messages for the field. Use to override default or global validation messages. Support function to provide dynamic message based on values. |
-| `defaultValue`     | `any`                                                      | `undefined` | The default value for the field.                                                                                                                                  |
+| `defaultValue`       | `any`                                                                                                                 | `undefined` | The default value for the field.                                                                                                                              |
 
 ### `InputType`
 
@@ -338,26 +338,26 @@ Supported input types:
 
 ### `ValidationConfig`
 
-| Prop          | Type                                                   | Default     | Description                                                                          |
-| :------------ | :----------------------------------------------------- | :---------- | :----------------------------------------------------------------------------------- |
-| `required`    | `boolean \| { value: boolean; message: string }`      | `false`     | Whether the field is required.                                                      |
-| `minLength`   | `number \| { value: number; message: string }`        | `undefined` | The minimum length of the field's value.                                            |
-| `maxLength`   | `number \| { value: number; message: string }`        | `undefined` | The maximum length of the field's value.                                            |
-| `min`         | `number \| string \| { value: number \| string; message: string }` | `undefined` | The minimum value of the field (for number, date).                                  |
-| `max`         | `number \| string \| { value: number \| string; message: string }` | `undefined` | The maximum value of the field (for number, date).                                  |
-| `pattern`     | `RegExp \| { value: RegExp; message: string }`       | `undefined` | A regular expression that the field's value must match.                             |
-| `validate`    | `(value: any, formValues: FormValues) => string \| undefined \| Promise<string \| undefined>` | `undefined` | A custom validation function. Returns an error message if validation fails, undefined otherwise. |
-|`requiredMessage`|`string`|`undefined`| Custom message for `required` validation. This prop is deprecated, use `validationMessages` instead|
+| Prop              | Type                                                                                          | Default     | Description                                                                                         |
+| :---------------- | :-------------------------------------------------------------------------------------------- | :---------- | :-------------------------------------------------------------------------------------------------- |
+| `required`        | `boolean \| { value: boolean; message: string }`                                              | `false`     | Whether the field is required.                                                                      |
+| `minLength`       | `number \| { value: number; message: string }`                                                | `undefined` | The minimum length of the field's value.                                                            |
+| `maxLength`       | `number \| { value: number; message: string }`                                                | `undefined` | The maximum length of the field's value.                                                            |
+| `min`             | `number \| string \| { value: number \| string; message: string }`                            | `undefined` | The minimum value of the field (for number, date).                                                  |
+| `max`             | `number \| string \| { value: number \| string; message: string }`                            | `undefined` | The maximum value of the field (for number, date).                                                  |
+| `pattern`         | `RegExp \| { value: RegExp; message: string }`                                                | `undefined` | A regular expression that the field's value must match.                                             |
+| `validate`        | `(value: any, formValues: FormValues) => string \| undefined \| Promise<string \| undefined>` | `undefined` | A custom validation function. Returns an error message if validation fails, undefined otherwise.    |
+| `requiredMessage` | `string`                                                                                      | `undefined` | Custom message for `required` validation. This prop is deprecated, use `validationMessages` instead |
 
 ### `Condition`
 
-| Prop       | Type                                       | Default      | Description                                                                  |
-| :--------- | :----------------------------------------- | :----------- | :--------------------------------------------------------------------------- |
-| `when`     | `string`                                   | `undefined`  | The field to watch for changes.                                              |
-| `operator` | `ComparisonOperator`                       | `'is'`       | The comparison operator to use.                                              |
-| `value`    | `any`                                      | `undefined`  | The value to compare against.                                                |
-| `comparator` | `(value: any) => boolean`                 | `undefined`  | A custom comparator function (only used when `operator` is `'custom'`). |
-| `fields`   | `string[]`                                 | `[]`         | The fields to show or hide based on the condition.                           |
+| Prop         | Type                      | Default     | Description                                                             |
+| :----------- | :------------------------ | :---------- | :---------------------------------------------------------------------- |
+| `when`       | `string`                  | `undefined` | The field to watch for changes.                                         |
+| `operator`   | `ComparisonOperator`      | `'is'`      | The comparison operator to use.                                         |
+| `value`      | `any`                     | `undefined` | The value to compare against.                                           |
+| `comparator` | `(value: any) => boolean` | `undefined` | A custom comparator function (only used when `operator` is `'custom'`). |
+| `fields`     | `string[]`                | `[]`        | The fields to show or hide based on the condition.                      |
 
 ### `ComparisonOperator`
 
@@ -376,33 +376,33 @@ Supported comparison operators:
 
 ### `FormClassNameConfig`
 
-| Prop                 | Type     | Default     | Description                                     |
-| :------------------- | :------- | :---------- | :---------------------------------------------- |
-| `formContainer`      | `string` | `undefined` | CSS class name for the form container.          |
-| `inputWrapper`       | `string` | `undefined` | CSS class name for the input wrapper.           |
-| `label`              | `string` | `undefined` | CSS class name for the label.                  |
-| `input`              | `string` | `undefined` | CSS class name for the input element.          |
-| `errorMessage`       | `string` | `undefined` | CSS class name for the error message.           |
-| `button`             | `string` | `undefined` | CSS class name for the button.                 |
-| `select`             | `string` | `undefined` | CSS class name for the select element.         |
-| `textarea`           | `string` | `undefined` | CSS class name for the textarea element.       |
-| `checkbox`           | `string` | `undefined` | CSS class name for the checkbox element.       |
-| `radio`              | `string` | `undefined` | CSS class name for the radio element.          |
-| `date`               | `string` | `undefined` | CSS class name for the date input element.     |
-| `number`             | `string` | `undefined` | CSS class name for the number input element.   |
-| `switch`             | `string` | `undefined` | CSS class name for the switch element.         |
-| `time`               | `string` | `undefined` | CSS class name for the time input element.     |
-| `dateTime`           | `string` | `undefined` | CSS class name for the datetime input element. |
-| `comboBox`           | `string` | `undefined` | CSS class name for the combobox input element. |
-| `radioGroup`         | `string` | `undefined` | CSS class name for the radio group.            |
-| `radioButton`        | `string` | `undefined` | CSS class name for the radio button.           |
-| `radioLabel`         | `string` | `undefined` | CSS class name for the radio label.            |
-| `checkboxInput`      | `string` | `undefined` | CSS class name for the checkbox input.         |
-| `switchContainer`    | `string` | `undefined` | CSS class name for the switch container.      |
-| `switchSlider`       | `string` | `undefined` | CSS class name for the switch slider.         |
+| Prop                   | Type     | Default     | Description                                    |
+| :--------------------- | :------- | :---------- | :--------------------------------------------- |
+| `formContainer`        | `string` | `undefined` | CSS class name for the form container.         |
+| `inputWrapper`         | `string` | `undefined` | CSS class name for the input wrapper.          |
+| `label`                | `string` | `undefined` | CSS class name for the label.                  |
+| `input`                | `string` | `undefined` | CSS class name for the input element.          |
+| `errorMessage`         | `string` | `undefined` | CSS class name for the error message.          |
+| `button`               | `string` | `undefined` | CSS class name for the button.                 |
+| `select`               | `string` | `undefined` | CSS class name for the select element.         |
+| `textarea`             | `string` | `undefined` | CSS class name for the textarea element.       |
+| `checkbox`             | `string` | `undefined` | CSS class name for the checkbox element.       |
+| `radio`                | `string` | `undefined` | CSS class name for the radio element.          |
+| `date`                 | `string` | `undefined` | CSS class name for the date input element.     |
+| `number`               | `string` | `undefined` | CSS class name for the number input element.   |
+| `switch`               | `string` | `undefined` | CSS class name for the switch element.         |
+| `time`                 | `string` | `undefined` | CSS class name for the time input element.     |
+| `dateTime`             | `string` | `undefined` | CSS class name for the datetime input element. |
+| `comboBox`             | `string` | `undefined` | CSS class name for the combobox input element. |
+| `radioGroup`           | `string` | `undefined` | CSS class name for the radio group.            |
+| `radioButton`          | `string` | `undefined` | CSS class name for the radio button.           |
+| `radioLabel`           | `string` | `undefined` | CSS class name for the radio label.            |
+| `checkboxInput`        | `string` | `undefined` | CSS class name for the checkbox input.         |
+| `switchContainer`      | `string` | `undefined` | CSS class name for the switch container.       |
+| `switchSlider`         | `string` | `undefined` | CSS class name for the switch slider.          |
 | `numberInputContainer` | `string` | `undefined` | CSS class name for the number input container. |
-| `numberInputButton`  | `string` | `undefined` | CSS class name for the number input button.    |
-| `comboBoxContainer`  | `string` | `undefined` | CSS class name for the combobox container.    |
+| `numberInputButton`    | `string` | `undefined` | CSS class name for the number input button.    |
+| `comboBoxContainer`    | `string` | `undefined` | CSS class name for the combobox container.     |
 | `comboBoxDropdownList` | `string` | `undefined` | CSS class name for the combobox dropdown list. |
 | `comboBoxDropdownItem` | `string` | `undefined` | CSS class name for the combobox dropdown item. |
 
@@ -411,7 +411,9 @@ Supported comparison operators:
 Same as `FormClassNameConfig`, but applies to individual fields. `FieldClassNameConfig` will override `FormClassNameConfig` for that specific field.
 
 ### `Validation`
+
 You can define validation rules for each field in the `validation` property of the `FieldConfig` object. The `validation` property can contain the following validation rules:
+
 - `required`: Whether the field is required.
 - `minLength`: The minimum length of the field's value.
 - `maxLength`: The maximum length of the field's value.
@@ -421,6 +423,7 @@ You can define validation rules for each field in the `validation` property of t
 - `validate`: A custom validation function.
 
 #### Custom Validation Messages
+
 You can provide custom validation messages for each field by using the `validationMessages` property in the `FieldConfig` object.
 You can also provide global custom validation messages for the whole form by using the `validationMessages` prop in the `DynamicForm` component.
 `FieldConfig.validationMessages` will override `DynamicForm.validationMessages` for that specific field.
@@ -452,6 +455,7 @@ const validationMessages: ValidationMessages = {
 ```
 
 ##### Validation Messages Interface
+
 ```ts
 interface ValidationMessages {
   [key: string]:
@@ -502,10 +506,20 @@ You can create your own custom input components and use them in the form. To do 
 
 ```tsx
 import React from 'react';
-import { DynamicForm, DynamicFormProps, CustomInputProps } from '@matthew.ngo/react-dynamic-form';
+import {
+  DynamicForm,
+  DynamicFormProps,
+  CustomInputProps,
+} from '@matthew.ngo/react-dynamic-form';
 
 // Example custom input component
-const MyCustomInput: React.FC<CustomInputProps> = ({ fieldConfig, formClassNameConfig, field, onChange, value }) => {
+const MyCustomInput: React.FC<CustomInputProps> = ({
+  fieldConfig,
+  formClassNameConfig,
+  field,
+  onChange,
+  value,
+}) => {
   return (
     <div>
       <label htmlFor={fieldConfig.id}>{fieldConfig.label}</label>
@@ -548,11 +562,18 @@ const App: React.FC = () => {
 
 export default App;
 ```
+
 ### Theming
+
 You can customize the look and feel of the form by providing a custom theme object to the `DynamicForm` component via the `theme` prop. The `theme` object should follow the `styled-components` `DefaultTheme` interface.
+
 ```tsx
 import React from 'react';
-import { DynamicForm, DynamicFormProps, defaultTheme } from '@matthew.ngo/react-dynamic-form';
+import {
+  DynamicForm,
+  DynamicFormProps,
+  defaultTheme,
+} from '@matthew.ngo/react-dynamic-form';
 import { ThemeProvider } from 'styled-components';
 
 const myTheme = {
