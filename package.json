@@ -14,7 +14,13 @@
     "dynamic-form",
     "react-hook-form",
     "form-validation",
-    "storybook"
+    "storybook",
+    "dynamic-form-configuration",
+    "conditional-fields",
+    "custom-inputs",
+    "theming",
+    "typescript",
+    "javascript"
   ],
   "license": "MIT",
   "main": "dist/index.js",
@@ -61,11 +67,12 @@
     "trailingComma": "es5"
   },
   "name": "@matthew.ngo/react-dynamic-form",
+  "description": "A powerful and flexible React library for creating dynamic forms based on a configuration object. It supports conditional fields, custom inputs, theming, and integrates seamlessly with react-hook-form and yup.",
   "author": "Matthew Ngo <matthew.ngo1114@gmail.com>",
   "bugs": {
     "url": "https://github.com/maemreyo/react-dynamic-form/issues"
   },
-  "homepage": "https://github.com/maemreyo/react-dynamic-form#readme",
+  "homepage": "https://maemreyo.github.io/react-dynamic-form/",
   "size-limit": [
     {
       "path": "dist/react-dynamic-form.cjs.production.min.js",

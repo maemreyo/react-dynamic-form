@@ -7,6 +7,10 @@
 
 `@matthew.ngo/react-dynamic-form` is a powerful and flexible React library for creating dynamic forms based on a configuration object. It leverages `react-hook-form` for form handling and `yup` for validation, offering a streamlined and efficient way to build complex forms with minimal code. It also supports conditional fields, custom inputs, and theming with `styled-components`.
 
+## Demo
+
+View the live demo here: [https://maemreyo.github.io/react-dynamic-form/](https://maemreyo.github.io/react-dynamic-form/)
+
 ## Features
 
 - **Dynamic Form Generation:** Create forms from a simple JSON configuration.
