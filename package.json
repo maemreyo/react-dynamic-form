@@ -36,7 +36,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
-    "lint": "eslint src ",
+    "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "prepare": "husky",
     "size": "size-limit",
