@@ -612,7 +612,7 @@ ComprehensiveForm.args = {
       },
       validationMessages: {
         required: 'You must fill in this field.',
-        minLength: ({ minLength }) =>
+        minLength: ({ minLength }: { minLength: number }) =>
           `Please enter at least ${minLength} characters.`,
       },
       classNameConfig: {
