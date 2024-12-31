@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { FormClassNameConfig } from '../../../dynamic-form/types';
 import { DefaultTheme } from 'styled-components';
 
-// Định nghĩa interface cho StyledGridLayout
 interface StyledGridLayoutProps {
   $minWidth?: string;
   $gap?: string;
@@ -31,7 +30,7 @@ const StyledGridLayout = styled.form<StyledGridLayoutProps>`
   ${(props) => {
     const { $breakpoints = props.theme.breakpoints } = props;
     return Object.entries($breakpoints)
-      .sort(([, a], [, b]) => Number(a) - Number(b)) // Sort breakpoints in ascending order
+      .sort(([, a], [, b]) => Number(a) - Number(b))
       .map(
         ([, value]: any) => `
           @media (min-width: ${value}px) {

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { FormClassNameConfig } from '../../../dynamic-form/types';
 import { DefaultTheme } from 'styled-components';
 
-// Định nghĩa interface cho StyledFlexLayout
 interface StyledFlexLayoutProps {
   $gap?: string;
   theme: DefaultTheme;
