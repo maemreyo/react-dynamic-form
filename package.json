@@ -1,5 +1,5 @@
 {
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -38,7 +38,7 @@
     "test": "tsdx test --passWithNoTests",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "prepare": "tsdx build",
+    "prepare": "tsdx build ",
     "size": "size-limit",
     "analyze": "size-limit --why",
     "storybook": "storybook dev -p 6006",
