@@ -44,13 +44,13 @@ const StyledSelect = styled.select<{ className?: string }>`
     opacity: 0.6;
   }
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
+  /* @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
     max-width: 300px;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     max-width: 400px;
-  }
+  } */
 `;
 
 interface SelectInputProps extends CommonInputProps {}

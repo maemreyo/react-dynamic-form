@@ -25,11 +25,7 @@ const TextInput: React.FC<CommonInputProps> = ({
   });
 
   return (
-    <InputWrapper
-      $horizontalLabel={horizontalLabel}
-      $labelWidth={labelWidth}
-      className={formClassNameConfig.inputWrapper}
-    >
+    <>
       {label && (
         <Label
           htmlFor={id}
@@ -50,7 +46,7 @@ const TextInput: React.FC<CommonInputProps> = ({
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
-    </InputWrapper>
+    </>
   );
 };
 
