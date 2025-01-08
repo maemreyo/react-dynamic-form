@@ -4,7 +4,7 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label, ErrorMessage } from '../../../styles';
+import { Label } from '../../../styles';
 import styled from 'styled-components';
 import { useTheme } from '../../../theme/ThemeProvider';
 
@@ -72,10 +72,8 @@ const RadioInput: React.FC<RadioInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
-  showInlineError,
   horizontalLabel,
   labelWidth,
-  error,
 }) => {
   const theme = useTheme();
   const { label, options } = fieldConfig;
@@ -120,11 +118,6 @@ const RadioInput: React.FC<RadioInputProps> = ({
           </RadioLabel>
         ))}
       </RadioGroup>
-      {showInlineError && error && (
-        <ErrorMessage className={formClassNameConfig.errorMessage}>
-          {error.message}
-        </ErrorMessage>
-      )}
     </>
   );
 };

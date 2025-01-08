@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Input, Label, ErrorMessage } from '../../../styles';
+import { Input, Label } from '../../../styles';
 import styled from 'styled-components';
 import { useTheme } from '../../../theme/ThemeProvider';
 
@@ -56,10 +56,8 @@ const NumberInput: React.FC<NumberInputProps> = ({
   fieldConfig,
   formClassNameConfig = {},
   disableAutocomplete,
-  showInlineError,
   horizontalLabel,
   labelWidth,
-  error,
 }) => {
   const theme = useTheme();
   const { label } = fieldConfig;
@@ -159,11 +157,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
           +
         </SpinButton>
       </NumberInputContainer>
-      {showInlineError && error && (
-        <ErrorMessage className={formClassNameConfig.errorMessage}>
-          {error.message}
-        </ErrorMessage>
-      )}
     </>
   );
 };
