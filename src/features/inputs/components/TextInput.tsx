@@ -4,7 +4,7 @@ import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
 import { useTheme } from '../../../theme/ThemeProvider';
-import { Input, Label, InputWrapper } from '../../../styles';
+import { Input, Label } from '../../../styles';
 
 const TextInput: React.FC<CommonInputProps> = ({
   id,

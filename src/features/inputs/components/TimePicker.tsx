@@ -4,7 +4,7 @@ import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
+import { Input, Label, ErrorMessage } from '../../../styles';
 import { useTheme } from '../../../theme/ThemeProvider';
 
 const TimePicker: React.FC<CommonInputProps> = ({
@@ -26,11 +26,7 @@ const TimePicker: React.FC<CommonInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <InputWrapper
-      $horizontalLabel={horizontalLabel}
-      $labelWidth={labelWidth}
-      className={formClassNameConfig.inputWrapper}
-    >
+    <>
       {label && (
         <Label
           htmlFor={id}
@@ -55,7 +51,7 @@ const TimePicker: React.FC<CommonInputProps> = ({
           {error.message}
         </ErrorMessage>
       )}
-    </InputWrapper>
+    </>
   );
 };
 

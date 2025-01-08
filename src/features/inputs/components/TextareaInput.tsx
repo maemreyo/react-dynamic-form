@@ -3,7 +3,7 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label, ErrorMessage, InputWrapper } from '../../../styles';
+import { Label, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
 import { useTheme } from '../../../theme/ThemeProvider';
 
@@ -72,11 +72,7 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <InputWrapper
-      $horizontalLabel={horizontalLabel}
-      $labelWidth={labelWidth}
-      className={formClassNameConfig.inputWrapper}
-    >
+    <>
       {label && (
         <Label
           htmlFor={id}
@@ -101,7 +97,7 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
           {error.message}
         </ErrorMessage>
       )}
-    </InputWrapper>
+    </>
   );
 };
 
