@@ -4,7 +4,7 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label, ErrorMessage, InputWrapper } from '../../../styles';
+import { Label, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
 import { useTheme } from '../../../theme/ThemeProvider';
 
@@ -74,11 +74,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <InputWrapper
-      $horizontalLabel={horizontalLabel}
-      $labelWidth={labelWidth}
-      className={formClassNameConfig.inputWrapper}
-    >
+    <>
       {label && (
         <Label
           htmlFor={id}
@@ -104,7 +100,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
           {error.message}
         </ErrorMessage>
       )}
-    </InputWrapper>
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Label, InputWrapper, ErrorMessage } from '../../../styles';
+import { Label, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
 
 const CheckboxInputStyled = styled.input<{ className?: string }>`
@@ -72,11 +72,7 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <InputWrapper
-      $horizontalLabel={horizontalLabel}
-      $labelWidth={labelWidth}
-      className={formClassNameConfig.inputWrapper}
-    >
+    <>
       {label && (
         <Label
           htmlFor={id}
@@ -99,7 +95,7 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
           {error.message}
         </ErrorMessage>
       )}
-    </InputWrapper>
+    </>
   );
 };
 

@@ -7,7 +7,7 @@ import {
   FieldError,
 } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
-import { Input, Label, ErrorMessage, InputWrapper } from '../../../styles';
+import { Input, Label, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
 
 const ComboBoxContainer = styled.div<{ className?: string }>`
@@ -154,11 +154,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     }
   }, [isOpen, highlightedIndex]);
   return (
-    <InputWrapper
-      $horizontalLabel={horizontalLabel}
-      $labelWidth={labelWidth}
-      className={formClassNameConfig.inputWrapper}
-    >
+    <>
       {label && (
         <Label
           htmlFor={id}
@@ -215,7 +211,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           {error.message}
         </ErrorMessage>
       )}
-    </InputWrapper>
+    </>
   );
 };
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label, ErrorMessage, InputWrapper } from '../../../styles';
+import { Label, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
 
 const SwitchContainer = styled.label<{ className?: string }>`
@@ -79,11 +79,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <InputWrapper
-      $horizontalLabel={horizontalLabel}
-      $labelWidth={labelWidth}
-      className={formClassNameConfig.inputWrapper}
-    >
+    <>
       {label && (
         <Label
           $horizontalLabel={horizontalLabel}
@@ -110,7 +106,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
           {error.message}
         </ErrorMessage>
       )}
-    </InputWrapper>
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Input, Label, InputWrapper, ErrorMessage } from '../../../styles';
+import { Input, Label, ErrorMessage } from '../../../styles';
 import styled from 'styled-components';
 import { useTheme } from '../../../theme/ThemeProvider';
 
@@ -99,11 +99,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     field.onChange(newValue);
   };
   return (
-    <InputWrapper
-      $horizontalLabel={horizontalLabel}
-      $labelWidth={labelWidth}
-      className={formClassNameConfig.inputWrapper}
-    >
+    <>
       {label && (
         <Label
           htmlFor={id}
@@ -168,7 +164,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
           {error.message}
         </ErrorMessage>
       )}
-    </InputWrapper>
+    </>
   );
 };
 
