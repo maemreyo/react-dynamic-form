@@ -34,27 +34,27 @@ BasicInputTypes.args = {
     firstName: {
       label: 'First Name',
       type: 'text',
-      defaultValue: 'John',
+      // defaultValue: 'John',
     },
     lastName: {
       label: 'Last Name',
       type: 'text',
-      defaultValue: 'Doe',
+      // defaultValue: 'Doe',
     },
     email: {
       label: 'Email',
       type: 'email',
-      defaultValue: 'john.doe@example.com',
+      // defaultValue: 'john.doe@example.com',
     },
     age: {
       label: 'Age',
       type: 'number',
-      defaultValue: 30,
+      // defaultValue: 30,
     },
     subscribe: {
       label: 'Subscribe to newsletter?',
       type: 'checkbox',
-      defaultValue: true,
+      // defaultValue: true,
     },
   },
   onSubmit: (data) => {
@@ -148,6 +148,8 @@ ValidationAndSubmission.args = {
       label: 'Min Length (3)',
       type: 'text',
       validation: {
+        required: { value: true, message: 'This field is required' },
+
         minLength: { value: 3, message: 'Minimum length is 3' },
       },
     },
@@ -173,6 +175,8 @@ ValidationAndSubmission.args = {
       label: 'Age',
       type: 'number',
       validation: {
+        required: { value: true, message: 'This field is required' },
+
         min: { value: 18, message: 'Must be 18 or older' },
         max: { value: 100, message: 'Must be 100 or younger' },
       },
@@ -386,7 +390,7 @@ ComprehensiveForm.args = {
     firstName: {
       label: 'First Name',
       type: 'text',
-      defaultValue: 'John',
+      // defaultValue: 'John',
       validation: {
         required: { value: true, message: 'This field is required' },
       },
@@ -398,7 +402,7 @@ ComprehensiveForm.args = {
     lastName: {
       label: 'Last Name',
       type: 'text',
-      defaultValue: 'Doe',
+      // defaultValue: 'Doe',
       validation: {
         required: { value: true, message: 'This field is required' },
       },
@@ -410,7 +414,7 @@ ComprehensiveForm.args = {
     email: {
       label: 'Email',
       type: 'email',
-      defaultValue: 'john.doe@example.com',
+      // defaultValue: 'john.doe@example.com',
       validation: {
         required: { value: true, message: 'This field is required' },
         pattern: {
@@ -427,8 +431,9 @@ ComprehensiveForm.args = {
     age: {
       label: 'Age',
       type: 'number',
-      defaultValue: 30,
+      // defaultValue: 30,
       validation: {
+        required: { value: true, message: 'This field is required' },
         min: { value: 18, message: 'Must be 18 or older' },
         max: { value: 99, message: 'Must be 99 or younger' },
       },
@@ -440,7 +445,10 @@ ComprehensiveForm.args = {
     subscribe: {
       label: 'Subscribe to newsletter?',
       type: 'checkbox',
-      defaultValue: true,
+      // defaultValue: true,
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
       classNameConfig: {
         checkboxInput: 'mr-2 leading-tight',
         label: 'block text-gray-700 text-sm font-bold mb-2',
@@ -450,16 +458,19 @@ ComprehensiveForm.args = {
     startDate: {
       label: 'Start Date',
       type: 'date',
-      defaultValue: '2023-11-20',
+      // defaultValue: '2023-11-20',
       classNameConfig: {
         date: 'border border-gray-400 p-2 rounded w-full', // Apply the 'date' class here
         label: 'block text-gray-700 text-sm font-bold mb-2',
+      },
+      validation: {
+        required: { value: true, message: 'This field is required' },
       },
     },
     startTime: {
       label: 'Start Time',
       type: 'time',
-      defaultValue: '09:00',
+      // defaultValue: '09:00',
       classNameConfig: {
         time: 'border border-gray-400 p-2 rounded w-full', // Apply the 'time' class here
         label: 'block text-gray-700 text-sm font-bold mb-2',
@@ -468,7 +479,7 @@ ComprehensiveForm.args = {
     dateTime: {
       label: 'Date and Time',
       type: 'datetime-local',
-      defaultValue: '2023-11-20T09:00',
+      // defaultValue: '2023-11-20T09:00',
       classNameConfig: {
         dateTime: 'border border-gray-400 p-2 rounded w-full', // Apply the 'dateTime' class here
         label: 'block text-gray-700 text-sm font-bold mb-2',
@@ -477,7 +488,7 @@ ComprehensiveForm.args = {
     notes: {
       label: 'Notes',
       type: 'textarea',
-      defaultValue: 'Some notes...',
+      // defaultValue: 'Some notes...',
       classNameConfig: {
         textarea: 'border border-gray-400 p-2 rounded w-full',
         label: 'block text-gray-700 text-sm font-bold mb-2',
@@ -486,7 +497,7 @@ ComprehensiveForm.args = {
     country: {
       label: 'Country',
       type: 'select',
-      defaultValue: 'US',
+      // defaultValue: 'US',
       options: [
         { value: 'US', label: 'United States' },
         { value: 'CA', label: 'Canada' },
@@ -500,7 +511,7 @@ ComprehensiveForm.args = {
     gender: {
       label: 'Gender',
       type: 'radio',
-      defaultValue: 'male',
+      // defaultValue: 'male',
       options: [
         { value: 'male', label: 'Male' },
         { value: 'female', label: 'Female' },
@@ -516,7 +527,10 @@ ComprehensiveForm.args = {
     notification: {
       label: 'Enable Notifications',
       type: 'switch',
-      defaultValue: true,
+      // defaultValue: true,
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
       classNameConfig: {
         switchContainer:
           'relative inline-block w-10 mr-2 align-middle select-none',
@@ -530,7 +544,10 @@ ComprehensiveForm.args = {
     favoriteFruit: {
       label: 'Favorite Fruit',
       type: 'combobox',
-      defaultValue: 'Apple',
+      // defaultValue: 'Apple',
+      validation: {
+        required: { value: true, message: 'This field is required' },
+      },
       options: [
         { value: 'Apple', label: 'Apple' },
         { value: 'Banana', label: 'Banana' },
@@ -549,12 +566,15 @@ ComprehensiveForm.args = {
     dynamicField: {
       label: 'Dynamic Field',
       type: 'text',
-      defaultValue: '',
+      // defaultValue: '',
       conditional: {
         when: 'firstName',
         operator: 'is',
         value: 'ShowDynamic',
         fields: ['dynamicField'],
+      },
+      validation: {
+        required: { value: true, message: 'This field is required' },
       },
       classNameConfig: {
         input: 'border border-gray-400 p-2 rounded w-full',
@@ -625,7 +645,7 @@ ComprehensiveForm.args = {
     quantity: {
       label: 'Quantity',
       type: 'number',
-      defaultValue: 1,
+      // defaultValue: 1,
       validation: {
         required: { value: true, message: 'Quantity is required' },
         min: { value: 1, message: 'Quantity must be at least 1' },
@@ -684,7 +704,6 @@ ComprehensiveForm.args = {
   },
   showSubmitButton: true,
   showInlineError: true,
-  showErrorSummary: true,
 };
 ComprehensiveForm.storyName = 'Comprehensive Form';
 

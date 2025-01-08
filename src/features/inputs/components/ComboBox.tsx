@@ -7,7 +7,7 @@ import {
   FieldError,
 } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
-import { Input, Label, ErrorMessage } from '../../../styles';
+import { Input, Label } from '../../../styles';
 import styled from 'styled-components';
 
 const ComboBoxContainer = styled.div<{ className?: string }>`
@@ -60,10 +60,8 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
-  showInlineError,
   horizontalLabel,
   labelWidth,
-  error,
 }) => {
   const { label, options } = fieldConfig;
   const [isOpen, setIsOpen] = useState(false);
@@ -206,11 +204,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           </DropdownList>
         )}
       </ComboBoxContainer>
-      {showInlineError && error && (
-        <ErrorMessage className={formClassNameConfig.errorMessage}>
-          {error.message}
-        </ErrorMessage>
-      )}
     </>
   );
 };

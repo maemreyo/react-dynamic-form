@@ -4,7 +4,7 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label, ErrorMessage } from '../../../styles';
+import { Label } from '../../../styles';
 import styled from 'styled-components';
 import { useTheme } from '../../../theme/ThemeProvider';
 
@@ -59,10 +59,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
-  showInlineError,
   horizontalLabel,
   labelWidth,
-  error,
 }) => {
   const theme = useTheme();
   const { label, options } = fieldConfig;
@@ -95,11 +93,6 @@ const SelectInput: React.FC<SelectInputProps> = ({
           </option>
         ))}
       </StyledSelect>
-      {showInlineError && error && (
-        <ErrorMessage className={formClassNameConfig.errorMessage}>
-          {error.message}
-        </ErrorMessage>
-      )}
     </>
   );
 };

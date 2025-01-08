@@ -4,7 +4,7 @@ import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Label, ErrorMessage } from '../../../styles';
+import { Label } from '../../../styles';
 import styled from 'styled-components';
 
 const CheckboxInputStyled = styled.input<{ className?: string }>`
@@ -58,10 +58,8 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
-  showInlineError,
   horizontalLabel,
   labelWidth,
-  error,
 }) => {
   const { label } = fieldConfig;
   const { control } = useFormContext<FormValues>();
@@ -89,11 +87,6 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
           />
           {label}
         </Label>
-      )}
-      {showInlineError && error && (
-        <ErrorMessage className={formClassNameConfig.errorMessage}>
-          {error.message}
-        </ErrorMessage>
       )}
     </>
   );

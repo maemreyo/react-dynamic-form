@@ -3,7 +3,7 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label, ErrorMessage } from '../../../styles';
+import { Label } from '../../../styles';
 import styled from 'styled-components';
 
 const SwitchContainer = styled.label<{ className?: string }>`
@@ -65,10 +65,8 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
-  showInlineError,
   horizontalLabel,
   labelWidth,
-  error,
 }) => {
   const { label } = fieldConfig;
   const { control } = useFormContext<FormValues>();
@@ -101,11 +99,6 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
         />
         <Slider className={formClassNameConfig.switchSlider} />
       </SwitchContainer>
-      {showInlineError && error && (
-        <ErrorMessage className={formClassNameConfig.errorMessage}>
-          {error.message}
-        </ErrorMessage>
-      )}
     </>
   );
 };

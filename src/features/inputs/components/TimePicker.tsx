@@ -4,17 +4,15 @@ import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Input, Label, ErrorMessage } from '../../../styles';
+import { Input, Label } from '../../../styles';
 import { useTheme } from '../../../theme/ThemeProvider';
 
 const TimePicker: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
-  showInlineError,
   horizontalLabel,
   labelWidth,
-  error,
 }) => {
   const theme = useTheme();
   const { label } = fieldConfig;
@@ -46,11 +44,6 @@ const TimePicker: React.FC<CommonInputProps> = ({
         type="time"
         id={id}
       />
-      {showInlineError && error && (
-        <ErrorMessage className={formClassNameConfig.errorMessage}>
-          {error.message}
-        </ErrorMessage>
-      )}
     </>
   );
 };

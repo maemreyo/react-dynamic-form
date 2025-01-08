@@ -3,7 +3,7 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label, ErrorMessage } from '../../../styles';
+import { Label } from '../../../styles';
 import styled from 'styled-components';
 import { useTheme } from '../../../theme/ThemeProvider';
 
@@ -57,10 +57,8 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
   fieldConfig,
   formClassNameConfig = {},
   disableAutocomplete,
-  showInlineError,
   horizontalLabel,
   labelWidth,
-  error,
 }) => {
   const theme = useTheme();
   const { label } = fieldConfig;
@@ -92,11 +90,6 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
-      {showInlineError && error && (
-        <ErrorMessage className={formClassNameConfig.errorMessage}>
-          {error.message}
-        </ErrorMessage>
-      )}
     </>
   );
 };
