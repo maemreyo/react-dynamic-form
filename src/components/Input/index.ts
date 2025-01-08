@@ -9,7 +9,7 @@ const baseFormElementStyles = css`
   padding: 8px 12px;
   border-radius: 8px;
   font-size: ${({ theme }) => theme.fontSizes.small};
-  width: calc(100% - 12px * 2);
+  width: 100%;
   transition:
     border-color 0.2s ease-in-out,
     box-shadow 0.2s ease-in-out;
