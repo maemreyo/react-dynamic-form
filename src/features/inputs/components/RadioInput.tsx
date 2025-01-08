@@ -92,7 +92,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
           $labelWidth={labelWidth}
           className={formClassNameConfig.label}
         >
-          {label}
+          {label}&nbsp;
           {fieldConfig.validation?.required && (
             <span style={{ color: theme.colors.danger }}>*</span>
           )}

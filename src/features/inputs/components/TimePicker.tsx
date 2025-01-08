@@ -32,7 +32,7 @@ const TimePicker: React.FC<CommonInputProps> = ({
           $labelWidth={labelWidth}
           className={formClassNameConfig.label}
         >
-          {label}
+          {label}&nbsp;
           {fieldConfig.validation?.required && (
             <span style={{ color: theme.colors.danger }}>*</span>
           )}

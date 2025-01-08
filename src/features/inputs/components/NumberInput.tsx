@@ -14,7 +14,6 @@ const NumberInputContainer = styled.div<{ className?: string }>`
   width: fit-content;
   input {
     text-align: center;
-    padding-right: 0;
     width: 65px;
   }
 `;
@@ -105,7 +104,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
           $labelWidth={labelWidth}
           className={formClassNameConfig.label}
         >
-          {label}
+          {label}&nbsp;
           {fieldConfig.validation?.required && (
             <span style={{ color: theme.colors.danger }}>*</span>
           )}

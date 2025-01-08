@@ -85,7 +85,7 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
             id={id}
             checked={!!field.value}
           />
-          {label}
+          {label}&nbsp;
         </Label>
       )}
     </>
