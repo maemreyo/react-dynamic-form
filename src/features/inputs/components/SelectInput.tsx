@@ -80,7 +80,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
           $labelWidth={labelWidth}
           className={formClassNameConfig.label}
         >
-          {label}
+          {label}&nbsp;
           {fieldConfig.validation?.required && (
             <span style={{ color: theme.colors.danger }}>*</span>
           )}

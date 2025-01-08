@@ -84,7 +84,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
           $labelWidth={labelWidth}
           className={formClassNameConfig.label}
         >
-          {label}
+          {label}&nbsp;
         </Label>
       )}
       <SwitchContainer

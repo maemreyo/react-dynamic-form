@@ -78,7 +78,7 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
           $labelWidth={labelWidth}
           className={formClassNameConfig.label}
         >
-          {label}
+          {label}&nbsp;
           {fieldConfig.validation?.required && (
             <span style={{ color: theme.colors.danger }}>*</span>
           )}

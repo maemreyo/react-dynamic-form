@@ -9,6 +9,7 @@ import {
 import { useFormContext, useController } from 'react-hook-form';
 import { Input, Label } from '../../../styles';
 import styled from 'styled-components';
+import { useTheme } from '../../../theme/ThemeProvider';
 
 const ComboBoxContainer = styled.div<{ className?: string }>`
   position: relative;
@@ -63,6 +64,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
+  const theme = useTheme();
   const { label, options } = fieldConfig;
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -160,9 +162,9 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           $labelWidth={labelWidth}
           className={formClassNameConfig.label}
         >
-          {label}
+          {label}&nbsp;
           {fieldConfig.validation?.required && (
-            <span style={{ color: 'red' }}>*</span>
+            <span style={{ color: theme.colors.danger }}>*</span>
           )}
         </Label>
       )}

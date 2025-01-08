@@ -33,7 +33,7 @@ const TextInput: React.FC<CommonInputProps> = ({
           $labelWidth={labelWidth}
           className={formClassNameConfig.label}
         >
-          {label}
+          {label}&nbsp;
           {fieldConfig.validation?.required &&
             typeof fieldConfig.validation.required === 'object' && (
               <span style={{ color: theme.colors.danger }}>*</span>
