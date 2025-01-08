@@ -9,7 +9,7 @@ const baseFormElementStyles = css`
   padding: 8px 12px;
   border-radius: 8px;
   font-size: ${({ theme }) => theme.fontSizes.small};
-  width: 100%;
+  width: calc(100% - 12px * 2);
   transition:
     border-color 0.2s ease-in-out,
     box-shadow 0.2s ease-in-out;
@@ -36,13 +36,13 @@ const baseFormElementStyles = css`
     opacity: 0.6;
   }
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
+  /* @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
     max-width: 300px;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     max-width: 400px;
-  }
+  } */
 `;
 
 /**

@@ -36,7 +36,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   renderLayout,
   layout = 'grid',
   layoutConfig = {
-    minWidth: '300px',
+    // minWidth: '300px',
   }, // Default layoutConfig
   horizontalLabel = false,
   labelWidth,
