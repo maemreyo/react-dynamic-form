@@ -324,7 +324,7 @@ export interface Condition {
 export interface FormField {
   label?: string;
   id: string;
-  type: InputType;
+  type: InputType | string;
   error?: FieldError;
 }
 

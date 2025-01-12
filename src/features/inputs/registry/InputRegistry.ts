@@ -16,8 +16,10 @@ import {
 import { InputType } from '../../dynamic-form/types';
 
 // Create a map of input types to components
-// @ts-expect-error
-const inputRegistry: Record<InputType, React.ComponentType<any> | undefined> = {
+const inputRegistry: Record<
+  InputType | string,
+  React.ComponentType<any> | undefined
+> = {
   text: TextInput,
   email: TextInput,
   password: TextInput,
@@ -36,26 +38,13 @@ const inputRegistry: Record<InputType, React.ComponentType<any> | undefined> = {
 };
 
 /**
- * Registers a new input component for a given type.
- *
- * @param type - The input type to register.
- * @param component - The component to register.
- */
-export const registerInput = (
-  type: InputType,
-  component: React.ComponentType<any>
-) => {
-  inputRegistry[type] = component;
-};
-
-/**
  * Retrieves the component registered for a given input type.
  *
  * @param type - The input type to retrieve the component for.
  * @returns The registered component, or undefined if no component is registered for the type.
  */
 export const getInputComponent = (
-  type: InputType
+  type: InputType | string
 ): React.ComponentType<any> | undefined => {
   return inputRegistry[type];
 };

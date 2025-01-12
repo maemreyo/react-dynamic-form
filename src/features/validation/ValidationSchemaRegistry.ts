@@ -4,8 +4,10 @@ import * as yup from 'yup';
 import { InputType } from '../dynamic-form';
 
 // Create a map of input types to Yup schema
-// @ts-expect-error
-const validationSchemaRegistry: Record<InputType, yup.AnySchema | undefined> = {
+const validationSchemaRegistry: Record<
+  InputType | string,
+  yup.AnySchema | undefined
+> = {
   text: yup.string(),
   email: yup.string().email('Invalid email format'),
   password: yup.string(),
@@ -30,7 +32,7 @@ const validationSchemaRegistry: Record<InputType, yup.AnySchema | undefined> = {
  * @param schema - The Yup schema to register.
  */
 export const registerValidationSchema = (
-  type: InputType,
+  type: InputType | string,
   schema: yup.AnySchema
 ) => {
   validationSchemaRegistry[type] = schema;
@@ -43,7 +45,7 @@ export const registerValidationSchema = (
  * @returns The registered schema, or undefined if no schema is registered for the type.
  */
 export const getValidationSchema = (
-  type: InputType
+  type: InputType | string
 ): yup.AnySchema | undefined => {
   return validationSchemaRegistry[type];
 };
