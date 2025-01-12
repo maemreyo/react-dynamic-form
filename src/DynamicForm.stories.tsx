@@ -7,6 +7,7 @@ import { defaultTheme, DynamicForm } from '.';
 // import { useTheme } from './theme/ThemeProvider';
 import { userEvent, within, expect } from '@storybook/test'; // Updated import
 import { FlexLayout } from './features/inputs/registry/components/FlexLayout';
+import ColorPicker from './features/inputs/components/ColorPicker';
 
 export default {
   title: 'DynamicForm',
@@ -788,3 +789,26 @@ const mockCheckEmailExists = async (email: string): Promise<boolean> => {
 //     await new Promise((resolve) => setTimeout(resolve, 400));
 //   });
 // };
+
+// Story 7: Custom Input (ColorPicker)
+export const CustomInput = Template.bind({});
+CustomInput.args = {
+  theme: defaultTheme,
+  config: {
+    favoriteColor: {
+      label: 'Favorite Color',
+      type: 'custom',
+      defaultValue: '#ff0000', // Default to red
+      component: ColorPicker,
+    },
+  },
+  customInputs: {
+    color: ColorPicker,
+  },
+  onSubmit: (data) => {
+    console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
+    alert(JSON.stringify(data));
+  },
+  onFormReady: fn(),
+};
+CustomInput.storyName = 'Custom Input (ColorPicker)';
