@@ -29,13 +29,13 @@ export type LayoutComponent = React.FC<any>;
  */
 export type RenderLayoutProps = (props: {
   children: React.ReactNode;
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   className?: string;
   formClassNameConfig?: FormClassNameConfig;
   style?: React.CSSProperties;
   layout: LayoutType;
   layoutConfig?: any;
   horizontalLabel?: boolean;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }) => React.ReactNode;
 
 // --- Form Config ---
@@ -53,10 +53,6 @@ export type InputComponentMap = {
 export interface DynamicFormProps {
   /** The form configuration. */
   config: FormConfig;
-  /** Optional callback function to be called when the form data changes. */
-  onChange?: (formData: FormValues) => void;
-  /** Optional callback function to be called when the form is submitted. */
-  onSubmit?: SubmitHandler<FieldValues>;
   /** Optional options for react-hook-form's useForm hook. */
   formOptions?: UseFormProps;
   /** Optional Yup schema for form validation. */
@@ -76,6 +72,8 @@ export interface DynamicFormProps {
     interval: number;
     save: (data: Record<string, any>) => void;
   };
+  /** Optional custom validation messages. */
+  validationMessages?: ValidationMessages;
   /** Whether to reset the form on submit. */
   resetOnSubmit?: boolean;
   /** Whether to focus on the first error field on submit. */
@@ -84,8 +82,6 @@ export interface DynamicFormProps {
   layout?: LayoutType;
   /** Optional layout configuration. */
   layoutConfig?: any;
-  /** Optional custom layout renderer. */
-  renderLayout?: RenderLayoutProps;
   /** Whether to use horizontal labels. */
   horizontalLabel?: boolean;
   /** Optional label width (for horizontal labels). */
@@ -114,6 +110,14 @@ export interface DynamicFormProps {
   style?: React.CSSProperties;
   /** Optional theme object. */
   theme?: any;
+  /** Optional custom validators. */
+  customValidators?: {
+    [key: string]: (value: any, context: any) => string | undefined;
+  };
+  /** Optional custom input components. */
+  customInputs?: InputComponentMap;
+  /** Optional custom layout renderer. */
+  renderLayout?: RenderLayoutProps;
   /** Optional callback function to be called when the form is ready. */
   onFormReady?: (form: UseFormReturn<any>) => void;
   /** Optional custom submit button renderer. */
@@ -122,20 +126,15 @@ export interface DynamicFormProps {
   renderFormContent?: RenderFormContentProps;
   /** Optional custom form footer renderer. */
   renderFormFooter?: RenderFormFooterProps;
-  /** Optional custom validators. */
-  customValidators?: {
-    [key: string]: (value: any, context: any) => string | undefined;
-  };
-  /** Optional custom input components. */
-  customInputs?: InputComponentMap;
-
   /** Optional error handler function. */
   onError?: (errors: FieldErrors) => void;
   /** Optional custom error summary renderer. */
   renderErrorSummary?: RenderErrorSummaryProps;
 
-  /** Optional custom validation messages. */
-  validationMessages?: ValidationMessages;
+  /** Optional callback function to be called when the form data changes. */
+  onChange?: (formData: FormValues) => void;
+  /** Optional callback function to be called when the form is submitted. */
+  onSubmit?: SubmitHandler<FieldValues>;
 }
 
 /**
@@ -155,7 +154,7 @@ export interface FormConfig {
  */
 export interface FieldConfig {
   /** The input type. */
-  type?: InputType;
+  type?: InputType | string;
   /** The label text. */
   label?: string;
   /** The placeholder text. */
@@ -311,10 +310,10 @@ export interface Condition {
   operator: ComparisonOperator;
   /** The value to compare against. */
   value?: any;
-  /** Optional custom comparator function. */
-  comparator?: ComparatorFunction;
   /** The fields to show or hide based on the condition. */
   fields: string[];
+  /** Optional custom comparator function. */
+  comparator?: ComparatorFunction;
 }
 
 // --- Field ---
@@ -325,7 +324,7 @@ export interface Condition {
 export interface FormField {
   label?: string;
   id: string;
-  type: InputType;
+  type: InputType | string;
   error?: FieldError;
 }
 
@@ -460,11 +459,11 @@ export type RenderErrorMessageProps = (
 export type RenderFormFooterProps = (props: {
   footer?: React.ReactNode;
   showSubmitButton: boolean;
-  renderSubmitButton: RenderSubmitButtonProps;
   isSubmitting: boolean;
   showErrorSummary: boolean;
   errors: FieldErrors;
   formClassNameConfig?: FormClassNameConfig;
+  renderSubmitButton: RenderSubmitButtonProps;
 }) => React.ReactNode;
 
 /**

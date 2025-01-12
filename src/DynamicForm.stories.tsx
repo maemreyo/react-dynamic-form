@@ -2,11 +2,13 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { fn } from '@storybook/test';
-import { defaultTheme, DynamicForm } from '.';
+import { CustomInputProps, defaultTheme, DynamicForm, FormValues } from '.';
 // import { useController, useFormContext } from 'react-hook-form';
 // import { useTheme } from './theme/ThemeProvider';
 import { userEvent, within, expect } from '@storybook/test'; // Updated import
 import { FlexLayout } from './features/inputs/registry/components/FlexLayout';
+import ColorPicker from './features/inputs/components/ColorPicker';
+import { useController, useFormContext } from 'react-hook-form';
 
 export default {
   title: 'DynamicForm',
@@ -788,3 +790,74 @@ const mockCheckEmailExists = async (email: string): Promise<boolean> => {
 //     await new Promise((resolve) => setTimeout(resolve, 400));
 //   });
 // };
+
+// Story 7: Custom Input
+
+const MyCustomInput: React.FC<CustomInputProps> = (props) => {
+  const { id, fieldConfig } = props;
+  const { label } = fieldConfig;
+  const { control } = useFormContext<FormValues>();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+    defaultValue: fieldConfig.defaultValue || 'My custom input',
+  });
+  return (
+    <>
+      <label>{label}</label>
+      <input {...field} />
+    </>
+  );
+};
+const AnotherCustomInput: React.FC<CustomInputProps> = (props) => {
+  const { id, fieldConfig } = props;
+  const { label } = fieldConfig;
+  const { control } = useFormContext<FormValues>();
+  const { field } = useController({
+    name: id,
+    control,
+    rules: fieldConfig.validation,
+    defaultValue: fieldConfig.defaultValue || 'Another custom input',
+  });
+  return (
+    <>
+      <label>{label}</label>
+      <label>{label}</label>
+      <input {...field} />
+    </>
+  );
+};
+
+export const CustomInput = Template.bind({});
+CustomInput.args = {
+  theme: defaultTheme,
+  config: {
+    myCustomInputField: {
+      label: 'Custom Input Label',
+      type: 'customInput',
+      defaultValue: 'My default Value',
+    },
+    anotherCustomInputField: {
+      label: 'Another Custom Input Label',
+      type: 'customInput',
+      defaultValue:
+        'Another default Value but the same type with myCustomInputField',
+    },
+    anotherAnotherCustomInputField: {
+      label: 'Another another Custom Input Label',
+      type: 'anotherCustomInput',
+      defaultValue: 'Completely different with duplicated label',
+    },
+  },
+  customInputs: {
+    customInput: MyCustomInput,
+    anotherCustomInput: AnotherCustomInput,
+  },
+  onSubmit: (data) => {
+    console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
+    alert(JSON.stringify(data));
+  },
+  onFormReady: fn(),
+};
+CustomInput.storyName = 'Custom Input (ColorPicker)';
