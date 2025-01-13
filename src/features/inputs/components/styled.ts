@@ -44,7 +44,7 @@ export const Dropdown = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
   box-shadow: ${({ theme }) => theme.shadows.md};
-  max-height: 200px;
+  max-height: 250px;
   overflow-y: auto;
   z-index: 1000;
 `;
@@ -53,7 +53,7 @@ export const DropdownItem = styled.div<{ $selected?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => theme.space.lg};
+  padding: ${({ theme }) => theme.space.md} ${({ theme }) => theme.space.lg};
   cursor: pointer;
 
   &:hover {
@@ -74,7 +74,8 @@ export const MaxItemsReached = styled.span`
 `;
 
 export const MessageText = styled.div`
-  padding: ${({ theme }) => theme.space.lg};
+  padding: ${({ theme }) => theme.space.md};
+  font-size: ${({ theme }) => theme.fontSizes.medium};
   text-align: center;
   color: ${({ theme }) => theme.colors['secondary-600']};
 `;
@@ -87,7 +88,7 @@ export const SelectedItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: ${({ theme }) => theme.space.lg};
+  padding: ${({ theme }) => theme.space.md};
   background-color: ${({ theme }) => theme.colors['light-100']};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
