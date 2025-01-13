@@ -187,6 +187,8 @@ export interface FieldConfig {
   validationMessages?: ValidationMessages;
   /** Optional default value for the input. */
   defaultValue?: any;
+  /** Optional custom component for the input. */
+  inputComponent?: React.ComponentType<CustomInputProps>;
   /** Optional custom props for the input. */
   inputProps?: Record<string, any>;
 }
