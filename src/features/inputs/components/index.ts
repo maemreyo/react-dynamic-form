@@ -9,4 +9,4 @@ export { default as SwitchInput } from './switch/SwitchInput';
 export { default as TimePicker } from './time/TimePicker';
 export { default as DateTimePicker } from './dateTime/DateTimePicker';
 export { default as ColorPicker } from './color/ColorPicker';
-export { default as ComboBox } from './combobox/ComboBox';
+export * from './combobox';
