@@ -1,4 +1,3 @@
-// Filepath: /src/features/form-renderer/components/FormFooter.tsx
 import React from 'react';
 import { ErrorSummary } from '../../../components';
 import { FormFooterProps } from '../types';

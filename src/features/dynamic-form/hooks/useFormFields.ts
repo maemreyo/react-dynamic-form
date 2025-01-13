@@ -1,5 +1,3 @@
-// Filepath: /src/features/dynamic-form/hooks/useFormFields.ts
-
 import { useMemo, useState, useEffect } from 'react';
 import {
   FormField,
@@ -70,10 +68,14 @@ function useFormFields(
     [config, conditionalFieldsConfig, watchedValues]
   );
 
-  const fields = useMemo(
-    () => getFields(flattenedConfig, formState, globalValidationMessages),
-    [flattenedConfig, formState, globalValidationMessages]
-  );
+  const fields = useMemo(() => {
+    console.log(
+      '[useFormFields] Generating fields with flattenedConfig:',
+      flattenedConfig
+    );
+
+    return getFields(flattenedConfig, formState, globalValidationMessages);
+  }, [flattenedConfig, formState, globalValidationMessages]);
 
   return { fields, fieldsToRender, conditionalFieldsConfig };
 }

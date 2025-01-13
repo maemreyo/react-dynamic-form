@@ -1,4 +1,3 @@
-// Filepath: /src/components/ErrorMessage/index.ts
 import styled from 'styled-components';
 
 /**

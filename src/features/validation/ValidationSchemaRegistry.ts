@@ -1,5 +1,3 @@
-// Filepath: /src/features/validation/ValidationSchemaRegistry.ts
-
 import * as yup from 'yup';
 import { InputType } from '../dynamic-form';
 
@@ -16,13 +14,18 @@ const validationSchemaRegistry: Record<
   checkbox: yup.boolean(),
   textarea: yup.string(),
   select: yup.string(),
-  radio: yup.boolean(),
+  radio: yup.string(),
   date: yup.date(),
   number: yup.number(),
   switch: yup.boolean(),
   time: yup.string(),
   'datetime-local': yup.string(),
-  combobox: yup.string(),
+  combobox: yup.array().of(
+    yup.object().shape({
+      id: yup.string().required(),
+      label: yup.string().required(),
+    })
+  ),
 };
 
 /**
@@ -35,6 +38,11 @@ export const registerValidationSchema = (
   type: InputType | string,
   schema: yup.AnySchema
 ) => {
+  console.log(
+    `[registerValidationSchema] Registering schema for type: ${type}`,
+    schema
+  );
+
   validationSchemaRegistry[type] = schema;
 };
 
@@ -47,5 +55,7 @@ export const registerValidationSchema = (
 export const getValidationSchema = (
   type: InputType | string
 ): yup.AnySchema | undefined => {
+  console.log(`[getValidationSchema] Retrieving schema for type: ${type}`);
+
   return validationSchemaRegistry[type];
 };

@@ -1,54 +1,8 @@
-// Filepath: /src/features/inputs/components/TextareaInput.tsx
 import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label } from '../../../styles';
-import styled from 'styled-components';
-import { useTheme } from '../../../theme/ThemeProvider';
-
-const StyledTextarea = styled.textarea<{ className?: string }>`
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: ${({ theme }) => theme.fontSizes.small};
-  width: 100%;
-  transition:
-    border-color 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
-  line-height: 1.5;
-  outline: none;
-
-  &:hover {
-    border-color: ${({ theme }) => theme.colors['info-700']};
-  }
-
-  &:focus {
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']};
-    border-color: ${({ theme }) => theme.colors.info};
-  }
-
-  &:disabled {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.text};
-    opacity: 0.6;
-  }
-
-  /* @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
-    max-width: 300px;
-  }
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    max-width: 400px;
-  } */
-
-  min-height: 100px;
-`;
+import { InputLabel, InputWrapper, StyledTextarea } from './styled';
 
 interface TextareaInputProps extends CommonInputProps {}
 
@@ -60,8 +14,7 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
-  const theme = useTheme();
-  const { label } = fieldConfig;
+  const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -70,27 +23,24 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
+        <InputLabel
           htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
-          {label}&nbsp;
-          {fieldConfig.validation?.required && (
-            <span style={{ color: theme.colors.danger }}>*</span>
-          )}
-        </Label>
+          {label}
+        </InputLabel>
       )}
       <StyledTextarea
         {...field}
+        {...inputProps}
         className={formClassNameConfig.textarea}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
-    </>
+    </InputWrapper>
   );
 };
 

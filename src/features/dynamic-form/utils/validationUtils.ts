@@ -29,6 +29,11 @@ export const getErrorMessage = (
     ...fieldValidationMessages,
   };
 
+  console.log(
+    `[getErrorMessage] Getting error message for type: ${type}, mergedValidationMessages:`,
+    mergedValidationMessages
+  );
+
   if (mergedValidationMessages && mergedValidationMessages[type]) {
     const template = mergedValidationMessages[type];
     return typeof template === 'function'

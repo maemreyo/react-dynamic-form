@@ -1,11 +1,8 @@
-// Filepath: /src/features/inputs/components/TimePicker.tsx
-
 import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Input, Label } from '../../../styles';
-import { useTheme } from '../../../theme/ThemeProvider';
+import { InputLabel, InputWrapper, StyledInput } from './styled';
 
 const TimePicker: React.FC<CommonInputProps> = ({
   id,
@@ -14,8 +11,7 @@ const TimePicker: React.FC<CommonInputProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
-  const theme = useTheme();
-  const { label } = fieldConfig;
+  const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -24,27 +20,24 @@ const TimePicker: React.FC<CommonInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
+        <InputLabel
           htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
-          {label}&nbsp;
-          {fieldConfig.validation?.required && (
-            <span style={{ color: theme.colors.danger }}>*</span>
-          )}
-        </Label>
+          {label}
+        </InputLabel>
       )}
-      <Input
+      <StyledInput
         {...field}
+        {...inputProps}
         className={formClassNameConfig.time}
         type="time"
         id={id}
       />
-    </>
+    </InputWrapper>
   );
 };
 

@@ -1,4 +1,3 @@
-// Filepath: /src/components/InputWrapper/index.ts
 import styled from 'styled-components';
 
 /**
@@ -20,8 +19,8 @@ export const InputWrapper = styled.div<InputWrapperProps>`
   flex-direction: ${({ $horizontalLabel }) =>
     $horizontalLabel ? 'row' : 'column'};
 
-  > :first-child {
+  /* > :first-child {
     margin-right: ${({ $horizontalLabel }) =>
-      $horizontalLabel ? '0.5em' : '0'};
-  }
+    $horizontalLabel ? '0.5em' : '0'};
+  } */
 `;

@@ -1,4 +1,3 @@
-// Filepath: /src/components/GridFormContainer/index.ts
 import styled, { css } from 'styled-components';
 import { FormContainer } from '../FormContainer';
 import { FormLayoutProps } from '../../features/form-renderer';

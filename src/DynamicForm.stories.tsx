@@ -1,4 +1,3 @@
-// Filepath: /src/DynamicForm.stories.tsx
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { fn } from '@storybook/test';
@@ -36,7 +35,14 @@ BasicInputTypes.args = {
     firstName: {
       label: 'First Name',
       type: 'text',
-      // defaultValue: 'John',
+      defaultValue: 'John',
+      inputProps: {
+        placeholder: 'Enter your first name',
+      },
+      validation: {
+        required: { value: true, message: 'This field is required' },
+        minLength: { value: 3, message: 'Minimum length is 3' },
+      },
     },
     lastName: {
       label: 'Last Name',
@@ -52,6 +58,9 @@ BasicInputTypes.args = {
       label: 'Age',
       type: 'number',
       // defaultValue: 30,
+      inputProps: {
+        disabled: true,
+      },
     },
     subscribe: {
       label: 'Subscribe to newsletter?',
@@ -75,6 +84,9 @@ AdvancedInputTypes.args = {
       label: 'Start Date',
       type: 'date',
       defaultValue: '2023-11-20',
+      validation: {
+        required: { value: true, message: 'Start date is required' },
+      },
     },
     startTime: {
       label: 'Start Time',
@@ -115,16 +127,6 @@ AdvancedInputTypes.args = {
       label: 'Enable Notifications',
       type: 'switch',
       defaultValue: true,
-    },
-    favoriteFruit: {
-      label: 'Favorite Fruit',
-      type: 'combobox',
-      defaultValue: 'Apple',
-      options: [
-        { value: 'Apple', label: 'Apple' },
-        { value: 'Banana', label: 'Banana' },
-        { value: 'Orange', label: 'Orange' },
-      ],
     },
   },
   onSubmit: (data) => {
@@ -864,3 +866,69 @@ CustomInput.args = {
   onFormReady: fn(),
 };
 CustomInput.storyName = 'Custom Input (ColorPicker)';
+
+// Story 8: ComboBox Input
+// Mock data for ComboBox
+const mockComboBoxData = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'orange', label: 'Orange' },
+  { value: 'grape', label: 'Grape' },
+  { value: 'watermelon', label: 'Watermelon' },
+  { value: 'pineapple', label: 'Pineapple' },
+  { value: 'mango', label: 'Mango' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'blueberry', label: 'Blueberry' },
+  { value: 'raspberry', label: 'Raspberry' },
+];
+
+// Mock search API function for ComboBox
+const mockSearchApi = async (params: { query: string }) => {
+  return new Promise<{ data: { value: string; label: string }[] }>(
+    (resolve) => {
+      setTimeout(() => {
+        const filteredData = mockComboBoxData.filter((item) =>
+          item.label.toLowerCase().includes(params.query.toLowerCase())
+        );
+        resolve({ data: filteredData });
+      }, 500); // Simulate 500ms delay
+    }
+  );
+};
+
+export const ComboBoxInput = Template.bind({});
+ComboBoxInput.args = {
+  theme: defaultTheme,
+  config: {
+    favoriteFruit: {
+      label: 'Favorite Fruit',
+      type: 'combobox',
+      inputProps: {
+        placeholder: 'Search for a fruit...',
+        searchApi: mockSearchApi,
+        noResultsMessage: 'No fruits found.',
+        loadingMessage: 'Loading fruits...',
+        disabled: false,
+        required: true,
+      },
+      validation: {
+        validate: (value) => {
+          console.log('🚀 ~ file: DynamicForm.stories.tsx ~ value:', value);
+          if (!value) {
+            return 'This field is required';
+          }
+          if (value.length < 3) {
+            return 'Please select at least 3 fruits';
+          }
+          return undefined;
+        },
+      },
+    },
+  },
+  onSubmit: (data) => {
+    console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
+    alert(JSON.stringify(data));
+  },
+  onFormReady: fn(),
+};
+ComboBoxInput.storyName = 'ComboBox Input';

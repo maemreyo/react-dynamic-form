@@ -1,4 +1,3 @@
-// Filepath: /src/features/form-renderer/FormRenderer.tsx
 // @ts-nocheck
 import React from 'react';
 import { useFormContext } from 'react-hook-form';

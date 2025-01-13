@@ -1,4 +1,3 @@
-// Filepath: /src/components/SubmitButton/index.ts
 import styled from 'styled-components';
 
 /**
@@ -16,7 +15,7 @@ export const SubmitButton = styled.button`
     background-color 0.2s ease-in-out,
     opacity 0.2s ease-in-out;
   width: auto;
-  font-size: ${({ theme }) => theme.fontSizes.medium};
+  font-size: ${({ theme }) => theme.fontSizes.small};
   box-shadow:
     0px 2px 4px -1px rgba(0, 0, 0, 0.2),
     0px 4px 5px 0px rgba(0, 0, 0, 0.14),

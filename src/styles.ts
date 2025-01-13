@@ -1,4 +1,3 @@
-// Filepath: /src/styles.ts
 export * from './components/FormContainer';
 export * from './components/GridFormContainer';
 export * from './components/Input';

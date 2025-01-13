@@ -2,15 +2,7 @@ import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Label } from '../../../styles';
-import styled from 'styled-components';
-
-const ColorInput = styled.input`
-  width: 100px;
-  height: 50px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-`;
+import { ColorInput, InputLabel, InputWrapper } from './styled';
 
 const ColorPicker: React.FC<CommonInputProps> = ({
   id,
@@ -19,34 +11,34 @@ const ColorPicker: React.FC<CommonInputProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
-  const { label } = fieldConfig;
+  const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
     control,
     rules: fieldConfig.validation,
-    defaultValue: fieldConfig.defaultValue || '#ffffff', // Default to white
+    defaultValue: fieldConfig.defaultValue || '#ffffff',
   });
 
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
+        <InputLabel
           htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
           {label}
-        </Label>
+        </InputLabel>
       )}
       <ColorInput
         {...field}
+        {...inputProps}
         className={formClassNameConfig.input}
         type="color"
         id={id}
       />
-    </>
+    </InputWrapper>
   );
 };
 

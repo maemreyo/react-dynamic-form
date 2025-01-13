@@ -1,5 +1,3 @@
-// Filepath: /src/features/validation/validationSchema.ts
-
 import * as yup from 'yup';
 import {
   FormConfig,
@@ -247,7 +245,6 @@ export const createValidationSchema = (
         validationMessages
       ),
   };
-
   for (const fieldId in config) {
     const fieldConfig = config[fieldId];
     const { validation, type, validationMessages } = fieldConfig;
@@ -262,7 +259,22 @@ export const createValidationSchema = (
       console.warn(`Field type is undefined for field: ${fieldId}`);
     }
 
+    console.log(
+      `[createValidationSchema] Processing field: ${fieldId}, type: ${type}`
+    );
+
     let fieldSchema: yup.AnySchema = getValidationSchema(type!) || yup.mixed();
+
+    // Add warning for conflict between validate and registered schema
+    if (
+      validation &&
+      typeof validation.validate === 'function' &&
+      getValidationSchema(type!) !== undefined
+    ) {
+      console.warn(
+        `[DynamicForm] Field "${fieldId}" (type: "${type}") has both a custom "validate" function and a registered validation schema. The "validate" function will take precedence.`
+      );
+    }
 
     if (validation) {
       const { validate, ...otherValidations } = validation;
@@ -283,6 +295,13 @@ export const createValidationSchema = (
         }
       }
 
+      console.log(
+        `[createValidationSchema] Applying validation for field: ${fieldId}`,
+        validation
+      );
+
+      // Custom validation function (validate) is applied AFTER other validation rules,
+      // therefore it takes precedence over the schema registered in validationSchemaRegistry.
       if (typeof validate === 'function') {
         fieldSchema = applyCustomValidation(fieldSchema, validate);
       }
@@ -290,6 +309,8 @@ export const createValidationSchema = (
 
     shape[fieldId] = fieldSchema;
   }
+
+  console.log('[createValidationSchema] Generated schema:', shape);
 
   return yup.object().shape(shape);
 };

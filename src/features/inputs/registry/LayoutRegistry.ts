@@ -1,5 +1,3 @@
-// Filepath: /src/features/core/LayoutRegistry.ts
-
 import React from 'react';
 import { FlexLayout } from './components/FlexLayout';
 import { GridLayout } from './components/GridLayout';
