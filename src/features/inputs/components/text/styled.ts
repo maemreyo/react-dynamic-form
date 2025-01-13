@@ -24,7 +24,7 @@ export const InputWrapper = styled.div<InputWrapperProps>`
 `;
 
 export const InputLabel = styled.label<ValidationProps>`
-  font-size: ${({ theme }) => theme.fontSizes.medium};
+  font-size: ${({ theme }) => theme.fontSizes.small};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   /* font-style: italic; */
   display: block;
@@ -43,7 +43,7 @@ export const InputLabel = styled.label<ValidationProps>`
 `;
 
 export const StyledInput = styled.input<InputHTMLAttributes<HTMLInputElement>>`
-  padding: ${({ theme }) => theme.space.lg};
+  padding: ${({ theme }) => theme.space.md};
   border: 1px solid ${({ theme }) => theme.colors['input-border']};
   border-radius: ${({ theme }) => theme.radius.md};
   width: 100%;
