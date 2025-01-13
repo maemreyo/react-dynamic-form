@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label } from '../../../styles';
 import {
+  InputLabel,
+  InputWrapper,
   NumberInputContainer,
-  Required,
   SpinButton,
   StyledInput,
 } from './styled';
@@ -29,6 +29,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   const [internalValue, setInternalValue] = useState<number>(+field.value || 0);
+
   const clampValue = useCallback(
     (value: number) => {
       const { min, max } = fieldConfig.validation || {};
@@ -43,6 +44,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     },
     [fieldConfig.validation]
   );
+
   useEffect(() => {
     setInternalValue(+field.value || 0);
   }, [field.value]);
@@ -58,18 +60,17 @@ const NumberInput: React.FC<NumberInputProps> = ({
     setInternalValue(newValue);
     field.onChange(newValue);
   };
+
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
+        <InputLabel
           htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
-          {label}&nbsp;
-          {fieldConfig.validation?.required && <Required>*</Required>}
-        </Label>
+          {label}
+        </InputLabel>
       )}
       <NumberInputContainer
         className={formClassNameConfig.numberInputContainer}
@@ -79,9 +80,10 @@ const NumberInput: React.FC<NumberInputProps> = ({
           onClick={handleDecrement}
           className={formClassNameConfig.numberInputButton}
           disabled={
-            fieldConfig.validation?.min !== undefined &&
-            typeof fieldConfig.validation.min === 'object' &&
-            internalValue <= +fieldConfig.validation.min.value
+            (fieldConfig.validation?.min !== undefined &&
+              typeof fieldConfig.validation.min === 'object' &&
+              internalValue <= +fieldConfig.validation.min.value) ||
+            inputProps?.disabled
           }
         >
           -
@@ -110,15 +112,16 @@ const NumberInput: React.FC<NumberInputProps> = ({
           onClick={handleIncrement}
           className={formClassNameConfig.numberInputButton}
           disabled={
-            fieldConfig.validation?.max !== undefined &&
-            typeof fieldConfig.validation.max === 'object' &&
-            internalValue >= +fieldConfig.validation.max.value
+            (fieldConfig.validation?.max !== undefined &&
+              typeof fieldConfig.validation.max === 'object' &&
+              internalValue >= +fieldConfig.validation.max.value) ||
+            inputProps?.disabled
           }
         >
           +
         </SpinButton>
       </NumberInputContainer>
-    </>
+    </InputWrapper>
   );
 };
 

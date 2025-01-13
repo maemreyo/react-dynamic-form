@@ -2,8 +2,7 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label } from '../../../styles';
-import { Required, StyledTextarea } from './styled';
+import { InputLabel, InputWrapper, StyledTextarea } from './styled';
 
 interface TextareaInputProps extends CommonInputProps {}
 
@@ -24,17 +23,15 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
+        <InputLabel
           htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
-          {label}&nbsp;
-          {fieldConfig.validation?.required && <Required>*</Required>}
-        </Label>
+          {label}
+        </InputLabel>
       )}
       <StyledTextarea
         {...field}
@@ -43,7 +40,7 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
-    </>
+    </InputWrapper>
   );
 };
 

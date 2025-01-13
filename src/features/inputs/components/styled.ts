@@ -2,14 +2,12 @@ import { styled, css } from 'styled-components';
 import { Input } from '../../../components';
 
 export const Container = styled.div`
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
 `;
 
 export const SearchContainer = styled.div`
   position: relative;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 `;
 
 export const Required = styled.span`
@@ -532,7 +530,7 @@ export const InputWrapper = styled.div<{
   display: ${({ $horizontalLabel }) => ($horizontalLabel ? 'flex' : 'block')};
   align-items: ${({ $horizontalLabel }) =>
     $horizontalLabel ? 'center' : 'stretch'};
-  gap: 1rem;
+  gap: 0.75rem;
 
   ${({ $horizontalLabel, $labelWidth }) =>
     $horizontalLabel &&
@@ -542,4 +540,15 @@ export const InputWrapper = styled.div<{
         margin-bottom: 0;
       }
     `}
+`;
+
+export const CheckBoxInputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  > label {
+    cursor: pointer;
+    margin: 0;
+  }
 `;

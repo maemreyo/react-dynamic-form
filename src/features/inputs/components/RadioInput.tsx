@@ -2,8 +2,13 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label } from '../../../styles';
-import { RadioGroup, RadioLabel, RadioInputStyled, Required } from './styled';
+import {
+  RadioGroup,
+  RadioLabel,
+  RadioInputStyled,
+  InputLabel,
+  InputWrapper,
+} from './styled';
 
 interface RadioInputProps extends CommonInputProps {}
 
@@ -23,16 +28,15 @@ const RadioInput: React.FC<RadioInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+        <InputLabel
+          htmlFor={id}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
-          {label}&nbsp;
-          {fieldConfig.validation?.required && <Required>*</Required>}
-        </Label>
+          {label}
+        </InputLabel>
       )}
       <RadioGroup className={formClassNameConfig.radioGroup}>
         {options?.map((option) => (
@@ -55,7 +59,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
           </RadioLabel>
         ))}
       </RadioGroup>
-    </>
+    </InputWrapper>
   );
 };
 

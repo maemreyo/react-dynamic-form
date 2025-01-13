@@ -2,8 +2,7 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label } from '../../../styles';
-import { Required, StyledSelect } from './styled';
+import { InputLabel, InputWrapper, StyledSelect } from './styled';
 
 interface SelectInputProps extends CommonInputProps {}
 
@@ -23,17 +22,15 @@ const SelectInput: React.FC<SelectInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
+        <InputLabel
           htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
-          {label}&nbsp;
-          {fieldConfig.validation?.required && <Required>*</Required>}
-        </Label>
+          {label}
+        </InputLabel>
       )}
       <StyledSelect
         {...field}
@@ -47,7 +44,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
           </option>
         ))}
       </StyledSelect>
-    </>
+    </InputWrapper>
   );
 };
 

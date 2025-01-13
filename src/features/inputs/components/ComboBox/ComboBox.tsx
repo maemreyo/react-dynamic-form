@@ -24,6 +24,7 @@ import {
   DropdownItem,
   MaxItemsReached,
   ListContainer,
+  InputLabel,
 } from '../styled';
 import { Label } from '../../../../components';
 
@@ -49,6 +50,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
+  const { label } = fieldConfig;
   const {
     searchApi,
     transformResponse = defaultTransformResponse,
@@ -179,16 +181,15 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   return (
     <Container>
       <SearchContainer>
-        <Label
-          htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
-          className={formClassNameConfig.label}
-        >
-          {fieldConfig.label}
-          &nbsp;
-          {required && <Required>*</Required>}
-        </Label>
+        {label && (
+          <InputLabel
+            htmlFor={id}
+            $validation={fieldConfig.validation}
+            className={formClassNameConfig.label}
+          >
+            {label}
+          </InputLabel>
+        )}
 
         <StyledInput
           {...field}

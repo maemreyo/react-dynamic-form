@@ -2,8 +2,7 @@ import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Label } from '../../../styles';
-import { Required, StyledInput } from './styled';
+import { InputLabel, InputWrapper, StyledInput } from './styled';
 
 const TimePicker: React.FC<CommonInputProps> = ({
   id,
@@ -21,17 +20,15 @@ const TimePicker: React.FC<CommonInputProps> = ({
     defaultValue: fieldConfig.defaultValue,
   });
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
+        <InputLabel
           htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
-          {label}&nbsp;
-          {fieldConfig.validation?.required && <Required>*</Required>}
-        </Label>
+          {label}
+        </InputLabel>
       )}
       <StyledInput
         {...field}
@@ -40,7 +37,7 @@ const TimePicker: React.FC<CommonInputProps> = ({
         type="time"
         id={id}
       />
-    </>
+    </InputWrapper>
   );
 };
 

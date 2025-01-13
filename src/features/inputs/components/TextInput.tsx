@@ -2,8 +2,7 @@ import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Label } from '../../../styles';
-import { Required, StyledInput } from './styled';
+import { StyledInput, InputWrapper, InputLabel } from './styled';
 
 const TextInput: React.FC<CommonInputProps> = ({
   id,
@@ -23,20 +22,15 @@ const TextInput: React.FC<CommonInputProps> = ({
   });
 
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
+        <InputLabel
           htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
-          {label}&nbsp;
-          {fieldConfig.validation?.required &&
-            typeof fieldConfig.validation.required === 'object' && (
-              <Required>*</Required>
-            )}
-        </Label>
+          {label}
+        </InputLabel>
       )}
       <StyledInput
         {...field}
@@ -45,7 +39,7 @@ const TextInput: React.FC<CommonInputProps> = ({
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
-    </>
+    </InputWrapper>
   );
 };
 

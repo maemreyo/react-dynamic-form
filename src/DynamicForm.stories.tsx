@@ -40,6 +40,10 @@ BasicInputTypes.args = {
       inputProps: {
         placeholder: 'Enter your first name',
       },
+      validation: {
+        required: { value: true, message: 'This field is required' },
+        minLength: { value: 3, message: 'Minimum length is 3' },
+      },
     },
     lastName: {
       label: 'Last Name',

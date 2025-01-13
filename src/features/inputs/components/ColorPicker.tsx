@@ -2,8 +2,7 @@ import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Label } from '../../../styles';
-import { ColorInput, Required } from './styled';
+import { ColorInput, InputLabel, InputWrapper } from './styled';
 
 const ColorPicker: React.FC<CommonInputProps> = ({
   id,
@@ -18,21 +17,19 @@ const ColorPicker: React.FC<CommonInputProps> = ({
     name: id,
     control,
     rules: fieldConfig.validation,
-    defaultValue: fieldConfig.defaultValue || '#ffffff', // Default to white
+    defaultValue: fieldConfig.defaultValue || '#ffffff',
   });
 
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
+        <InputLabel
           htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
           {label}
-          {fieldConfig.validation?.required && <Required>*</Required>}
-        </Label>
+        </InputLabel>
       )}
       <ColorInput
         {...field}
@@ -41,7 +38,7 @@ const ColorPicker: React.FC<CommonInputProps> = ({
         type="color"
         id={id}
       />
-    </>
+    </InputWrapper>
   );
 };
 
