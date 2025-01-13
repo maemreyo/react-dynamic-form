@@ -38,7 +38,7 @@ const defaultTransformResponse = (item: any): Item => ({
   label: item.label,
 });
 
-const ComboBox: React.FC<ComboBoxProps> = ({
+export const ComboBox: React.FC<ComboBoxProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
@@ -240,5 +240,3 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     </Container>
   );
 };
-
-export default ComboBox;
