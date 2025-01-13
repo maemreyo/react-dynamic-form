@@ -916,7 +916,10 @@ ComboBoxInput.args = {
         required: true,
       },
       validation: {
-        required: { value: true, message: 'This field is required' },
+        validate: (value, formValues: FormValues) => {
+          console.log('formValues', formValues);
+          return 'False';
+        },
       },
     },
   },

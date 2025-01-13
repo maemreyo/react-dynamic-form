@@ -247,7 +247,6 @@ export const createValidationSchema = (
         validationMessages
       ),
   };
-
   for (const fieldId in config) {
     const fieldConfig = config[fieldId];
     const { validation, type, validationMessages } = fieldConfig;
@@ -261,6 +260,10 @@ export const createValidationSchema = (
     if (type === undefined) {
       console.warn(`Field type is undefined for field: ${fieldId}`);
     }
+
+    console.log(
+      `[createValidationSchema] Processing field: ${fieldId}, type: ${type}`
+    );
 
     let fieldSchema: yup.AnySchema = getValidationSchema(type!) || yup.mixed();
 
@@ -283,6 +286,10 @@ export const createValidationSchema = (
         }
       }
 
+      console.log(
+        `[createValidationSchema] Applying validation for field: ${fieldId}`,
+        validation
+      );
       if (typeof validate === 'function') {
         fieldSchema = applyCustomValidation(fieldSchema, validate);
       }
@@ -290,6 +297,8 @@ export const createValidationSchema = (
 
     shape[fieldId] = fieldSchema;
   }
+
+  console.log('[createValidationSchema] Generated schema:', shape);
 
   return yup.object().shape(shape);
 };
