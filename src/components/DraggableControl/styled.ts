@@ -12,36 +12,36 @@ export const DraggableItemWrapper = styled.div<{
 }>`
   display: flex;
   align-items: center;
-  margin-bottom: 4px;
+  margin-bottom: ${({ theme }) => theme.space.sm};
   cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'move')};
   opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
   transition: all 0.3s ease;
 
-  ${({ isDragging }) =>
+  ${({ isDragging, theme }) =>
     isDragging &&
     `
     opacity: 0.5;
-    background: rgba(0, 0, 0, 0.05);
+    background: ${theme.colors['light-300']};
   `}
 
-  ${({ isOver }) =>
+  ${({ isOver, theme }) =>
     isOver &&
     `
     position: relative;
     &::before {
       content: '';
       position: absolute;
-      top: -2px;
+      top: -${theme.space.xs};
       left: 0;
       right: 0;
-      height: 2px;
-      background: #0066cc;
+      height: ${theme.space.xs};
+      background: ${theme.colors.info};
     }
   `}
 `;
 
 export const DragHandle = styled.div`
-  margin-right: 8px;
+  margin-right: ${({ theme }) => theme.space.xl};
   cursor: grab;
 
   &:active {
