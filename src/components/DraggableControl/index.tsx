@@ -15,7 +15,7 @@ const DraggableList = <T extends { id?: string }>({
     items: sortedItems,
     onDragStart,
     onDragOver,
-    onDrop,
+    // onDrop,
   } = useDraggableList(items, sortBy);
 
   const handleDrop = () => {
