@@ -2,8 +2,7 @@ import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Label } from '../../../styles';
-import { Required, StyledInput } from './styled';
+import { InputWrapper, InputLabel, StyledDateInput } from './styled';
 
 const DateInput: React.FC<CommonInputProps> = ({
   id,
@@ -20,27 +19,26 @@ const DateInput: React.FC<CommonInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: fieldConfig.defaultValue,
   });
+
   return (
-    <>
+    <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
-        <Label
+        <InputLabel
           htmlFor={id}
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
-          {label}&nbsp;
-          {fieldConfig.validation?.required && <Required>*</Required>}
-        </Label>
+          {label}
+        </InputLabel>
       )}
-      <StyledInput
+      <StyledDateInput
         {...field}
         {...inputProps}
         className={formClassNameConfig.date}
         type="date"
         id={id}
       />
-    </>
+    </InputWrapper>
   );
 };
 

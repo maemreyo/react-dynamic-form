@@ -81,6 +81,9 @@ AdvancedInputTypes.args = {
       label: 'Start Date',
       type: 'date',
       defaultValue: '2023-11-20',
+      validation: {
+        required: { value: true, message: 'Start date is required' },
+      },
     },
     startTime: {
       label: 'Start Time',

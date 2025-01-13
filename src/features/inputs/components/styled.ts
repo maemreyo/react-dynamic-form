@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { styled, css } from 'styled-components';
 import { Input } from '../../../components';
 
 export const Container = styled.div`
@@ -420,4 +420,126 @@ export const CheckboxInputStyled = styled.input<{ className?: string }>`
     cursor: not-allowed;
     opacity: 0.7;
   }
+`;
+
+// ==========================================================================
+// =========================== Date/Time/DateTime ===========================
+// ==========================================================================
+
+const commonInputStyles = css`
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #374151;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    border-color: #9ca3af;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    ring: 2px;
+    ring-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  }
+
+  &:disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+`;
+
+const inputContainerStyles = css`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+export const InputContainer = styled.div`
+  ${inputContainerStyles}
+`;
+
+export const StyledDateInput = styled.input`
+  ${commonInputStyles}
+
+  &::-webkit-datetime-edit {
+    padding: 0;
+  }
+
+  &::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-date-and-time-value {
+    min-height: 1.5em;
+  }
+`;
+
+export const StyledDateTimeInput = styled(StyledDateInput)`
+  &::-webkit-datetime-edit-hour-field,
+  &::-webkit-datetime-edit-minute-field,
+  &::-webkit-datetime-edit-second-field {
+    padding: 0 2px;
+  }
+`;
+
+export const StyledTimeInput = styled(StyledDateInput)`
+  &::-webkit-time-picker-indicator {
+    margin-left: 8px;
+  }
+`;
+
+export const InputLabel = styled.label<{ $validation?: any }>`
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 0.25rem;
+
+  ${({ $validation }) =>
+    !!$validation?.required &&
+    css`
+      &::after {
+        content: '*';
+        color: #ef4444;
+        margin-left: 0.25rem;
+      }
+    `}
+`;
+
+export const InputWrapper = styled.div<{
+  $horizontalLabel?: boolean;
+  $labelWidth?: string | number;
+}>`
+  display: ${({ $horizontalLabel }) => ($horizontalLabel ? 'flex' : 'block')};
+  align-items: ${({ $horizontalLabel }) =>
+    $horizontalLabel ? 'center' : 'stretch'};
+  gap: 1rem;
+
+  ${({ $horizontalLabel, $labelWidth }) =>
+    $horizontalLabel &&
+    css`
+      ${InputLabel} {
+        flex: ${$labelWidth ? '0 0 ' + $labelWidth : '0 0 200px'};
+        margin-bottom: 0;
+      }
+    `}
 `;

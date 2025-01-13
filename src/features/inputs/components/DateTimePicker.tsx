@@ -3,7 +3,7 @@ import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
 import { Label } from '../../../styles';
-import { Required, StyledInput } from './styled';
+import { Required, StyledDateTimeInput, StyledInput } from './styled';
 
 const DateTimePicker: React.FC<CommonInputProps> = ({
   id,
@@ -33,7 +33,7 @@ const DateTimePicker: React.FC<CommonInputProps> = ({
           {fieldConfig.validation?.required && <Required>*</Required>}
         </Label>
       )}
-      <StyledInput
+      <StyledDateTimeInput
         {...field}
         {...inputProps}
         className={formClassNameConfig.dateTime}
