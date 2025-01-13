@@ -7,7 +7,7 @@ export const Container = styled.div`
 
 export const SearchContainer = styled.div`
   position: relative;
-  margin-bottom: 0.5rem;
+  margin-bottom: ${({ theme }) => theme.space.lg};
 `;
 
 export const Required = styled.span`
@@ -16,22 +16,23 @@ export const Required = styled.span`
 
 export const StyledInput = styled(Input)<{ $disabled?: boolean }>`
   width: 100%;
-  padding: 0.5rem;
+  padding: ${({ theme }) => theme.space.sm} ${({ theme }) => theme.space.md};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 0.25rem;
+  border-radius: ${({ theme }) => theme.radius.md};
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.info};
-    box-shadow: 0 0 0 0.25rem ${({ theme }) => theme.colors.info}40;
+    box-shadow: 0 0 0 ${({ theme }) => theme.space.xs} // @ts-ignore
+      ${({ theme }) => theme.colors['info-400']};
     outline: none;
   }
 
-  ${({ disabled, theme }) =>
-    disabled &&
-    `
-    background-color: ${theme.colors['light-500']};
-    cursor: not-allowed;
-  `}
+  ${({ $disabled, theme }) =>
+    $disabled &&
+    css`
+      background-color: ${theme.colors['light-500']};
+      cursor: not-allowed;
+    `}
 `;
 
 export const Dropdown = styled.div`
@@ -39,10 +40,10 @@ export const Dropdown = styled.div`
   top: 100%;
   left: 0;
   right: 0;
-  background: white;
+  background: ${({ theme }) => theme.colors.white};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 0.25rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: ${({ theme }) => theme.radius.md};
+  box-shadow: ${({ theme }) => theme.shadows.md};
   max-height: 200px;
   overflow-y: auto;
   z-index: 1000;
@@ -52,7 +53,7 @@ export const DropdownItem = styled.div<{ $selected?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
+  padding: ${({ theme }) => theme.space.lg};
   cursor: pointer;
 
   &:hover {
@@ -61,19 +62,19 @@ export const DropdownItem = styled.div<{ $selected?: boolean }>`
 
   ${({ $selected, theme }) =>
     $selected &&
-    `
-    background-color: ${theme.colors['light-500']};
-    cursor: not-allowed;
-  `}
+    css`
+      background-color: ${theme.colors['light-500']};
+      cursor: not-allowed;
+    `}
 `;
 
 export const MaxItemsReached = styled.span`
-  font-size: 0.75rem;
+  font-size: ${({ theme }) => theme.fontSizes.small};
   color: ${({ theme }) => theme.colors['secondary-600']};
 `;
 
 export const MessageText = styled.div`
-  padding: 0.5rem;
+  padding: ${({ theme }) => theme.space.lg};
   text-align: center;
   color: ${({ theme }) => theme.colors['secondary-600']};
 `;
@@ -86,11 +87,11 @@ export const SelectedItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem;
+  padding: ${({ theme }) => theme.space.lg};
   background-color: ${({ theme }) => theme.colors['light-100']};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 0.25rem;
-  margin-bottom: 0.5rem;
+  border-radius: ${({ theme }) => theme.radius.md};
+  margin-bottom: ${({ theme }) => theme.space.lg};
 
   &:last-child {
     margin-bottom: 0;
@@ -98,7 +99,7 @@ export const SelectedItem = styled.div`
 `;
 
 export const ItemLabel = styled.span`
-  margin-right: 0.5rem;
+  margin-right: ${({ theme }) => theme.space.lg};
   word-break: break-word;
 `;
 
@@ -106,25 +107,25 @@ export const RemoveButton = styled.button`
   background: none;
   border: none;
   color: ${({ theme }) => theme.colors.danger};
-  font-size: 1.25rem;
+  font-size: ${({ theme }) => theme.fontSizes.large};
   line-height: 1;
-  padding: 0 0.25rem;
+  padding: 0 ${({ theme }) => theme.space.xs};
   cursor: pointer;
   flex-shrink: 0;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.danger}dd;
+    color: ${({ theme }) => theme.colors['danger-700']};
   }
 `;
 
 export const ListContainer = styled.div`
-  margin-top: 1rem;
+  margin-top: ${({ theme }) => theme.space['2xl']};
 `;
 
 export const StyledTextarea = styled.textarea<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: ${({ theme }) => theme.space.sm} ${({ theme }) => theme.space.md};
+  border-radius: ${({ theme }) => theme.radius.xl};
   font-size: ${({ theme }) => theme.fontSizes.small};
   width: 100%;
   transition:
@@ -143,7 +144,7 @@ export const StyledTextarea = styled.textarea<{ className?: string }>`
   }
 
   &:disabled {
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.colors['light-300']};
     cursor: not-allowed;
     opacity: 0.7;
   }
@@ -167,7 +168,7 @@ export const StyledTextarea = styled.textarea<{ className?: string }>`
 export const SwitchContainer = styled.label<{ className?: string }>`
   position: relative;
   display: inline-block;
-  width: 40px;
+  width: 42px;
   height: 20px;
   cursor: pointer;
 `;
@@ -190,7 +191,7 @@ export const SwitchInputStyled = styled.input<{ className?: string }>`
   }
 
   &:disabled + span {
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.colors['light-300']};
     cursor: not-allowed;
     opacity: 0.7;
   }
@@ -207,7 +208,7 @@ export const SliderStyled = styled.span<{ className?: string }>`
   border-radius: 34px;
 
   &:hover {
-    background-color: #979797;
+    background-color: ${({ theme }) => theme.colors['secondary-400']};
   }
 
   &:before {
@@ -215,9 +216,9 @@ export const SliderStyled = styled.span<{ className?: string }>`
     content: '';
     height: 16px;
     width: 16px;
-    left: 2px;
+    left: 3px;
     bottom: 2px;
-    background-color: white;
+    background-color: ${({ theme }) => theme.colors.white};
     transition: 0.3s;
     border-radius: 50%;
   }
@@ -225,8 +226,8 @@ export const SliderStyled = styled.span<{ className?: string }>`
 
 export const StyledSelect = styled.select<{ className?: string }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: ${({ theme }) => theme.space.md} ${({ theme }) => theme.space.lg};
+  border-radius: ${({ theme }) => theme.radius.xl};
   font-size: ${({ theme }) => theme.fontSizes.small};
   appearance: none;
   width: 100%;
@@ -236,7 +237,7 @@ export const StyledSelect = styled.select<{ className?: string }>`
   line-height: 1.5;
   outline: none;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%239CA3AF' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E")
-    no-repeat right 12px center;
+    no-repeat right ${({ theme }) => theme.space.lg} center;
   background-size: 12px 8px;
 
   &:hover {
@@ -249,7 +250,7 @@ export const StyledSelect = styled.select<{ className?: string }>`
   }
 
   &:disabled {
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.colors['light-300']};
     cursor: not-allowed;
     opacity: 0.7;
   }
@@ -270,13 +271,13 @@ export const StyledSelect = styled.select<{ className?: string }>`
 
 export const RadioGroup = styled.div<{ className?: string }>`
   display: flex;
-  gap: 16px;
+  gap: ${({ theme }) => theme.space['2xl']};
 `;
 
 export const RadioLabel = styled.label<{ className?: string }>`
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: ${({ theme }) => theme.space.md};
   cursor: pointer;
 `;
 
@@ -306,7 +307,7 @@ export const RadioInputStyled = styled.input<{ className?: string }>`
     display: block;
     width: 9px;
     height: 9px;
-    background-color: white;
+    background-color: ${({ theme }) => theme.colors.white};
     border-radius: 50%;
     position: absolute;
     top: 50%;
@@ -320,7 +321,7 @@ export const RadioInputStyled = styled.input<{ className?: string }>`
   }
 
   &:disabled {
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.colors['light-300']};
     cursor: not-allowed;
     opacity: 0.7;
   }
@@ -340,9 +341,9 @@ export const SpinButton = styled.button<{ className?: string }>`
   background: none;
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 0;
-  height: 32px;
-  width: 32px;
-  font-size: 18px;
+  height: 28px;
+  width: 28px;
+  font-size: ${({ theme }) => theme.fontSizes['18']};
   line-height: 0;
   color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
@@ -354,14 +355,16 @@ export const SpinButton = styled.button<{ className?: string }>`
   }
   &:disabled {
     cursor: default;
-    background-color: #efefef;
+    background-color: ${({ theme }) => theme.colors['light-100']};
   }
   &:first-of-type {
-    border-radius: 8px 0 0 8px;
+    border-radius: ${({ theme }) => theme.radius.xl} 0 0
+      ${({ theme }) => theme.radius.xl};
     border-right: none;
   }
   &:last-of-type {
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 ${({ theme }) => theme.radius.xl}
+      ${({ theme }) => theme.radius.xl} 0;
     border-left: none;
   }
 `;
@@ -369,7 +372,7 @@ export const SpinButton = styled.button<{ className?: string }>`
 export const ColorInput = styled.input`
   width: 100px;
   height: 50px;
-  border: 1px solid #ccc;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   cursor: pointer;
 `;
 
@@ -378,7 +381,7 @@ export const CheckboxInputStyled = styled.input<{ className?: string }>`
   width: 18px;
   height: 18px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 4px;
+  border-radius: ${({ theme }) => theme.radius.sm};
   cursor: pointer;
   transition:
     background-color 0.2s,
@@ -398,7 +401,7 @@ export const CheckboxInputStyled = styled.input<{ className?: string }>`
     content: '✔';
     display: block;
     text-align: center;
-    font-size: 14px;
+    font-size: ${({ theme }) => theme.fontSizes['14']};
     line-height: 18px;
     color: ${({ theme }) => theme.colors.white};
     position: absolute;
@@ -414,7 +417,7 @@ export const CheckboxInputStyled = styled.input<{ className?: string }>`
   }
 
   &:disabled {
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.colors['light-300']};
     cursor: not-allowed;
     opacity: 0.7;
   }
@@ -426,30 +429,30 @@ export const CheckboxInputStyled = styled.input<{ className?: string }>`
 
 const commonInputStyles = css`
   width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: #374151;
-  background-color: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
+  padding: 0 ${({ theme }) => theme.space.sm};
+  font-size: ${({ theme }) => theme.fontSizes.small};
+  line-height: ${({ theme }) => theme.space['3xl']};
+  color: ${({ theme }) => theme.colors['secondary-900']};
+  background-color: ${({ theme }) => theme.colors.white};
+  border: 1px solid ${({ theme }) => theme.colors['secondary-200']};
+  border-radius: ${({ theme }) => theme.radius.md};
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 
   &:hover {
-    border-color: #9ca3af;
+    border-color: ${({ theme }) => theme.colors['secondary-400']};
   }
 
   &:focus {
     outline: none;
-    border-color: #3b82f6;
-    ring: 2px;
-    ring-color: rgba(59, 130, 246, 0.5);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    border-color: ${({ theme }) => theme.colors.info};
+    /* ring: 2px;
+    ring-color: ${({ theme }) => theme.colors['info-300']}; */
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors['info-200']};
   }
 
   &:disabled {
-    background-color: #f3f4f6;
+    background-color: ${({ theme }) => theme.colors['light-400']};
     cursor: not-allowed;
     opacity: 0.7;
   }
@@ -469,7 +472,7 @@ const inputContainerStyles = css`
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: ${({ theme }) => theme.space.lg};
 `;
 
 export const InputContainer = styled.div`
@@ -502,23 +505,25 @@ export const StyledDateTimeInput = styled(StyledDateInput)`
 
 export const StyledTimeInput = styled(StyledDateInput)`
   &::-webkit-time-picker-indicator {
-    margin-left: 8px;
+    margin-left: ${({ theme }) => theme.space.xl};
   }
 `;
 
 export const InputLabel = styled.label<{ $validation?: any }>`
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #374151;
-  margin-bottom: 0.25rem;
+  font-size: ${({ theme }) => theme.fontSizes.small};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  /* font-style: italic; */
+  display: block;
+  color: ${({ theme }) => theme.colors['secondary-900']};
+  margin-bottom: ${({ theme }) => theme.space.sm};
 
   ${({ $validation }) =>
     !!$validation?.required &&
     css`
       &::after {
         content: '*';
-        color: #ef4444;
-        margin-left: 0.25rem;
+        color: ${({ theme }) => theme.colors.danger};
+        margin-left: ${({ theme }) => theme.space.sm};
       }
     `}
 `;
@@ -530,7 +535,7 @@ export const InputWrapper = styled.div<{
   display: ${({ $horizontalLabel }) => ($horizontalLabel ? 'flex' : 'block')};
   align-items: ${({ $horizontalLabel }) =>
     $horizontalLabel ? 'center' : 'stretch'};
-  gap: 0.75rem;
+  gap: ${({ theme }) => theme.space.lg};
 
   ${({ $horizontalLabel, $labelWidth }) =>
     $horizontalLabel &&
@@ -545,7 +550,7 @@ export const InputWrapper = styled.div<{
 export const CheckBoxInputWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${({ theme }) => theme.space.lg};
 
   > label {
     cursor: pointer;

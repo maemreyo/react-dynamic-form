@@ -2,12 +2,12 @@ import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Label } from '../../../styles';
 import {
   SwitchContainer,
   SwitchInputStyled,
   SliderStyled,
-  Required,
+  InputLabel,
+  CheckBoxInputWrapper,
 } from './styled';
 
 interface SwitchInputProps extends CommonInputProps {}
@@ -16,8 +16,6 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
-  horizontalLabel,
-  labelWidth,
 }) => {
   const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
@@ -29,16 +27,15 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
   });
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <CheckBoxInputWrapper>
       {label && (
-        <Label
-          $horizontalLabel={horizontalLabel}
-          $labelWidth={labelWidth}
+        <InputLabel
+          htmlFor={id}
+          $validation={fieldConfig.validation}
           className={formClassNameConfig.label}
         >
-          {label}&nbsp;
-          {fieldConfig.validation?.required && <Required>*</Required>}
-        </Label>
+          {label}
+        </InputLabel>
       )}
       <SwitchContainer
         htmlFor={id}
@@ -54,7 +51,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
         />
         <SliderStyled className={formClassNameConfig.switchSlider} />
       </SwitchContainer>
-    </div>
+    </CheckBoxInputWrapper>
   );
 };
 
