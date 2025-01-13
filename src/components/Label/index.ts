@@ -1,4 +1,3 @@
-// Filepath: /src/components/Label/index.ts
 import styled, { css } from 'styled-components';
 
 /**
