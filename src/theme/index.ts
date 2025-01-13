@@ -1,5 +1,3 @@
-// Filepath: /src/theme/index.ts
-// [CONTINUE-1]
 import { DefaultTheme } from 'styled-components';
 
 /**

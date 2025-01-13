@@ -1,4 +1,3 @@
-// Filepath: /src/components/FormContainer/index.ts
 import styled from 'styled-components';
 import { LayoutType } from '../../features/dynamic-form';
 import { FormLayoutProps } from '../../features/form-renderer';

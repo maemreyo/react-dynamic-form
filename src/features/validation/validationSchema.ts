@@ -1,5 +1,3 @@
-// Filepath: /src/features/validation/validationSchema.ts
-
 import * as yup from 'yup';
 import {
   FormConfig,

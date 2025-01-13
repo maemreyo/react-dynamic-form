@@ -1,4 +1,3 @@
-// Filepath: /src/components/InputWrapper/index.ts
 import styled from 'styled-components';
 
 /**

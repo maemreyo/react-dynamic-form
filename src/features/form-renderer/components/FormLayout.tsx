@@ -1,4 +1,3 @@
-// Filepath: /src/features/form-renderer/components/FormLayout.tsx
 import React, { useMemo } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { defaultTheme } from '../../../theme';
