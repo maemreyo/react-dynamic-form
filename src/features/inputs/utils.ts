@@ -1,4 +1,3 @@
-// src/features/inputs/utils.ts
 import { InputType } from '../dynamic-form/types';
 
 /**

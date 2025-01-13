@@ -163,7 +163,7 @@ export const defaultTheme: DefaultTheme = {
     border: '#D3D3D4',
     'default-border': '#A6A8A9',
     'dark-border': '#2e3840',
-    'input-border': '#e9edf6',
+    'input-border': '#C6C6C6',
     error: '#dc3545',
   },
   space: {
@@ -227,10 +227,10 @@ export const defaultTheme: DefaultTheme = {
     bolder: 'bolder',
   },
   radius: {
-    sm: '3px',
-    md: '4px',
-    lg: '5px',
-    xl: '8px',
+    sm: '4px',
+    md: '6px',
+    lg: '8px',
+    xl: '10px',
     '2xl': '12px',
     rounded: '50%',
     pill: '1.5rem',

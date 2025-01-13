@@ -1,8 +1,7 @@
 import React from 'react';
-import { useFormContext, useController } from 'react-hook-form';
-import { CommonInputProps } from '../types';
-import { FormValues } from '../../dynamic-form';
+import { CommonInputProps } from '../../types';
 import { InputLabel, InputWrapper, StyledDateTimeInput } from './styled';
+import { useBaseInput } from '../useBaseInput';
 
 const DateTimePicker: React.FC<CommonInputProps> = ({
   id,
@@ -12,13 +11,8 @@ const DateTimePicker: React.FC<CommonInputProps> = ({
   labelWidth,
 }) => {
   const { label, inputProps } = fieldConfig;
-  const { control } = useFormContext<FormValues>();
-  const { field } = useController({
-    name: id,
-    control,
-    rules: fieldConfig.validation,
-    defaultValue: fieldConfig.defaultValue,
-  });
+  const { field } = useBaseInput(id, fieldConfig);
+
   return (
     <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (

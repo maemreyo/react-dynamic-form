@@ -1,4 +1,3 @@
-// src/features/inputs/registry/InputRegistry.ts
 import React from 'react';
 import {
   TextInput,

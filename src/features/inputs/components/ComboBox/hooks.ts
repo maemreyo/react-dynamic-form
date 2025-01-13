@@ -15,6 +15,7 @@ export const useSearch = (
 
   const handleSearch = useCallback(
     async (query: string, page: number = 0) => {
+      console.log('handleSearch called with query:', query);
       try {
         // Cancel previous request if exists
         if (abortControllerRef.current) {

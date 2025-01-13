@@ -1,1 +1,3 @@
-export { default as ComboBox } from './ComboBox';
+export { default } from './ComboBox';
+export * from './types';
+export * from './hooks';

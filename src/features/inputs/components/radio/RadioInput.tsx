@@ -1,7 +1,5 @@
 import React from 'react';
-import { FormValues } from '../../dynamic-form';
-import { useFormContext, useController } from 'react-hook-form';
-import { CommonInputProps } from '../types';
+import { CommonInputProps } from '../../types';
 import {
   RadioGroup,
   RadioLabel,
@@ -9,6 +7,7 @@ import {
   InputLabel,
   InputWrapper,
 } from './styled';
+import { useBaseInput } from '../useBaseInput';
 
 interface RadioInputProps extends CommonInputProps {}
 
@@ -20,13 +19,8 @@ const RadioInput: React.FC<RadioInputProps> = ({
   labelWidth,
 }) => {
   const { label, options, inputProps } = fieldConfig;
-  const { control } = useFormContext<FormValues>();
-  const { field } = useController({
-    name: id,
-    control,
-    rules: fieldConfig.validation,
-    defaultValue: fieldConfig.defaultValue,
-  });
+  const { field } = useBaseInput(id, fieldConfig);
+
   return (
     <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (

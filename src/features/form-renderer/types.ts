@@ -1,4 +1,3 @@
-// src/features/form-renderer/types.ts
 import {
   FormField,
   FormConfig,

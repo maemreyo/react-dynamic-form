@@ -2,11 +2,8 @@ import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { CustomInputProps, defaultTheme, DynamicForm, FormValues } from '.';
-// import { useController, useFormContext } from 'react-hook-form';
-// import { useTheme } from './theme/ThemeProvider';
 import { userEvent, within, expect } from '@storybook/test'; // Updated import
 import { FlexLayout } from './features/inputs/registry/components/FlexLayout';
-import ColorPicker from './features/inputs/components/ColorPicker';
 import { useController, useFormContext } from 'react-hook-form';
 
 export default {
@@ -58,9 +55,7 @@ BasicInputTypes.args = {
       label: 'Age',
       type: 'number',
       // defaultValue: 30,
-      inputProps: {
-        disabled: true,
-      },
+      inputProps: {},
     },
     subscribe: {
       label: 'Subscribe to newsletter?',

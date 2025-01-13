@@ -1,8 +1,7 @@
 import React from 'react';
-import { FormValues } from '../../dynamic-form';
-import { useFormContext, useController } from 'react-hook-form';
-import { CommonInputProps } from '../types';
+import { CommonInputProps } from '../../types';
 import { InputLabel, InputWrapper, StyledSelect } from './styled';
+import { useBaseInput } from '../useBaseInput';
 
 interface SelectInputProps extends CommonInputProps {}
 
@@ -14,13 +13,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
   labelWidth,
 }) => {
   const { label, options, inputProps } = fieldConfig;
-  const { control } = useFormContext<FormValues>();
-  const { field } = useController({
-    name: id,
-    control,
-    rules: fieldConfig.validation,
-    defaultValue: fieldConfig.defaultValue,
-  });
+  const { field } = useBaseInput(id, fieldConfig);
+
   return (
     <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (

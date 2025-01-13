@@ -32,6 +32,12 @@
     // `tsdx build` now takes care of creating the .d.ts files.
     "outDir": "./dist",
     "emitDeclarationOnly": false,
-    "noEmit": false // Changed to false to emit output files
+    "noEmit": false, // Changed to false to emit output files,
+    // "paths": {
+    //   "@/*": ["./src/*"],
+    //   "features/*": ["./src/features/*"],
+    //   "components/*": ["./src/components/*"],
+    //   "theme/*": ["./src/theme/*"]
+    // }
   }
 }

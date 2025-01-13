@@ -1,12 +1,11 @@
 import React from 'react';
-import { useFormContext, useController } from 'react-hook-form';
-import { CommonInputProps } from '../types';
-import { FormValues } from '../../dynamic-form';
+import { CommonInputProps } from '../../types';
 import {
   CheckboxInputStyled,
   CheckBoxInputWrapper,
   InputLabel,
 } from './styled';
+import { useBaseInput } from '../useBaseInput';
 
 const CheckboxInput: React.FC<CommonInputProps> = ({
   id,
@@ -14,13 +13,8 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
   formClassNameConfig = {},
 }) => {
   const { label, inputProps } = fieldConfig;
-  const { control } = useFormContext<FormValues>();
-  const { field } = useController({
-    name: id,
-    control,
-    rules: fieldConfig.validation as any,
-    defaultValue: fieldConfig.defaultValue,
-  });
+  const { field } = useBaseInput(id, fieldConfig);
+
   return (
     <CheckBoxInputWrapper>
       {label && (
