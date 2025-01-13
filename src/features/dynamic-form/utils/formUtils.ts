@@ -1,4 +1,3 @@
-// src/features/dynamic-form/utils/formUtils.ts
 import {
   FieldClassNameConfig,
   FormClassNameConfig,

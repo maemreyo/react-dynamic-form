@@ -1,12 +1,9 @@
 import React from 'react';
-import { FormValues } from '../../dynamic-form';
-import { useFormContext, useController } from 'react-hook-form';
-import { CommonInputProps } from '../types';
-import { InputLabel, InputWrapper, StyledTextarea } from './styled';
+import { StyledInput, InputWrapper, InputLabel } from './styled';
+import { useBaseInput } from '../useBaseInput';
+import { CommonInputProps } from '../../types';
 
-interface TextareaInputProps extends CommonInputProps {}
-
-const TextareaInput: React.FC<TextareaInputProps> = ({
+const TextInput: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
@@ -15,13 +12,8 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
   labelWidth,
 }) => {
   const { label, inputProps } = fieldConfig;
-  const { control } = useFormContext<FormValues>();
-  const { field } = useController({
-    name: id,
-    control,
-    rules: fieldConfig.validation,
-    defaultValue: fieldConfig.defaultValue,
-  });
+  const { field } = useBaseInput(id, fieldConfig);
+
   return (
     <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
       {label && (
@@ -33,10 +25,10 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
           {label}
         </InputLabel>
       )}
-      <StyledTextarea
+      <StyledInput
         {...field}
         {...inputProps}
-        className={formClassNameConfig.textarea}
+        className={formClassNameConfig.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
       />
@@ -44,4 +36,4 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
   );
 };
 
-export default TextareaInput;
+export default TextInput;

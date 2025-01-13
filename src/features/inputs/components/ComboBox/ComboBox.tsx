@@ -1,15 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useFormContext, useController } from 'react-hook-form';
+import { useFormContext, useController, FieldError } from 'react-hook-form';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import {
-  FieldConfig,
-  FormClassNameConfig,
-  FieldError,
-} from '../../../dynamic-form';
-import DraggableList from '../../../../components/DraggableControl';
-import { Item, CustomComboBoxProps } from './types';
-import { useSearch } from './hooks';
+
 import {
   SelectedItem,
   ItemLabel,
@@ -24,7 +17,11 @@ import {
   MaxItemsReached,
   ListContainer,
   InputLabel,
-} from '../styled';
+} from './styled';
+import { CustomComboBoxProps, Item } from './types';
+import { useSearch } from './hooks';
+import DraggableList from '../../../../components/DraggableControl';
+import { FieldConfig, FormClassNameConfig } from '../../../dynamic-form';
 
 interface ComboBoxProps extends Omit<CustomComboBoxProps, 'onItemsChange'> {
   id: string;
@@ -159,7 +156,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   // Render item in draggable list
   const renderItem = useCallback(
     (item: Item) => (
-      <SelectedItem>
+      <SelectedItem key={item.id}>
         <ItemLabel>{item.label}</ItemLabel>
         <RemoveButton
           type="button"

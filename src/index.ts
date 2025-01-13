@@ -1,4 +1,3 @@
-// src/index.tsx
 export * from './features/dynamic-form';
 export * from './features/form-renderer';
 export * from './features/inputs';

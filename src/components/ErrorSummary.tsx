@@ -1,4 +1,3 @@
-// src/components/ErrorSummary.tsx
 import React from 'react';
 import ErrorRenderer from './ErrorRenderer';
 import { FieldErrors, FormClassNameConfig } from '../features/dynamic-form';

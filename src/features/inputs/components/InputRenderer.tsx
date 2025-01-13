@@ -1,5 +1,3 @@
-// File: features/inputs/components/InputRenderer.tsx
-// src/features/inputs/components/InputRenderer.tsx
 import React from 'react';
 import {
   FormField,
@@ -11,8 +9,8 @@ import {
 } from '../../dynamic-form/types';
 import { getInputComponent } from '../registry/InputRegistry';
 import { CommonInputProps, CustomInputProps } from '../types';
-import { ErrorMessage } from '../../../styles';
 import { mergeClassNames } from '../../dynamic-form/utils/formUtils';
+import { ErrorMessage } from '../../../components';
 
 interface InputRendererProps {
   field: FormField;

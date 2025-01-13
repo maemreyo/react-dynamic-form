@@ -1,25 +1,17 @@
 import React from 'react';
-import { useFormContext, useController } from 'react-hook-form';
-import { CommonInputProps } from '../types';
-import { FormValues } from '../../dynamic-form';
-import { StyledInput, InputWrapper, InputLabel } from './styled';
+import { CommonInputProps } from '../../types';
+import { ColorInput, InputLabel, InputWrapper } from './styled';
+import { useBaseInput } from '../useBaseInput';
 
-const TextInput: React.FC<CommonInputProps> = ({
+const ColorPicker: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
-  disableAutocomplete,
   horizontalLabel,
   labelWidth,
 }) => {
   const { label, inputProps } = fieldConfig;
-  const { control } = useFormContext<FormValues>();
-  const { field } = useController({
-    name: id,
-    control,
-    rules: fieldConfig.validation,
-    defaultValue: fieldConfig.defaultValue,
-  });
+  const { field } = useBaseInput(id, fieldConfig);
 
   return (
     <InputWrapper $horizontalLabel={horizontalLabel} $labelWidth={labelWidth}>
@@ -32,15 +24,15 @@ const TextInput: React.FC<CommonInputProps> = ({
           {label}
         </InputLabel>
       )}
-      <StyledInput
+      <ColorInput
         {...field}
         {...inputProps}
         className={formClassNameConfig.input}
+        type="color"
         id={id}
-        autoComplete={disableAutocomplete ? 'off' : undefined}
       />
     </InputWrapper>
   );
 };
 
-export default TextInput;
+export default ColorPicker;

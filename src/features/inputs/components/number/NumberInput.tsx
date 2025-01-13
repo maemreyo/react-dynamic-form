@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FormValues } from '../../dynamic-form';
-import { useFormContext, useController } from 'react-hook-form';
-import { CommonInputProps } from '../types';
+import { CommonInputProps } from '../../types';
 import {
   InputLabel,
   InputWrapper,
@@ -9,10 +7,9 @@ import {
   SpinButton,
   StyledInput,
 } from './styled';
+import { useBaseInput } from '../useBaseInput';
 
-interface NumberInputProps extends CommonInputProps {}
-
-const NumberInput: React.FC<NumberInputProps> = ({
+const NumberInput: React.FC<CommonInputProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
@@ -21,13 +18,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   labelWidth,
 }) => {
   const { label, inputProps } = fieldConfig;
-  const { control } = useFormContext<FormValues>();
-  const { field } = useController({
-    name: id,
-    control,
-    rules: fieldConfig.validation,
-    defaultValue: fieldConfig.defaultValue,
-  });
+  const { field } = useBaseInput(id, fieldConfig);
   const [internalValue, setInternalValue] = useState<number>(+field.value || 0);
 
   const clampValue = useCallback(
