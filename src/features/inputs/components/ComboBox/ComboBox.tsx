@@ -16,7 +16,6 @@ import {
   RemoveButton,
   Container,
   SearchContainer,
-  Required,
   StyledInput,
   Dropdown,
   MessageText,
@@ -26,7 +25,6 @@ import {
   ListContainer,
   InputLabel,
 } from '../styled';
-import { Label } from '../../../../components';
 
 interface ComboBoxProps extends Omit<CustomComboBoxProps, 'onItemsChange'> {
   id: string;
@@ -47,8 +45,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
-  horizontalLabel,
-  labelWidth,
 }) => {
   const { label } = fieldConfig;
   const {
@@ -60,7 +56,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     noResultsMessage = 'No results found',
     loadingMessage = 'Loading...',
     disabled = false,
-    required = false,
   } = fieldConfig.inputProps as CustomComboBoxProps;
   const [selectedItems, setSelectedItems] = useState<Item[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
