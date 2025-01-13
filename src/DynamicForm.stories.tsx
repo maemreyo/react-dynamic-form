@@ -916,9 +916,15 @@ ComboBoxInput.args = {
         required: true,
       },
       validation: {
-        validate: (value, formValues: FormValues) => {
-          console.log('formValues', formValues);
-          return 'False';
+        validate: (value) => {
+          console.log('🚀 ~ file: DynamicForm.stories.tsx ~ value:', value);
+          if (!value) {
+            return 'This field is required';
+          }
+          if (value.length < 3) {
+            return 'Please select at least 3 fruits';
+          }
+          return undefined;
         },
       },
     },

@@ -20,7 +20,12 @@ const validationSchemaRegistry: Record<
   switch: yup.boolean(),
   time: yup.string(),
   'datetime-local': yup.string(),
-  combobox: yup.string(),
+  combobox: yup.array().of(
+    yup.object().shape({
+      id: yup.string().required(),
+      label: yup.string().required(),
+    })
+  ),
 };
 
 /**

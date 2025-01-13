@@ -267,6 +267,17 @@ export const createValidationSchema = (
 
     let fieldSchema: yup.AnySchema = getValidationSchema(type!) || yup.mixed();
 
+    // Add warning for conflict between validate and registered schema
+    if (
+      validation &&
+      typeof validation.validate === 'function' &&
+      getValidationSchema(type!) !== undefined
+    ) {
+      console.warn(
+        `[DynamicForm] Field "${fieldId}" (type: "${type}") has both a custom "validate" function and a registered validation schema. The "validate" function will take precedence.`
+      );
+    }
+
     if (validation) {
       const { validate, ...otherValidations } = validation;
 
@@ -290,6 +301,9 @@ export const createValidationSchema = (
         `[createValidationSchema] Applying validation for field: ${fieldId}`,
         validation
       );
+
+      // Custom validation function (validate) is applied AFTER other validation rules,
+      // therefore it takes precedence over the schema registered in validationSchemaRegistry.
       if (typeof validate === 'function') {
         fieldSchema = applyCustomValidation(fieldSchema, validate);
       }
