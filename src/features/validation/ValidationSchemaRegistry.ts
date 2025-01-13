@@ -14,7 +14,7 @@ const validationSchemaRegistry: Record<
   checkbox: yup.boolean(),
   textarea: yup.string(),
   select: yup.string(),
-  radio: yup.boolean(),
+  radio: yup.string(),
   date: yup.date(),
   number: yup.number(),
   switch: yup.boolean(),
