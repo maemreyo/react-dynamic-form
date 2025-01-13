@@ -3,7 +3,12 @@ import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { Label } from '../../../styles';
-import { SwitchContainer, SwitchInputStyled, Slider } from './styled';
+import {
+  SwitchContainer,
+  SwitchInputStyled,
+  SliderStyled,
+  Required,
+} from './styled';
 
 interface SwitchInputProps extends CommonInputProps {}
 
@@ -22,8 +27,9 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
     rules: fieldConfig.validation,
     defaultValue: fieldConfig.defaultValue,
   });
+
   return (
-    <>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
       {label && (
         <Label
           $horizontalLabel={horizontalLabel}
@@ -31,6 +37,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
           className={formClassNameConfig.label}
         >
           {label}&nbsp;
+          {fieldConfig.validation?.required && <Required>*</Required>}
         </Label>
       )}
       <SwitchContainer
@@ -42,11 +49,12 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
           {...inputProps}
           type="checkbox"
           id={id}
+          checked={field.value}
           className={formClassNameConfig.switch}
         />
-        <Slider className={formClassNameConfig.switchSlider} />
+        <SliderStyled className={formClassNameConfig.switchSlider} />
       </SwitchContainer>
-    </>
+    </div>
   );
 };
 

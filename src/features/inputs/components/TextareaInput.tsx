@@ -3,8 +3,7 @@ import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { Label } from '../../../styles';
-import { useTheme } from '../../../theme/ThemeProvider';
-import { StyledTextarea } from './styled';
+import { Required, StyledTextarea } from './styled';
 
 interface TextareaInputProps extends CommonInputProps {}
 
@@ -16,7 +15,6 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
-  const theme = useTheme();
   const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
@@ -35,9 +33,7 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
           className={formClassNameConfig.label}
         >
           {label}&nbsp;
-          {fieldConfig.validation?.required && (
-            <span style={{ color: theme.colors.danger }}>*</span>
-          )}
+          {fieldConfig.validation?.required && <Required>*</Required>}
         </Label>
       )}
       <StyledTextarea

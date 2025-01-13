@@ -3,7 +3,7 @@ import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
 import { Label } from '../../../styles';
-import { CheckboxInputStyled } from './styled';
+import { CheckboxInputStyled, Required } from './styled';
 
 const CheckboxInput: React.FC<CommonInputProps> = ({
   id,
@@ -38,6 +38,7 @@ const CheckboxInput: React.FC<CommonInputProps> = ({
             checked={!!field.value}
           />
           {label}&nbsp;
+          {fieldConfig.validation?.required && <Required>*</Required>}
         </Label>
       )}
     </>

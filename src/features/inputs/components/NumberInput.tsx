@@ -3,8 +3,12 @@ import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { Label } from '../../../styles';
-import { useTheme } from '../../../theme/ThemeProvider';
-import { NumberInputContainer, SpinButton, StyledInput } from './styled';
+import {
+  NumberInputContainer,
+  Required,
+  SpinButton,
+  StyledInput,
+} from './styled';
 
 interface NumberInputProps extends CommonInputProps {}
 
@@ -16,7 +20,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
-  const theme = useTheme();
   const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
@@ -65,9 +68,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
           className={formClassNameConfig.label}
         >
           {label}&nbsp;
-          {fieldConfig.validation?.required && (
-            <span style={{ color: theme.colors.danger }}>*</span>
-          )}
+          {fieldConfig.validation?.required && <Required>*</Required>}
         </Label>
       )}
       <NumberInputContainer

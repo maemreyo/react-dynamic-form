@@ -2,9 +2,8 @@ import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { Input, Label } from '../../../styles';
-import { useTheme } from '../../../theme/ThemeProvider';
-import { StyledInput } from './styled';
+import { Label } from '../../../styles';
+import { Required, StyledInput } from './styled';
 
 const DateTimePicker: React.FC<CommonInputProps> = ({
   id,
@@ -13,7 +12,6 @@ const DateTimePicker: React.FC<CommonInputProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
-  const theme = useTheme();
   const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
@@ -32,9 +30,7 @@ const DateTimePicker: React.FC<CommonInputProps> = ({
           className={formClassNameConfig.label}
         >
           {label}&nbsp;
-          {fieldConfig.validation?.required && (
-            <span style={{ color: theme.colors.danger }}>*</span>
-          )}
+          {fieldConfig.validation?.required && <Required>*</Required>}
         </Label>
       )}
       <StyledInput

@@ -3,7 +3,7 @@ import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
 import { Label } from '../../../styles';
-import { ColorInput } from './styled';
+import { ColorInput, Required } from './styled';
 
 const ColorPicker: React.FC<CommonInputProps> = ({
   id,
@@ -31,6 +31,7 @@ const ColorPicker: React.FC<CommonInputProps> = ({
           className={formClassNameConfig.label}
         >
           {label}
+          {fieldConfig.validation?.required && <Required>*</Required>}
         </Label>
       )}
       <ColorInput

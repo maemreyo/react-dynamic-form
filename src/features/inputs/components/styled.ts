@@ -178,23 +178,27 @@ export const SwitchInputStyled = styled.input<{ className?: string }>`
   opacity: 0;
   width: 0;
   height: 0;
-  &:checked + .slider {
+
+  &:checked + span {
     background-color: ${({ theme }) => theme.colors.info};
   }
-  &:focus + .slider {
+
+  &:focus + span {
     box-shadow: 0 0 1px ${({ theme }) => theme.colors.info};
   }
-  &:checked + .slider:before {
-    transform: translateX(19px);
+
+  &:checked + span:before {
+    transform: translateX(20px);
   }
-  &:disabled + .slider {
+
+  &:disabled + span {
     background-color: #f5f5f5;
     cursor: not-allowed;
     opacity: 0.7;
   }
 `;
 
-export const Slider = styled.span<{ className?: string }>`
+export const SliderStyled = styled.span<{ className?: string }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -203,9 +207,11 @@ export const Slider = styled.span<{ className?: string }>`
   background-color: #ccc;
   transition: 0.4s;
   border-radius: 34px;
+
   &:hover {
     background-color: #979797;
   }
+
   &:before {
     position: absolute;
     content: '';
@@ -214,7 +220,7 @@ export const Slider = styled.span<{ className?: string }>`
     left: 2px;
     bottom: 2px;
     background-color: white;
-    transition: 0.4s;
+    transition: 0.3s;
     border-radius: 50%;
   }
 `;

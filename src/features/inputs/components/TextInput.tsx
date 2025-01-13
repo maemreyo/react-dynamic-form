@@ -1,11 +1,9 @@
-// Filepath: /src/features/inputs/components/TextInput.tsx
 import React from 'react';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
-import { useTheme } from '../../../theme/ThemeProvider';
 import { Label } from '../../../styles';
-import { StyledInput } from './styled';
+import { Required, StyledInput } from './styled';
 
 const TextInput: React.FC<CommonInputProps> = ({
   id,
@@ -15,7 +13,6 @@ const TextInput: React.FC<CommonInputProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
-  const theme = useTheme();
   const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
@@ -37,7 +34,7 @@ const TextInput: React.FC<CommonInputProps> = ({
           {label}&nbsp;
           {fieldConfig.validation?.required &&
             typeof fieldConfig.validation.required === 'object' && (
-              <span style={{ color: theme.colors.danger }}>*</span>
+              <Required>*</Required>
             )}
         </Label>
       )}

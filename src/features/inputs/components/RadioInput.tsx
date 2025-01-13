@@ -3,8 +3,7 @@ import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { Label } from '../../../styles';
-import { useTheme } from '../../../theme/ThemeProvider';
-import { RadioGroup, RadioLabel, RadioInputStyled } from './styled';
+import { RadioGroup, RadioLabel, RadioInputStyled, Required } from './styled';
 
 interface RadioInputProps extends CommonInputProps {}
 
@@ -15,7 +14,6 @@ const RadioInput: React.FC<RadioInputProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
-  const theme = useTheme();
   const { label, options, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
@@ -33,9 +31,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
           className={formClassNameConfig.label}
         >
           {label}&nbsp;
-          {fieldConfig.validation?.required && (
-            <span style={{ color: theme.colors.danger }}>*</span>
-          )}
+          {fieldConfig.validation?.required && <Required>*</Required>}
         </Label>
       )}
       <RadioGroup className={formClassNameConfig.radioGroup}>
