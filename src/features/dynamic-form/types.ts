@@ -187,6 +187,8 @@ export interface FieldConfig {
   validationMessages?: ValidationMessages;
   /** Optional default value for the input. */
   defaultValue?: any;
+  /** Optional custom props for the input. */
+  inputProps?: Record<string, any>;
 }
 
 // --- Input Types ---

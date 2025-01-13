@@ -794,7 +794,7 @@ const mockCheckEmailExists = async (email: string): Promise<boolean> => {
 // Story 7: Custom Input
 
 const MyCustomInput: React.FC<CustomInputProps> = (props) => {
-  const { id, fieldConfig } = props;
+  const { id, fieldConfig, inputProps } = props;
   const { label } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
@@ -806,7 +806,7 @@ const MyCustomInput: React.FC<CustomInputProps> = (props) => {
   return (
     <>
       <label>{label}</label>
-      <input {...field} />
+      <input {...field} {...inputProps} />
     </>
   );
 };
@@ -837,6 +837,9 @@ CustomInput.args = {
       label: 'Custom Input Label',
       type: 'customInput',
       defaultValue: 'My default Value',
+      inputProps: {
+        disabled: true,
+      },
     },
     anotherCustomInputField: {
       label: 'Another Custom Input Label',

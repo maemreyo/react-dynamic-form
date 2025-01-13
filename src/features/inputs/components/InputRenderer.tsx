@@ -1,3 +1,4 @@
+// File: features/inputs/components/InputRenderer.tsx
 // src/features/inputs/components/InputRenderer.tsx
 import React from 'react';
 import {
@@ -78,8 +79,11 @@ const InputRenderer: React.FC<InputRendererProps> = ({
 
   return (
     <>
-      {/* Cast to CustomInputProps for custom components */}
-      <InputComponent {...(commonInputProps as CustomInputProps)} />
+      {/* Pass inputProps to custom components */}
+      <InputComponent
+        {...(commonInputProps as CustomInputProps)}
+        inputProps={fieldConfig.inputProps}
+      />
       {errorMessageElement}
     </>
   );

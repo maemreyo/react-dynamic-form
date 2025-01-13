@@ -1,4 +1,3 @@
-// src/features/inputs/types.ts
 import {
   FieldConfig,
   FormClassNameConfig,
@@ -35,5 +34,6 @@ export interface CommonInputProps {
  * Interface for props of custom input components.
  */
 export interface CustomInputProps extends CommonInputProps {
-  // You can add any custom props specific to custom input components here.
+  /** Custom props passed to the custom input component. */
+  inputProps?: Record<string, any>;
 }
