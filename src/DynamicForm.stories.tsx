@@ -122,16 +122,6 @@ AdvancedInputTypes.args = {
       type: 'switch',
       defaultValue: true,
     },
-    favoriteFruit: {
-      label: 'Favorite Fruit',
-      type: 'combobox',
-      defaultValue: 'Apple',
-      options: [
-        { value: 'Apple', label: 'Apple' },
-        { value: 'Banana', label: 'Banana' },
-        { value: 'Orange', label: 'Orange' },
-      ],
-    },
   },
   onSubmit: (data) => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);

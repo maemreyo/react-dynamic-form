@@ -280,10 +280,6 @@ export type ErrorMessageTemplate =
  */
 export interface ValidationMessages {
   [key: string]: ErrorMessageTemplate;
-  validateItemCount?: {
-    min?: ErrorMessageTemplate;
-    max?: ErrorMessageTemplate;
-  };
 }
 
 // --- Conditional Rendering ---
