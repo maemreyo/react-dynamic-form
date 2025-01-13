@@ -1,52 +1,10 @@
-// Filepath: /src/features/inputs/components/NumberInput.tsx
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
-import { Input, Label } from '../../../styles';
-import styled from 'styled-components';
+import { Label } from '../../../styles';
 import { useTheme } from '../../../theme/ThemeProvider';
-
-const NumberInputContainer = styled.div<{ className?: string }>`
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  input {
-    text-align: center;
-    width: 65px;
-  }
-`;
-
-const SpinButton = styled.button<{ className?: string }>`
-  background: none;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 0;
-  height: 32px;
-  width: 32px;
-  font-size: 18px;
-  line-height: 0;
-  color: ${({ theme }) => theme.colors.text};
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors['light-500']};
-  }
-  &:disabled {
-    cursor: default;
-    background-color: #efefef;
-  }
-  &:first-of-type {
-    border-radius: 8px 0 0 8px;
-    border-right: none;
-  }
-  &:last-of-type {
-    border-radius: 0 8px 8px 0;
-    border-left: none;
-  }
-`;
+import { NumberInputContainer, SpinButton, StyledInput } from './styled';
 
 interface NumberInputProps extends CommonInputProps {}
 
@@ -59,7 +17,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   labelWidth,
 }) => {
   const theme = useTheme();
-  const { label } = fieldConfig;
+  const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -85,11 +43,13 @@ const NumberInput: React.FC<NumberInputProps> = ({
   useEffect(() => {
     setInternalValue(+field.value || 0);
   }, [field.value]);
+
   const handleIncrement = () => {
     const newValue = clampValue(internalValue + 1);
     setInternalValue(newValue);
     field.onChange(newValue);
   };
+
   const handleDecrement = () => {
     const newValue = clampValue(internalValue - 1);
     setInternalValue(newValue);
@@ -125,8 +85,9 @@ const NumberInput: React.FC<NumberInputProps> = ({
         >
           -
         </SpinButton>
-        <Input
+        <StyledInput
           {...field}
+          {...inputProps}
           className={formClassNameConfig.number}
           type="number"
           id={id}

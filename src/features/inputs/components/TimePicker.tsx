@@ -6,6 +6,7 @@ import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
 import { Input, Label } from '../../../styles';
 import { useTheme } from '../../../theme/ThemeProvider';
+import { StyledInput } from './styled';
 
 const TimePicker: React.FC<CommonInputProps> = ({
   id,
@@ -15,7 +16,7 @@ const TimePicker: React.FC<CommonInputProps> = ({
   labelWidth,
 }) => {
   const theme = useTheme();
-  const { label } = fieldConfig;
+  const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -38,8 +39,9 @@ const TimePicker: React.FC<CommonInputProps> = ({
           )}
         </Label>
       )}
-      <Input
+      <StyledInput
         {...field}
+        {...inputProps}
         className={formClassNameConfig.time}
         type="time"
         id={id}

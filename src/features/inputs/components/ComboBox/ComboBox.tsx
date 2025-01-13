@@ -8,7 +8,7 @@ import {
   FieldError,
 } from '../../../dynamic-form';
 import DraggableList from '../../../../components/DraggableControl';
-import { Item, SearchableDraggableListProps } from './types';
+import { Item, CustomComboBoxProps } from './types';
 import { useSearch } from './hooks';
 import {
   SelectedItem,
@@ -24,11 +24,10 @@ import {
   DropdownItem,
   MaxItemsReached,
   ListContainer,
-} from './styled';
+} from '../styled';
 import { Label } from '../../../../components';
 
-interface ComboBoxProps
-  extends Omit<SearchableDraggableListProps, 'onItemsChange'> {
+interface ComboBoxProps extends Omit<CustomComboBoxProps, 'onItemsChange'> {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig?: FormClassNameConfig;
@@ -49,16 +48,18 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   formClassNameConfig = {},
   horizontalLabel,
   labelWidth,
-  searchApi,
-  transformResponse = defaultTransformResponse,
-  debounceTime = 500,
-  maxItems,
-  placeholder = 'Search items...',
-  noResultsMessage = 'No results found',
-  loadingMessage = 'Loading...',
-  disabled = false,
-  required = false,
 }) => {
+  const {
+    searchApi,
+    transformResponse = defaultTransformResponse,
+    debounceTime = 500,
+    maxItems,
+    placeholder = 'Search items...',
+    noResultsMessage = 'No results found',
+    loadingMessage = 'Loading...',
+    disabled = false,
+    required = false,
+  } = fieldConfig.inputProps as CustomComboBoxProps;
   const [selectedItems, setSelectedItems] = useState<Item[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [hasInitialSearch, setHasInitialSearch] = useState(false);
@@ -185,6 +186,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           className={formClassNameConfig.label}
         >
           {fieldConfig.label}
+          &nbsp;
           {required && <Required>*</Required>}
         </Label>
 
@@ -196,7 +198,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           onChange={handleInputChange}
           onFocus={handleInputFocus}
           placeholder={placeholder}
-          $disabled={disabled}
           disabled={disabled}
           aria-label="Search"
           aria-expanded={showDropdown}

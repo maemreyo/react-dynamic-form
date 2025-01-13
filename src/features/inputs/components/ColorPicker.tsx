@@ -3,14 +3,7 @@ import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
 import { Label } from '../../../styles';
-import styled from 'styled-components';
-
-const ColorInput = styled.input`
-  width: 100px;
-  height: 50px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-`;
+import { ColorInput } from './styled';
 
 const ColorPicker: React.FC<CommonInputProps> = ({
   id,
@@ -19,7 +12,7 @@ const ColorPicker: React.FC<CommonInputProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
-  const { label } = fieldConfig;
+  const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -42,6 +35,7 @@ const ColorPicker: React.FC<CommonInputProps> = ({
       )}
       <ColorInput
         {...field}
+        {...inputProps}
         className={formClassNameConfig.input}
         type="color"
         id={id}

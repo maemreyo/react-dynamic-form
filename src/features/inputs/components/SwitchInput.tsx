@@ -1,63 +1,9 @@
-// Filepath: /src/features/inputs/components/SwitchInput.tsx
 import React from 'react';
 import { FormValues } from '../../dynamic-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { Label } from '../../../styles';
-import styled from 'styled-components';
-
-const SwitchContainer = styled.label<{ className?: string }>`
-  position: relative;
-  display: inline-block;
-  width: 40px;
-  height: 20px;
-  cursor: pointer;
-`;
-
-const SwitchInputStyled = styled.input<{ className?: string }>`
-  opacity: 0;
-  width: 0;
-  height: 0;
-  &:checked + .slider {
-    background-color: ${({ theme }) => theme.colors.info};
-  }
-  &:focus + .slider {
-    box-shadow: 0 0 1px ${({ theme }) => theme.colors.info};
-  }
-  &:checked + .slider:before {
-    transform: translateX(19px);
-  }
-  &:disabled + .slider {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-`;
-
-const Slider = styled.span<{ className?: string }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 34px;
-  &:hover {
-    background-color: #979797;
-  }
-  &:before {
-    position: absolute;
-    content: '';
-    height: 16px;
-    width: 16px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
-  }
-`;
+import { SwitchContainer, SwitchInputStyled, Slider } from './styled';
 
 interface SwitchInputProps extends CommonInputProps {}
 
@@ -68,7 +14,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
   horizontalLabel,
   labelWidth,
 }) => {
-  const { label } = fieldConfig;
+  const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -93,6 +39,7 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
       >
         <SwitchInputStyled
           {...field}
+          {...inputProps}
           type="checkbox"
           id={id}
           className={formClassNameConfig.switch}

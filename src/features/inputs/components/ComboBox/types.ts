@@ -14,7 +14,7 @@ export interface SearchParams {
   pageSize?: number;
 }
 
-export interface SearchableDraggableListProps {
+export interface CustomComboBoxProps {
   onItemsChange?: (items: Item[]) => void;
   searchApi: (params: SearchParams) => Promise<SearchResponse<any>>;
   transformResponse?: (item: any) => Item;

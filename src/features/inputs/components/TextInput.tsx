@@ -4,7 +4,8 @@ import { useFormContext, useController } from 'react-hook-form';
 import { CommonInputProps } from '../types';
 import { FormValues } from '../../dynamic-form';
 import { useTheme } from '../../../theme/ThemeProvider';
-import { Input, Label } from '../../../styles';
+import { Label } from '../../../styles';
+import { StyledInput } from './styled';
 
 const TextInput: React.FC<CommonInputProps> = ({
   id,
@@ -15,7 +16,7 @@ const TextInput: React.FC<CommonInputProps> = ({
   labelWidth,
 }) => {
   const theme = useTheme();
-  const { label } = fieldConfig;
+  const { label, inputProps } = fieldConfig;
   const { control } = useFormContext<FormValues>();
   const { field } = useController({
     name: id,
@@ -40,8 +41,9 @@ const TextInput: React.FC<CommonInputProps> = ({
             )}
         </Label>
       )}
-      <Input
+      <StyledInput
         {...field}
+        {...inputProps}
         className={formClassNameConfig.input}
         id={id}
         autoComplete={disableAutocomplete ? 'off' : undefined}
