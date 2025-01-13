@@ -41,9 +41,18 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   const { id, type, error } = field;
   const fieldConfig = config[id] || {};
 
-  const CustomInputComponent = customInputs?.[type];
+  const CustomInputComponent = fieldConfig.inputComponent;
+  const RegisteredCustomInput = customInputs?.[type];
   const RegisteredInputComponent = getInputComponent(type);
-  const InputComponent = CustomInputComponent || RegisteredInputComponent;
+
+  const InputComponent =
+    CustomInputComponent || RegisteredCustomInput || RegisteredInputComponent;
+
+  if (CustomInputComponent && RegisteredCustomInput) {
+    console.warn(
+      `[DynamicForm] Field "${id}" (type: "${type}") has both "inputComponent" defined in its config and a custom input registered in "customInputs". The "inputComponent" in the field config will be used.`
+    );
+  }
 
   const mergedFormClassNameConfig = mergeClassNames(
     {},
