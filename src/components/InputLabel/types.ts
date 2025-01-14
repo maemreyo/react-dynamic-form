@@ -1,34 +1,16 @@
-import { ReactNode, CSSProperties, Ref } from 'react';
-
-export type InputLabelPosition = 'top' | 'left';
-export type TooltipPlacement =
-  | 'top'
-  | 'right'
-  | 'bottom'
-  | 'left'
-  | 'top-start'
-  | 'top-end'
-  | 'bottom-start'
-  | 'bottom-end'
-  | 'right-start'
-  | 'right-end'
-  | 'left-start'
-  | 'left-end';
+import { CSSProperties, ReactNode } from 'react';
+import { Placement } from '@popperjs/core';
 
 export interface InputLabelProps {
-  htmlFor: string; // Required
-  label: ReactNode; // Required
+  htmlFor: string;
+  label: ReactNode;
   required?: boolean;
   optional?: boolean;
   disabled?: boolean;
-  position?: InputLabelPosition;
+  position?: 'top' | 'left';
   tooltip?: ReactNode;
-  tooltipPlacement?: TooltipPlacement;
+  tooltipPlacement?: Placement;
   className?: string;
   style?: CSSProperties;
-  ref?: Ref<HTMLLabelElement>;
-  /**
-   * @deprecated Use `style` instead.
-   */
-  customStyles?: CSSProperties; // Allow custom styling via customStyles prop
+  ref?: React.Ref<HTMLLabelElement>;
 }

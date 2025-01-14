@@ -1,90 +1,80 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
-import InputLabel, { InputLabelProps } from './';
-import InputBase from '../InputBase';
+import InputLabel from './InputLabel';
+import { InputLabelProps } from './types';
 
 export default {
   title: 'Components/InputLabel',
   component: InputLabel,
   argTypes: {
     position: {
-      options: ['top', 'left'],
       control: { type: 'radio' },
+      options: ['top', 'left'],
     },
     tooltipPlacement: {
+      control: { type: 'select' },
       options: [
         'top',
-        'right',
-        'bottom',
-        'left',
         'top-start',
         'top-end',
-        'bottom-start',
-        'bottom-end',
+        'right',
         'right-start',
         'right-end',
+        'bottom',
+        'bottom-start',
+        'bottom-end',
+        'left',
         'left-start',
         'left-end',
       ],
-      control: { type: 'select' },
     },
   },
 } as Meta<typeof InputLabel>;
 
 const Template: StoryFn<InputLabelProps> = (args) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-    <div>
-      <InputLabel {...args} htmlFor="input-base-1" />
-      <InputBase id="input-base-1" />
-    </div>
+  <div style={{ padding: '20px' }}>
+    <InputLabel {...args} />
   </div>
 );
-// Default story
+
 export const Default = Template.bind({});
 Default.args = {
-  label: 'Label Text',
-  htmlFor: 'input-1',
+  htmlFor: 'input-id',
+  label: 'Input Label',
 };
-// Required story
+
 export const Required = Template.bind({});
 Required.args = {
-  label: 'Label Text',
-  htmlFor: 'input-2',
+  htmlFor: 'input-id',
+  label: 'Required Input Label',
   required: true,
 };
-// Optional story
+
 export const Optional = Template.bind({});
 Optional.args = {
-  label: 'Label Text',
-  htmlFor: 'input-3',
+  htmlFor: 'input-id',
+  label: 'Optional Input Label',
   optional: true,
 };
-// Disabled story
+
 export const Disabled = Template.bind({});
 Disabled.args = {
-  label: 'Label Text',
-  htmlFor: 'input-4',
+  htmlFor: 'input-id',
+  label: 'Disabled Input Label',
   disabled: true,
 };
-// Position left story
+
 export const PositionLeft = Template.bind({});
 PositionLeft.args = {
-  label: 'Label Text',
-  htmlFor: 'input-5',
+  htmlFor: 'input-id',
+  label: 'Left Positioned Label',
   position: 'left',
 };
-// Tooltip story
-export const TooltipStory = Template.bind({});
-TooltipStory.args = {
-  label: 'Label Text',
-  htmlFor: 'input-6',
-  tooltip: 'This is a tooltip',
-};
-// Tooltip placement story
-export const TooltipPlacementStory = Template.bind({});
-TooltipPlacementStory.args = {
-  label: 'Label Text',
-  htmlFor: 'input-7',
-  tooltip: 'This is a tooltip with placement',
-  tooltipPlacement: 'bottom-end',
+
+export const WithTooltip = Template.bind({});
+WithTooltip.args = {
+  htmlFor: 'input-id',
+  label: 'Label with Tooltip',
+  tooltip: 'This is a tooltip message!',
+  tooltipPlacement: 'right',
 };

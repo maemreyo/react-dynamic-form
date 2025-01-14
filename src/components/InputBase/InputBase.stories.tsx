@@ -2,6 +2,7 @@ import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import InputBase from './InputBase';
 import { InputBaseProps } from './types';
+import InputLabel from '../InputLabel';
 
 export default {
   title: 'Components/InputBase',
@@ -203,3 +204,19 @@ SmallSize.args = {
   size: 'sm',
   placeholder: 'Small input',
 };
+
+export const WithLabel = Template.bind({});
+WithLabel.args = {
+  ...Default.args,
+  id: 'with-label',
+  placeholder: 'Input with Label',
+};
+
+WithLabel.decorators = [
+  (Story) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <InputLabel htmlFor="with-label" label="Input with Label" required />
+      <Story />
+    </div>
+  ),
+];

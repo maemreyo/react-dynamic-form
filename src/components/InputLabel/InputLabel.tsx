@@ -1,14 +1,15 @@
 import React, { forwardRef } from 'react';
-import { InputLabelProps } from './types';
-import {
-  LabelWrapper,
-  LabelText,
-  RequiredIndicator,
-  OptionalIndicator,
-} from './styled';
-import { Tooltip } from '../Tooltip';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../theme';
+import {
+  StyledLabel,
+  StyledIndicator,
+  StyledLabelContainer,
+  StyledRequired,
+  StyledOptional,
+} from './styled';
+import { InputLabelProps } from './types';
+import Tooltip from '../Tooltip';
 
 const InputLabel = forwardRef<HTMLLabelElement, InputLabelProps>(
   (
@@ -19,65 +20,47 @@ const InputLabel = forwardRef<HTMLLabelElement, InputLabelProps>(
       optional = false,
       disabled = false,
       position = 'top',
-      tooltip,
+      tooltip = null,
       tooltipPlacement = 'top',
       className,
       style,
-      customStyles,
-      ...rest
     },
     ref
   ) => {
     if (!htmlFor) {
-      console.error('InputLabel: htmlFor prop is required.');
-      return null; // Or render a placeholder, based on your error handling strategy
+      console.error('InputLabel requires htmlFor prop');
     }
 
-    if (position !== 'top' && position !== 'left') {
-      console.error(
-        "InputLabel: position prop must be either 'top' or 'left'."
-      );
-      position = 'top'; // Fallback to default value
-    }
-    const hasTooltip = !!tooltip;
+    const RequiredIndicator = <StyledRequired>*</StyledRequired>;
+
+    const OptionalIndicator = <StyledOptional>(optional)</StyledOptional>;
+
     return (
       <ThemeProvider theme={theme}>
-        <LabelWrapper
-          htmlFor={htmlFor}
-          $position={position}
-          disabled={disabled}
+        <StyledLabelContainer
           className={className}
           style={style}
-          $hasTooltip={hasTooltip}
-          ref={ref}
-          {...rest}
+          $position={position}
         >
-          {tooltip ? (
-            <Tooltip content={tooltip} placement={tooltipPlacement}>
-              <LabelText $position={position} disabled={disabled}>
-                {label}
-                {required && !optional && (
-                  <RequiredIndicator>*</RequiredIndicator>
-                )}
-                {optional && !required && (
-                  <OptionalIndicator>(optional)</OptionalIndicator>
-                )}
-              </LabelText>
-            </Tooltip>
-          ) : (
-            <LabelText $position={position} disabled={disabled}>
-              {label}
-              {required && !optional && (
-                <RequiredIndicator>*</RequiredIndicator>
-              )}
-              {optional && !required && (
-                <OptionalIndicator>(optional)</OptionalIndicator>
-              )}
-            </LabelText>
-          )}
-
-          {disabled && <input type="hidden" aria-disabled="true" />}
-        </LabelWrapper>
+          <StyledLabel
+            htmlFor={htmlFor}
+            $disabled={disabled}
+            $position={position}
+            ref={ref}
+            role={disabled ? undefined : 'label'}
+            {...(disabled ? { 'aria-disabled': true } : {})}
+          >
+            {tooltip ? (
+              <Tooltip title={tooltip} placement={tooltipPlacement}>
+                <span>{label}</span>
+              </Tooltip>
+            ) : (
+              label
+            )}
+            {required && RequiredIndicator}
+            {optional && !required && OptionalIndicator}
+          </StyledLabel>
+        </StyledLabelContainer>
       </ThemeProvider>
     );
   }

@@ -1,51 +1,47 @@
 import styled from 'styled-components';
-import { InputLabelPosition } from './types';
 
-interface LabelWrapperProps {
-  $position: InputLabelPosition;
-  disabled?: boolean;
-  $hasTooltip: boolean;
+interface StyledLabelContainerProps {
+  $position: 'top' | 'left';
 }
 
-interface LabelTextProps {
-  disabled?: boolean;
-  $position: InputLabelPosition;
+interface StyledLabelProps {
+  $disabled?: boolean;
+  $position?: 'top' | 'left';
 }
 
-export const LabelWrapper = styled.label<LabelWrapperProps>`
+export const StyledLabelContainer = styled.div<StyledLabelContainerProps>`
   display: flex;
-  flex-direction: ${({ $position }) =>
-    $position === 'left' ? 'row' : 'column'};
-  align-items: ${({ $position }) =>
-    $position === 'left' ? 'center' : 'flex-start'};
-  margin-bottom: ${({ theme, $position }) =>
-    $position === 'top' ? theme.space.xs : '0'};
-  margin-right: ${({ theme, $position }) =>
-    $position === 'left' ? theme.space.sm : '0'};
-  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
-  cursor: ${({ $hasTooltip }) => ($hasTooltip ? 'help' : 'default')};
+  flex-direction: ${(props) => (props.$position === 'left' ? 'row' : 'column')};
+  align-items: ${(props) =>
+    props.$position === 'left' ? 'center' : 'flex-start'};
 `;
 
-export const LabelText = styled.span<LabelTextProps>`
-  font-family: ${({ theme }) => theme.typography.primaryFont};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
+export const StyledLabel = styled.label<StyledLabelProps>`
+  font-family: ${(props) => props.theme.typography.primaryFont};
+  font-size: ${(props) => props.theme.fontSizes.small};
+  font-weight: ${(props) => props.theme.fontWeights.medium};
   line-height: 1.5;
-  color: ${({ theme, disabled }) =>
-    disabled ? theme.colors['secondary-500'] : theme.colors.text};
-  margin-right: ${({ theme, $position }) =>
-    $position === 'left' ? theme.space.xs : '0'};
-  margin-bottom: ${({ theme, $position }) =>
-    $position === 'top' ? theme.space.xs : '0'};
+  color: ${(props) =>
+    props.$disabled
+      ? props.theme.colors['text-muted']
+      : props.theme.colors.text};
+  margin-bottom: ${(props) =>
+    props.$position === 'top' ? props.theme.space.xs : '0'};
+  margin-right: ${(props) =>
+    props.$position === 'left' ? props.theme.space.md : '0'};
+  display: inline-block; // Ensures consistent spacing around the label
+  cursor: ${(props) => (props.$disabled ? 'default' : 'pointer')};
 `;
 
-export const RequiredIndicator = styled.span`
-  color: ${({ theme }) => theme.colors.danger};
-  margin-left: ${({ theme }) => theme.space['2xs']};
+export const StyledIndicator = styled.span``;
+
+export const StyledRequired = styled.span`
+  color: ${(props) => props.theme.colors.danger};
+  margin-left: ${(props) => props.theme.space.xs};
 `;
 
-export const OptionalIndicator = styled.span`
-  color: ${({ theme }) => theme.colors['secondary-500']};
-  font-weight: ${({ theme }) => theme.fontWeights.normal};
-  margin-left: ${({ theme }) => theme.space['2xs']};
+export const StyledOptional = styled.span`
+  color: ${(props) => props.theme.colors['text-muted']};
+  font-weight: ${(props) => props.theme.fontWeights.normal};
+  margin-left: ${(props) => props.theme.space.xs};
 `;
