@@ -103,7 +103,7 @@ WithIconLeft.args = {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      style={{ width: '1.5rem', height: '1.5rem' }}
+      style={{ width: '1rem', height: '1rem' }}
     >
       <path
         strokeLinecap="round"
@@ -124,7 +124,7 @@ WithIconRight.args = {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      style={{ width: '1.5rem', height: '1.5rem' }}
+      style={{ width: '1rem', height: '1rem' }}
     >
       <path
         strokeLinecap="round"
