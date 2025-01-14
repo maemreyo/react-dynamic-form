@@ -1,3 +1,4 @@
+import { merge } from 'lodash';
 import { DefaultTheme } from 'styled-components';
 
 /**
@@ -414,33 +415,10 @@ export const defaultTheme: DefaultTheme = {
  * @param customTheme - The custom theme object.
  * @returns The merged theme object.
  */
-export const createTheme = (customTheme: any): DefaultTheme => {
-  return {
-    ...defaultTheme,
-    ...customTheme,
-    colors: {
-      ...defaultTheme.colors,
-      ...(customTheme.colors || {}),
-    },
-    space: {
-      ...defaultTheme.space,
-      ...(customTheme.space || {}),
-    },
-    fontSizes: {
-      ...defaultTheme.fontSizes,
-      ...(customTheme.fontSizes || {}),
-    },
-    fontWeights: {
-      ...defaultTheme.fontWeights,
-      ...(customTheme.fontWeights || {}),
-    },
-    radius: {
-      ...defaultTheme.radius,
-      ...(customTheme.radius || {}),
-    },
-    breakpoints: {
-      ...defaultTheme.breakpoints,
-      ...(customTheme.breakpoints || {}),
-    },
-  };
+export const createTheme = <T extends Partial<DefaultTheme>>(
+  customTheme: T
+): DefaultTheme => {
+  return merge({}, defaultTheme, customTheme);
 };
+
+export default createTheme<any>({});
