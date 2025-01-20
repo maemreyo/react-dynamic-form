@@ -1,3 +1,4 @@
+const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -15,6 +16,9 @@ module.exports = {
     autodocs: true,
   },
   webpackFinal: async (config) => {
+    // config.resolve.plugins = config.resolve.plugins || [];
+    // config.resolve.plugins.push(new TsconfigPathsPlugin({}));
+
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
       exclude: /node_modules/,

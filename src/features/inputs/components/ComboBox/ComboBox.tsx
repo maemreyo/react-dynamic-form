@@ -1,29 +1,20 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useFormContext, useController, FieldError } from 'react-hook-form';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-
 import {
-  SelectedItem,
-  ItemLabel,
-  RemoveButton,
-  Container,
-  SearchContainer,
-  StyledInput,
-  Dropdown,
-  MessageText,
-  ErrorText,
-  DropdownItem,
-  MaxItemsReached,
-  ListContainer,
   InputLabel,
-} from './styled';
+  SortableTagPicker,
+  SortableTagPickerProps,
+} from '@matthew.ngo/react-form-kit';
+import { Container } from './styled';
 import { CustomComboBoxProps, Item } from './types';
-import { useSearch } from './hooks';
-import DraggableList from '../../../../components/DraggableControl';
 import { FieldConfig, FormClassNameConfig } from '../../../dynamic-form';
 
-interface ComboBoxProps extends Omit<CustomComboBoxProps, 'onItemsChange'> {
+interface ComboBoxProps
+  extends Omit<CustomComboBoxProps, 'onItemsChange'>,
+    Omit<
+      SortableTagPickerProps,
+      'value' | 'onChange' | 'options' | 'onSearch' | 'onRemoveItem' | 'error'
+    > {
   id: string;
   fieldConfig: FieldConfig;
   formClassNameConfig?: FormClassNameConfig;
@@ -42,6 +33,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   id,
   fieldConfig,
   formClassNameConfig = {},
+  ...props
 }) => {
   const { label } = fieldConfig;
   const {
@@ -54,190 +46,106 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     loadingMessage = 'Loading...',
     disabled = false,
   } = fieldConfig.inputProps as CustomComboBoxProps;
-  const [selectedItems, setSelectedItems] = useState<Item[]>([]);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [hasInitialSearch, setHasInitialSearch] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const { control } = useFormContext();
   const { field } = useController({
     name: id,
     control,
     rules: fieldConfig.validation,
+    defaultValue: fieldConfig.defaultValue,
   });
+  console.log('fieldConfig.defaultValue', fieldConfig.defaultValue);
+  // fieldConfig.defaultValue [
+  //   {
+  //     id: 'a',
+  //     label: 'Apple',
+  //   },
+  //   {
+  //     id: 'b',
+  //     label: 'Banana',
+  //   },
+  // ];
 
-  const {
-    searchTerm,
-    setSearchTerm,
-    isLoading,
-    error,
-    searchResults,
-    debouncedSearch,
-    handleSearch,
-  } = useSearch(searchApi, transformResponse, debounceTime);
+  const [allItems, setAllItems] = useState<Item[]>([]);
+  const [searchResults, setSearchResults] = useState<Item[]>([]);
+  const [selectedItems, setSelectedItems] = useState<Item[]>(
+    field.value
+      ? (field.value as string[]).map(
+          (id) => allItems.find((item) => item.id === id) || { id, label: '' }
+        )
+      : []
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorState, setError] = useState<string | null>(null);
 
-  // Handle initial search when focusing input
-  const handleInputFocus = useCallback(() => {
-    if (!disabled && !hasInitialSearch) {
-      setShowDropdown(true);
-      handleSearch('');
-      setHasInitialSearch(true);
-    } else if (!disabled) {
-      setShowDropdown(true);
-    }
-  }, [disabled, hasInitialSearch, handleSearch]);
+  const handleSearch = useCallback(
+    async (query: string) => {
+      try {
+        setIsLoading(true);
+        setError(null);
 
-  // Reset initial search flag when searchApi changes
-  useEffect(() => {
-    setHasInitialSearch(false);
-  }, [searchApi]);
+        const response = await searchApi({ query });
+        const transformedItems = response.data.map(transformResponse);
 
-  // Handle click outside dropdown
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
-      ) {
-        setShowDropdown(false);
+        if (query === '') {
+          setAllItems(transformedItems);
+        }
+        setSearchResults(transformedItems);
+      } catch (err) {
+        setError('Failed to fetch search results');
+        setSearchResults([]);
+      } finally {
+        setIsLoading(false);
       }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Handle input change
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setShowDropdown(true);
-    debouncedSearch(value);
-  };
-
-  // Handle item selection
-  const handleSelectItem = (item: Item) => {
-    if (maxItems && selectedItems.length >= maxItems) {
-      return;
-    }
-
-    if (selectedItems.some((selected) => selected.id === item.id)) {
-      return;
-    }
-
-    const newItems = [...selectedItems, item];
-    setSelectedItems(newItems);
-    setSearchTerm('');
-    setShowDropdown(false);
-    field.onChange(newItems); // Update form state
-  };
-
-  // Handle draggable list updates
-  const handleListUpdate = (updatedItems: Item[]) => {
-    setSelectedItems(updatedItems);
-    field.onChange(updatedItems); // Update form state
-  };
-
-  // Handle item removal
-  const handleRemoveItem = useCallback(
-    (itemId: string) => {
-      setSelectedItems((prev) => {
-        const newItems = prev.filter((item) => item.id !== itemId);
-        field.onChange(newItems); // Update form state
-        return newItems;
-      });
     },
-    [field]
+    [searchApi, transformResponse]
   );
 
-  // Render item in draggable list
-  const renderItem = useCallback(
-    (item: Item) => (
-      <SelectedItem key={item.id}>
-        <ItemLabel>{item.label}</ItemLabel>
-        <RemoveButton
-          type="button"
-          onClick={() => handleRemoveItem(item.id)}
-          aria-label="Remove item"
-        >
-          ×
-        </RemoveButton>
-      </SelectedItem>
+  useEffect(() => {
+    handleSearch('');
+  }, [handleSearch]);
+
+  const handleOnChange = (values: string[]) => {
+    const updatedItems = values.map(
+      (value) =>
+        allItems.find((item) => item.id === value) || { id: value, label: '' }
+    );
+    setSelectedItems(updatedItems);
+    field.onChange(updatedItems);
+  };
+
+  const combinedOptions = [
+    ...searchResults,
+    ...selectedItems.filter(
+      (item) => !searchResults.some((sr) => sr.id === item.id)
     ),
-    [handleRemoveItem]
-  );
+  ];
+
+  const options = combinedOptions.map((item) => ({
+    value: item.id,
+    label: item.label,
+  }));
+
+  const value = selectedItems.map((item) => item.id);
 
   return (
     <Container>
-      <SearchContainer>
-        {label && (
-          <InputLabel
-            htmlFor={id}
-            $validation={fieldConfig.validation}
-            className={formClassNameConfig.label}
-          >
-            {label}
-          </InputLabel>
-        )}
-
-        <StyledInput
-          {...field}
-          ref={inputRef}
-          type="text"
-          value={searchTerm}
-          onChange={handleInputChange}
-          onFocus={handleInputFocus}
-          placeholder={placeholder}
-          disabled={disabled}
-          aria-label="Search"
-          aria-expanded={showDropdown}
-          className={formClassNameConfig.input}
-        />
-
-        {showDropdown && (
-          <Dropdown ref={dropdownRef} role="listbox">
-            {isLoading && <MessageText>{loadingMessage}</MessageText>}
-            {error && <ErrorText>{error}</ErrorText>}
-            {!isLoading && !error && searchResults.length === 0 && (
-              <MessageText>{noResultsMessage}</MessageText>
-            )}
-            {!isLoading &&
-              !error &&
-              searchResults.map((item) => (
-                <DropdownItem
-                  key={item.id}
-                  $selected={selectedItems.some(
-                    (selected) => selected.id === item.id
-                  )}
-                  onClick={() => handleSelectItem(item)}
-                  role="option"
-                  aria-selected={selectedItems.some(
-                    (selected) => selected.id === item.id
-                  )}
-                >
-                  {item.label}
-                  {maxItems && selectedItems.length >= maxItems && (
-                    <MaxItemsReached>Max items reached</MaxItemsReached>
-                  )}
-                </DropdownItem>
-              ))}
-          </Dropdown>
-        )}
-      </SearchContainer>
-
-      <DndProvider backend={HTML5Backend}>
-        <ListContainer>
-          <DraggableList
-            items={selectedItems}
-            onUpdate={handleListUpdate}
-            renderItem={renderItem}
-          />
-        </ListContainer>
-      </DndProvider>
+      <InputLabel label={label} htmlFor="a"></InputLabel>
+      <SortableTagPicker
+        {...props}
+        value={value}
+        debounceTime={debounceTime}
+        onChange={handleOnChange}
+        onOrderChange={handleOnChange}
+        onSearch={handleSearch}
+        options={options}
+        placeholder={placeholder}
+        disabled={disabled}
+        loading={isLoading}
+        error={errorState ? errorState : undefined}
+        maxItems={maxItems}
+      />
     </Container>
   );
 };
+
 export default ComboBox;

@@ -906,9 +906,17 @@ ComboBoxInput.args = {
         disabled: false,
         required: true,
       },
+      defaultValue: [
+        { id: 'a', label: 'Apple' },
+        { id: 'b', label: 'Banana' },
+      ],
       validation: {
-        validate: (value) => {
-          console.log('🚀 ~ file: DynamicForm.stories.tsx ~ value:', value);
+        validate: (value, formValues) => {
+          console.log(
+            '🚀 ~ file: DynamicForm.stories.tsx ~ value:',
+            value,
+            formValues
+          );
           if (!value) {
             return 'This field is required';
           }
