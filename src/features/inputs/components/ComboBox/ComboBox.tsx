@@ -42,8 +42,8 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     debounceTime = 500,
     maxItems,
     placeholder = 'Search items...',
-    noResultsMessage = 'No results found',
-    loadingMessage = 'Loading...',
+    // noResultsMessage = 'No results found',
+    // loadingMessage = 'Loading...',
     disabled = false,
   } = fieldConfig.inputProps as CustomComboBoxProps;
 
