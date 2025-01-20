@@ -13,7 +13,7 @@ const useRHFOptions = (
   globalValidationMessages: ValidationMessages | undefined
 ): UseFormProps<FormValues> => {
   return useMemo(() => {
-    console.log('[useRHFOptions] Creating schema with config:', config);
+    // console.log('[useRHFOptions] Creating schema with config:', config);
 
     const schema = createValidationSchema(config, globalValidationMessages);
     const resolver = yupResolver(schema);

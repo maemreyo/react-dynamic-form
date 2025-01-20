@@ -259,9 +259,9 @@ export const createValidationSchema = (
       console.warn(`Field type is undefined for field: ${fieldId}`);
     }
 
-    console.log(
-      `[createValidationSchema] Processing field: ${fieldId}, type: ${type}`
-    );
+    // console.log(
+    //   `[createValidationSchema] Processing field: ${fieldId}, type: ${type}`
+    // );
 
     let fieldSchema: yup.AnySchema = getValidationSchema(type!) || yup.mixed();
 
@@ -295,10 +295,10 @@ export const createValidationSchema = (
         }
       }
 
-      console.log(
-        `[createValidationSchema] Applying validation for field: ${fieldId}`,
-        validation
-      );
+      // console.log(
+      //   `[createValidationSchema] Applying validation for field: ${fieldId}`,
+      //   validation
+      // );
 
       // Custom validation function (validate) is applied AFTER other validation rules,
       // therefore it takes precedence over the schema registered in validationSchemaRegistry.
@@ -310,7 +310,7 @@ export const createValidationSchema = (
     shape[fieldId] = fieldSchema;
   }
 
-  console.log('[createValidationSchema] Generated schema:', shape);
+  // console.log('[createValidationSchema] Generated schema:', shape);
 
   return yup.object().shape(shape);
 };

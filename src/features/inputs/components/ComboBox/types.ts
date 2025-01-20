@@ -29,4 +29,5 @@ export interface CustomComboBoxProps {
   defaultPageSize?: number;
   required?: boolean;
   showDraggableList?: boolean;
+  overrideOnMismatchLabel?: boolean;
 }

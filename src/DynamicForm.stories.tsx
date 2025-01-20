@@ -67,6 +67,11 @@ BasicInputTypes.args = {
   onSubmit: (data) => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
   },
+  renderSubmitButton: (onSubmitHandler, isSubmitting) => (
+    <button onClick={onSubmitHandler} disabled={isSubmitting}>
+      Submit
+    </button>
+  ),
   onFormReady: fn(),
 };
 BasicInputTypes.storyName = 'Basic Input Types';
@@ -387,167 +392,167 @@ ComprehensiveForm.args = {
   ),
   config: {
     // --- Basic Inputs ---
-    firstName: {
-      label: 'First Name',
-      type: 'text',
-      // defaultValue: 'John',
-      validation: {
-        required: { value: true, message: 'This field is required' },
-      },
-      classNameConfig: {
-        input: 'border border-gray-400 p-2 rounded w-full',
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-    },
-    lastName: {
-      label: 'Last Name',
-      type: 'text',
-      // defaultValue: 'Doe',
-      validation: {
-        required: { value: true, message: 'This field is required' },
-      },
-      classNameConfig: {
-        input: 'border border-gray-400 p-2 rounded w-full',
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-    },
-    email: {
-      label: 'Email',
-      type: 'email',
-      // defaultValue: 'john.doe@example.com',
-      validation: {
-        required: { value: true, message: 'This field is required' },
-        pattern: {
-          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-          message: 'Invalid email address',
-        },
-      },
-      classNameConfig: {
-        input: 'border border-gray-400 p-2 rounded w-full',
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-        errorMessage: 'text-red-500 text-xs italic',
-      },
-    },
-    age: {
-      label: 'Age',
-      type: 'number',
-      // defaultValue: 30,
-      validation: {
-        required: { value: true, message: 'This field is required' },
-        min: { value: 18, message: 'Must be 18 or older' },
-        max: { value: 99, message: 'Must be 99 or younger' },
-      },
-      classNameConfig: {
-        input: 'border border-gray-400 p-2 rounded w-full',
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-    },
-    subscribe: {
-      label: 'Subscribe to newsletter?',
-      type: 'checkbox',
-      // defaultValue: true,
-      validation: {
-        required: { value: true, message: 'This field is required' },
-      },
-      classNameConfig: {
-        checkboxInput: 'mr-2 leading-tight',
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-    },
-    // --- Advanced Inputs ---
-    startDate: {
-      label: 'Start Date',
-      type: 'date',
-      // defaultValue: '2023-11-20',
-      classNameConfig: {
-        date: 'border border-gray-400 p-2 rounded w-full', // Apply the 'date' class here
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-      validation: {
-        required: { value: true, message: 'This field is required' },
-      },
-    },
-    startTime: {
-      label: 'Start Time',
-      type: 'time',
-      // defaultValue: '09:00',
-      classNameConfig: {
-        time: 'border border-gray-400 p-2 rounded w-full', // Apply the 'time' class here
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-    },
-    dateTime: {
-      label: 'Date and Time',
-      type: 'datetime-local',
-      // defaultValue: '2023-11-20T09:00',
-      classNameConfig: {
-        dateTime: 'border border-gray-400 p-2 rounded w-full', // Apply the 'dateTime' class here
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-    },
-    notes: {
-      label: 'Notes',
-      type: 'textarea',
-      // defaultValue: 'Some notes...',
-      classNameConfig: {
-        textarea: 'border border-gray-400 p-2 rounded w-full',
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-    },
-    country: {
-      label: 'Country',
-      type: 'select',
-      // defaultValue: 'US',
-      options: [
-        { value: 'US', label: 'United States' },
-        { value: 'CA', label: 'Canada' },
-        { value: 'UK', label: 'United Kingdom' },
-      ],
-      classNameConfig: {
-        select: 'border border-gray-400 p-2 rounded w-full',
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-    },
-    gender: {
-      label: 'Gender',
-      type: 'radio',
-      // defaultValue: 'male',
-      options: [
-        { value: 'male', label: 'Male' },
-        { value: 'female', label: 'Female' },
-        { value: 'other', label: 'Other' },
-      ],
-      classNameConfig: {
-        radioGroup: 'flex items-center',
-        radioLabel: 'mr-4',
-        radioButton: 'mr-1',
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-    },
-    notification: {
-      label: 'Enable Notifications',
-      type: 'switch',
-      // defaultValue: true,
-      validation: {
-        required: { value: true, message: 'This field is required' },
-      },
-      classNameConfig: {
-        switchContainer:
-          'relative inline-block w-10 mr-2 align-middle select-none',
-        switch:
-          'absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer',
-        switchSlider:
-          'absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-400 transition-all duration-300 rounded-full',
-        label: 'block text-gray-700 text-sm font-bold mb-2',
-      },
-    },
+    // firstName: {
+    //   label: 'First Name',
+    //   type: 'text',
+    //   // defaultValue: 'John',
+    //   validation: {
+    //     required: { value: true, message: 'This field is required' },
+    //   },
+    //   classNameConfig: {
+    //     input: 'border border-gray-400 p-2 rounded w-full',
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    // },
+    // lastName: {
+    //   label: 'Last Name',
+    //   type: 'text',
+    //   // defaultValue: 'Doe',
+    //   validation: {
+    //     required: { value: true, message: 'This field is required' },
+    //   },
+    //   classNameConfig: {
+    //     input: 'border border-gray-400 p-2 rounded w-full',
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    // },
+    // email: {
+    //   label: 'Email',
+    //   type: 'email',
+    //   // defaultValue: 'john.doe@example.com',
+    //   validation: {
+    //     required: { value: true, message: 'This field is required' },
+    //     pattern: {
+    //       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+    //       message: 'Invalid email address',
+    //     },
+    //   },
+    //   classNameConfig: {
+    //     input: 'border border-gray-400 p-2 rounded w-full',
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //     errorMessage: 'text-red-500 text-xs italic',
+    //   },
+    // },
+    // age: {
+    //   label: 'Age',
+    //   type: 'number',
+    //   // defaultValue: 30,
+    //   validation: {
+    //     required: { value: true, message: 'This field is required' },
+    //     min: { value: 18, message: 'Must be 18 or older' },
+    //     max: { value: 99, message: 'Must be 99 or younger' },
+    //   },
+    //   classNameConfig: {
+    //     input: 'border border-gray-400 p-2 rounded w-full',
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    // },
+    // subscribe: {
+    //   label: 'Subscribe to newsletter?',
+    //   type: 'checkbox',
+    //   // defaultValue: true,
+    //   validation: {
+    //     required: { value: true, message: 'This field is required' },
+    //   },
+    //   classNameConfig: {
+    //     checkboxInput: 'mr-2 leading-tight',
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    // },
+    // // --- Advanced Inputs ---
+    // startDate: {
+    //   label: 'Start Date',
+    //   type: 'date',
+    //   // defaultValue: '2023-11-20',
+    //   classNameConfig: {
+    //     date: 'border border-gray-400 p-2 rounded w-full', // Apply the 'date' class here
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    //   validation: {
+    //     required: { value: true, message: 'This field is required' },
+    //   },
+    // },
+    // startTime: {
+    //   label: 'Start Time',
+    //   type: 'time',
+    //   // defaultValue: '09:00',
+    //   classNameConfig: {
+    //     time: 'border border-gray-400 p-2 rounded w-full', // Apply the 'time' class here
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    // },
+    // dateTime: {
+    //   label: 'Date and Time',
+    //   type: 'datetime-local',
+    //   // defaultValue: '2023-11-20T09:00',
+    //   classNameConfig: {
+    //     dateTime: 'border border-gray-400 p-2 rounded w-full', // Apply the 'dateTime' class here
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    // },
+    // notes: {
+    //   label: 'Notes',
+    //   type: 'textarea',
+    //   // defaultValue: 'Some notes...',
+    //   classNameConfig: {
+    //     textarea: 'border border-gray-400 p-2 rounded w-full',
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    // },
+    // country: {
+    //   label: 'Country',
+    //   type: 'select',
+    //   // defaultValue: 'US',
+    //   options: [
+    //     { value: 'US', label: 'United States' },
+    //     { value: 'CA', label: 'Canada' },
+    //     { value: 'UK', label: 'United Kingdom' },
+    //   ],
+    //   classNameConfig: {
+    //     select: 'border border-gray-400 p-2 rounded w-full',
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    // },
+    // gender: {
+    //   label: 'Gender',
+    //   type: 'radio',
+    //   // defaultValue: 'male',
+    //   options: [
+    //     { value: 'male', label: 'Male' },
+    //     { value: 'female', label: 'Female' },
+    //     { value: 'other', label: 'Other' },
+    //   ],
+    //   classNameConfig: {
+    //     radioGroup: 'flex items-center',
+    //     radioLabel: 'mr-4',
+    //     radioButton: 'mr-1',
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    // },
+    // notification: {
+    //   label: 'Enable Notifications',
+    //   type: 'switch',
+    //   // defaultValue: true,
+    //   validation: {
+    //     required: { value: true, message: 'This field is required' },
+    //   },
+    //   classNameConfig: {
+    //     switchContainer:
+    //       'relative inline-block w-10 mr-2 align-middle select-none',
+    //     switch:
+    //       'absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer',
+    //     switchSlider:
+    //       'absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-400 transition-all duration-300 rounded-full',
+    //     label: 'block text-gray-700 text-sm font-bold mb-2',
+    //   },
+    // },
     favoriteFruit: {
       label: 'Favorite Fruit',
       type: 'combobox',
       // defaultValue: 'Apple',
-      validation: {
-        required: { value: true, message: 'This field is required' },
-      },
+      // validation: {
+      //   required: { value: true, message: 'This field is required' },
+      // },
       options: [
         { value: 'Apple', label: 'Apple' },
         { value: 'Banana', label: 'Banana' },
@@ -935,7 +940,12 @@ ComboBoxInput.args = {
         required: true,
         showDraggableList: false,
       },
-      defaultValue: [],
+      defaultValue: [
+        {
+          id: 'apple',
+          label: 'aaa',
+        },
+      ],
       validation: {
         validate: (value, formValues) => {
           console.log(

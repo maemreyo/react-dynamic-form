@@ -90,6 +90,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     // loadingMessage = 'Loading...',
     disabled = false,
     showDraggableList,
+    overrideOnMismatchLabel = true,
   } = fieldConfig.inputProps as CustomComboBoxProps;
 
   const { control } = useFormContext();
@@ -105,6 +106,10 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   const [selectedItems, setSelectedItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorState, setError] = useState<string | null>(null);
+  // @ts-ignore
+  const [labelMismatchWarning, setLabelMismatchWarning] = useState<
+    string | null
+  >(null);
   // @ts-ignore
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -133,21 +138,21 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           const defaultIds = fieldConfig.defaultValue.map((item) => item.id);
 
           // Check if default items are in initial items
-          const foundInInitial = fieldConfig.defaultValue.filter(
-            (defaultItem) =>
-              initialItems.some((item) => item.id === defaultItem.id)
+          const foundInInitial = initialItems.filter((item) =>
+            defaultIds.includes(item.id)
           );
 
           // If not all default items were found in initial items, load more pages
+          let allFoundItems = foundInInitial;
           if (foundInInitial.length < defaultIds.length) {
             const items = await loadAllPagesUntilDefaultsFound(
               defaultIds,
               searchApi,
               transformResponse
             );
+            allFoundItems = items;
             setAllItems((prevItems) => {
               const newItems = [...items];
-              // Ensure we don't have duplicates
               prevItems.forEach((item) => {
                 if (!newItems.some((newItem) => newItem.id === item.id)) {
                   newItems.push(item);
@@ -157,15 +162,37 @@ const ComboBox: React.FC<ComboBoxProps> = ({
             });
           }
 
-          // Set selected items based on found items, maintaining order
+          // Check label mismatch
+          const labelMismatches = fieldConfig.defaultValue.filter(
+            (defaultItem) => {
+              const matchingItem = allFoundItems.find(
+                (item) => item.id === defaultItem.id
+              );
+              return matchingItem && matchingItem.label !== defaultItem.label;
+            }
+          );
+
+          if (labelMismatches.length > 0) {
+            console.warn('Label mismatch detected for items:', labelMismatches);
+            setLabelMismatchWarning(
+              `Warning: Some items have different labels in the system. Labels have been updated to match the system values.`
+            );
+          }
+
+          // Set selected items based on found items, maintaining order and using correct labels
           const defaultItems = fieldConfig.defaultValue.map((defaultItem) => {
-            const foundItem =
-              allItems.find((item) => item.id === defaultItem.id) ||
-              initialItems.find((item) => item.id === defaultItem.id);
+            const foundItem = allFoundItems.find(
+              (item) => item.id === defaultItem.id
+            );
             return foundItem || defaultItem;
           });
 
           setSelectedItems(defaultItems);
+
+          if (overrideOnMismatchLabel) {
+            // Update form value with correct labels
+            field.onChange(defaultItems);
+          }
         }
       } catch (error) {
         console.error('Error initializing data:', error);
