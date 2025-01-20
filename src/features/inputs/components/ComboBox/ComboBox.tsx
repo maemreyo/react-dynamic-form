@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormContext, useController, FieldError } from 'react-hook-form';
 import {
   InputLabel,
@@ -23,11 +23,55 @@ interface ComboBoxProps
   labelWidth?: string | number;
   error?: FieldError;
 }
+const PAGE_SIZE = 20;
 
 const defaultTransformResponse = (item: any): Item => ({
   id: item.id || item.value,
   label: item.label,
 });
+
+const loadAllPagesUntilDefaultsFound = async (
+  defaultIds: string[],
+  searchApi: any,
+  transformResponse: any
+) => {
+  let page = 1;
+  const foundIds = new Set<string>();
+  let allFoundItems: Item[] = [];
+
+  while (defaultIds.length > foundIds.size) {
+    try {
+      const response = await searchApi({
+        query: '',
+        pageIndex: page,
+        pageSize: PAGE_SIZE,
+      });
+
+      const transformedItems = response.data.map(transformResponse);
+
+      const foundInThisPage = transformedItems.filter((item: any) =>
+        defaultIds.includes(item.id)
+      );
+
+      foundInThisPage.forEach((item: any) => foundIds.add(item.id));
+      allFoundItems = [...allFoundItems, ...transformedItems];
+
+      if (
+        transformedItems.length < PAGE_SIZE ||
+        foundIds.size === defaultIds.length
+      ) {
+        break;
+      }
+
+      page++;
+    } catch (error) {
+      console.error('Error loading all pages:', error);
+      break;
+    }
+  }
+
+  return allFoundItems;
+};
 
 const ComboBox: React.FC<ComboBoxProps> = ({
   id,
@@ -63,54 +107,11 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   const [errorState, setError] = useState<string | null>(null);
   // @ts-ignore
   const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 20;
 
-  // Function to load all pages until we find all default values
-  const loadAllPagesUntilDefaultsFound = useCallback(
-    async (defaultIds: string[]) => {
-      let page = 1;
-      const foundIds = new Set<string>();
-      let allFoundItems: Item[] = [];
-
-      while (defaultIds.length > foundIds.size) {
-        try {
-          const response = await searchApi({
-            query: '',
-            pageIndex: page,
-            pageSize: PAGE_SIZE,
-          });
-
-          const transformedItems = response.data.map(transformResponse);
-
-          const foundInThisPage = transformedItems.filter((item) =>
-            defaultIds.includes(item.id)
-          );
-
-          foundInThisPage.forEach((item) => foundIds.add(item.id));
-          allFoundItems = [...allFoundItems, ...transformedItems];
-
-          if (
-            transformedItems.length < PAGE_SIZE ||
-            foundIds.size === defaultIds.length
-          ) {
-            break;
-          }
-
-          page++;
-        } catch (error) {
-          console.error('Error loading all pages:', error);
-          break;
-        }
-      }
-
-      return allFoundItems;
-    },
-    [searchApi, transformResponse]
-  );
-
-  // Load initial data when component mounts
   useEffect(() => {
     const initializeData = async () => {
+      if (!searchApi) return;
+
       setIsLoading(true);
       try {
         // First, load initial items for dropdown
@@ -126,42 +127,45 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         // Then, if we have default values, load them
         if (
           fieldConfig.defaultValue &&
-          Array.isArray(fieldConfig.defaultValue)
+          Array.isArray(fieldConfig.defaultValue) &&
+          fieldConfig.defaultValue.length > 0
         ) {
           const defaultIds = fieldConfig.defaultValue.map((item) => item.id);
 
-          if (defaultIds.length > 0) {
-            // Check if default items are in initial items
-            const foundInInitial = fieldConfig.defaultValue.filter(
-              (defaultItem) =>
-                initialItems.some((item) => item.id === defaultItem.id)
+          // Check if default items are in initial items
+          const foundInInitial = fieldConfig.defaultValue.filter(
+            (defaultItem) =>
+              initialItems.some((item) => item.id === defaultItem.id)
+          );
+
+          // If not all default items were found in initial items, load more pages
+          if (foundInInitial.length < defaultIds.length) {
+            const items = await loadAllPagesUntilDefaultsFound(
+              defaultIds,
+              searchApi,
+              transformResponse
             );
-
-            // If not all default items were found in initial items, load more pages
-            if (foundInInitial.length < defaultIds.length) {
-              const items = await loadAllPagesUntilDefaultsFound(defaultIds);
-              setAllItems((prevItems) => {
-                const newItems = [...items];
-                // Ensure we don't have duplicates
-                prevItems.forEach((item) => {
-                  if (!newItems.some((newItem) => newItem.id === item.id)) {
-                    newItems.push(item);
-                  }
-                });
-                return newItems;
+            setAllItems((prevItems) => {
+              const newItems = [...items];
+              // Ensure we don't have duplicates
+              prevItems.forEach((item) => {
+                if (!newItems.some((newItem) => newItem.id === item.id)) {
+                  newItems.push(item);
+                }
               });
-            }
-
-            // Set selected items based on found items, maintaining order
-            const defaultItems = fieldConfig.defaultValue.map((defaultItem) => {
-              const foundItem =
-                allItems.find((item) => item.id === defaultItem.id) ||
-                initialItems.find((item) => item.id === defaultItem.id);
-              return foundItem || defaultItem;
+              return newItems;
             });
-
-            setSelectedItems(defaultItems);
           }
+
+          // Set selected items based on found items, maintaining order
+          const defaultItems = fieldConfig.defaultValue.map((defaultItem) => {
+            const foundItem =
+              allItems.find((item) => item.id === defaultItem.id) ||
+              initialItems.find((item) => item.id === defaultItem.id);
+            return foundItem || defaultItem;
+          });
+
+          setSelectedItems(defaultItems);
         }
       } catch (error) {
         console.error('Error initializing data:', error);
@@ -172,48 +176,40 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     };
 
     initializeData();
-  }, [
-    searchApi,
-    transformResponse,
-    fieldConfig.defaultValue,
-    loadAllPagesUntilDefaultsFound,
-  ]);
+  }, [searchApi, transformResponse]);
 
-  const handleSearch = useCallback(
-    async (query: string) => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        setCurrentPage(1);
+  const handleSearch = async (query: string) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      setCurrentPage(1);
 
-        const response = await searchApi({
-          query,
-          pageIndex: 1,
-          pageSize: PAGE_SIZE,
+      const response = await searchApi({
+        query,
+        pageIndex: 1,
+        pageSize: PAGE_SIZE,
+      });
+
+      const transformedItems = response.data.map(transformResponse);
+      setSearchResults(transformedItems);
+
+      // @ts-ignore
+      setAllItems((prevItems) => {
+        const newItems = [...transformedItems];
+        selectedItems.forEach((selectedItem) => {
+          if (!newItems.some((item) => item.id === selectedItem.id)) {
+            newItems.push(selectedItem);
+          }
         });
-
-        const transformedItems = response.data.map(transformResponse);
-        setSearchResults(transformedItems);
-
-        // @ts-ignore
-        setAllItems((prevItems) => {
-          const newItems = [...transformedItems];
-          selectedItems.forEach((selectedItem) => {
-            if (!newItems.some((item) => item.id === selectedItem.id)) {
-              newItems.push(selectedItem);
-            }
-          });
-          return newItems;
-        });
-      } catch (err) {
-        setError('Failed to fetch search results');
-        setSearchResults([]);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [searchApi, transformResponse, selectedItems]
-  );
+        return newItems;
+      });
+    } catch (err) {
+      setError('Failed to fetch search results');
+      setSearchResults([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleOnChange = (values: string[]) => {
     const updatedItems = values.map(
@@ -229,11 +225,11 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   };
 
   // When dropdown is opened without a search query
-  const handleDropdownOpen = useCallback(async () => {
+  const handleDropdownOpen = async () => {
     if (searchResults.length === 0 && !isLoading) {
       await handleSearch('');
     }
-  }, [searchResults.length, isLoading, handleSearch]);
+  };
 
   const combinedOptions = [
     ...searchResults,
