@@ -934,11 +934,7 @@ ComboBoxInput.args = {
         disabled: false,
         required: true,
       },
-      defaultValue: [
-        { id: 'apple', label: 'Apple' },
-        { id: 'banana', label: 'Banana' },
-        { id: 'dragonfruit', label: 'Dragon Fruit' },
-      ],
+      defaultValue: [],
       validation: {
         validate: (value, formValues) => {
           console.log(

@@ -2528,7 +2528,7 @@ __metadata:
     "@chromatic-com/storybook": "npm:^3.2.3"
     "@eslint/compat": "npm:^1.2.4"
     "@hookform/resolvers": "npm:^3.9.1"
-    "@matthew.ngo/react-form-kit": "npm:^0.0.6"
+    "@matthew.ngo/react-form-kit": "npm:^0.0.8"
     "@semantic-release/changelog": "npm:^6.0.3"
     "@semantic-release/git": "npm:^10.0.1"
     "@semantic-release/github": "npm:^11.0.1"
@@ -2590,9 +2590,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@matthew.ngo/react-form-kit@npm:^0.0.6":
-  version: 0.0.6
-  resolution: "@matthew.ngo/react-form-kit@npm:0.0.6"
+"@matthew.ngo/react-form-kit@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "@matthew.ngo/react-form-kit@npm:0.0.8"
   dependencies:
     "@popperjs/core": "npm:^2.11.8"
     framer-motion: "npm:^11.18.0"
@@ -2607,7 +2607,7 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
     react-hook-form: ">=7.0.0"
-  checksum: 10c0/a728137e3dc1b211fdfd0022cd6a9fa6423183a1349ae63a1e22946ec02195f3deaba7a95309c68dc1431059b39cc63d63f8d643a0934f9a16ac3da14782be2b
+  checksum: 10c0/5ffb0fa2894baa46f94728cfb7de24cfa6af3d462e1f1dffad9158e72818888ce10e7f2828e37c399af7ed3f6f38daa1e6265e6610a3c6d1aa6c159a99df390d
   languageName: node
   linkType: hard
 

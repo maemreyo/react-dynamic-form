@@ -61,7 +61,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [errorState, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 10; // Adjust based on your needs
+  const PAGE_SIZE = 20;
 
   // Function to load all pages until we find all default values
   const loadAllPagesUntilDefaultsFound = useCallback(
@@ -80,7 +80,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
 
           const transformedItems = response.data.map(transformResponse);
 
-          // Check if we found any default items in this page
           const foundInThisPage = transformedItems.filter((item) =>
             defaultIds.includes(item.id)
           );
@@ -88,7 +87,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
           foundInThisPage.forEach((item) => foundIds.add(item.id));
           allFoundItems = [...allFoundItems, ...transformedItems];
 
-          // If no more results or we've found all default items, break
           if (
             transformedItems.length < PAGE_SIZE ||
             foundIds.size === defaultIds.length
@@ -108,39 +106,76 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     [searchApi, transformResponse]
   );
 
-  // Initialize with default values
+  // Load initial data when component mounts
   useEffect(() => {
-    const initializeDefaultValues = async () => {
-      if (fieldConfig.defaultValue && Array.isArray(fieldConfig.defaultValue)) {
-        const defaultIds = fieldConfig.defaultValue.map((item) => item.id);
+    const initializeData = async () => {
+      setIsLoading(true);
+      try {
+        // First, load initial items for dropdown
+        const response = await searchApi({
+          query: '',
+          pageIndex: 1,
+          pageSize: PAGE_SIZE,
+        });
+        const initialItems = response.data.map(transformResponse);
+        setSearchResults(initialItems);
+        setAllItems(initialItems);
 
-        if (defaultIds.length > 0) {
-          setIsLoading(true);
-          try {
-            const items = await loadAllPagesUntilDefaultsFound(defaultIds);
-            setAllItems(items);
+        // Then, if we have default values, load them
+        if (
+          fieldConfig.defaultValue &&
+          Array.isArray(fieldConfig.defaultValue)
+        ) {
+          const defaultIds = fieldConfig.defaultValue.map((item) => item.id);
 
-            // Set selected items based on found items, maintaining order of defaultValue
+          if (defaultIds.length > 0) {
+            // Check if default items are in initial items
+            const foundInInitial = fieldConfig.defaultValue.filter(
+              (defaultItem) =>
+                initialItems.some((item) => item.id === defaultItem.id)
+            );
+
+            // If not all default items were found in initial items, load more pages
+            if (foundInInitial.length < defaultIds.length) {
+              const items = await loadAllPagesUntilDefaultsFound(defaultIds);
+              setAllItems((prevItems) => {
+                const newItems = [...items];
+                // Ensure we don't have duplicates
+                prevItems.forEach((item) => {
+                  if (!newItems.some((newItem) => newItem.id === item.id)) {
+                    newItems.push(item);
+                  }
+                });
+                return newItems;
+              });
+            }
+
+            // Set selected items based on found items, maintaining order
             const defaultItems = fieldConfig.defaultValue.map((defaultItem) => {
-              const foundItem = items.find(
-                (item) => item.id === defaultItem.id
-              );
-              return foundItem || defaultItem; // Fall back to default item if not found
+              const foundItem =
+                allItems.find((item) => item.id === defaultItem.id) ||
+                initialItems.find((item) => item.id === defaultItem.id);
+              return foundItem || defaultItem;
             });
 
             setSelectedItems(defaultItems);
-          } catch (error) {
-            console.error('Error initializing default values:', error);
-            setError('Failed to load default values');
-          } finally {
-            setIsLoading(false);
           }
         }
+      } catch (error) {
+        console.error('Error initializing data:', error);
+        setError('Failed to load initial data');
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    initializeDefaultValues();
-  }, [fieldConfig.defaultValue, loadAllPagesUntilDefaultsFound]);
+    initializeData();
+  }, [
+    searchApi,
+    transformResponse,
+    fieldConfig.defaultValue,
+    loadAllPagesUntilDefaultsFound,
+  ]);
 
   const handleSearch = useCallback(
     async (query: string) => {
@@ -158,7 +193,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         const transformedItems = response.data.map(transformResponse);
         setSearchResults(transformedItems);
 
-        // Update allItems while preserving selected items that might not be in search results
         setAllItems((prevItems) => {
           const newItems = [...transformedItems];
           selectedItems.forEach((selectedItem) => {
@@ -191,6 +225,13 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     field.onChange(updatedItems);
   };
 
+  // When dropdown is opened without a search query
+  const handleDropdownOpen = useCallback(async () => {
+    if (searchResults.length === 0 && !isLoading) {
+      await handleSearch('');
+    }
+  }, [searchResults.length, isLoading, handleSearch]);
+
   const combinedOptions = [
     ...searchResults,
     ...selectedItems.filter(
@@ -221,6 +262,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         loading={isLoading}
         error={errorState ? errorState : undefined}
         maxItems={maxItems}
+        onFocus={handleDropdownOpen}
       />
     </Container>
   );
