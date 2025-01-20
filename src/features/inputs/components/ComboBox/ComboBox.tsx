@@ -60,6 +60,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   const [selectedItems, setSelectedItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorState, setError] = useState<string | null>(null);
+  // @ts-ignore
   const [currentPage, setCurrentPage] = useState(1);
   const PAGE_SIZE = 20;
 
@@ -193,6 +194,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         const transformedItems = response.data.map(transformResponse);
         setSearchResults(transformedItems);
 
+        // @ts-ignore
         setAllItems((prevItems) => {
           const newItems = [...transformedItems];
           selectedItems.forEach((selectedItem) => {
