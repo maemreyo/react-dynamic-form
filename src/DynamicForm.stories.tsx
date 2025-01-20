@@ -933,6 +933,7 @@ ComboBoxInput.args = {
         loadingMessage: 'Loading fruits...',
         disabled: false,
         required: true,
+        showDraggableList: false,
       },
       defaultValue: [],
       validation: {
