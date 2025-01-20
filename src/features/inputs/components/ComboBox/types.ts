@@ -28,4 +28,5 @@ export interface CustomComboBoxProps {
   enablePagination?: boolean;
   defaultPageSize?: number;
   required?: boolean;
+  showDraggableList?: boolean;
 }

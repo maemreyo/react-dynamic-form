@@ -45,6 +45,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     // noResultsMessage = 'No results found',
     // loadingMessage = 'Loading...',
     disabled = false,
+    showDraggableList,
   } = fieldConfig.inputProps as CustomComboBoxProps;
 
   const { control } = useFormContext();
@@ -265,6 +266,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         error={errorState ? errorState : undefined}
         maxItems={maxItems}
         onFocus={handleDropdownOpen}
+        showDraggableList={showDraggableList}
       />
     </Container>
   );

@@ -6,51 +6,7 @@ interface ValidationProps {
 }
 
 export const Container = styled.div`
-  .dropdown-menu {
-    /* Custom Scrollbar Styling */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #888;
-      border-radius: 3px;
-
-      &:hover {
-        background: #555;
-      }
-    }
-
-    /* Firefox */
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f1f1f1;
-  }
-
-  /* Smooth transitions for drag and drop */
-  .tag-item {
-    transition:
-      transform 0.2s ease,
-      background-color 0.2s ease;
-
-    &.dragging {
-      transform: scale(1.02);
-      opacity: 0.8;
-    }
-  }
-
-  .tag-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    min-height: 32px;
-    padding: 2px;
-  }
+  width: 100%;
 `;
 export const SearchContainer = styled.div`
   position: relative;
