@@ -190,6 +190,8 @@ export interface FieldConfig {
   inputComponent?: React.ComponentType<CustomInputProps>;
   /** Optional custom props for the input. */
   inputProps?: Record<string, any>;
+  /** Optional custom error message renderer. */
+  renderErrorMessage?: RenderErrorMessageProps;
 }
 
 // --- Input Types ---
