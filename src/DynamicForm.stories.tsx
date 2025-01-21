@@ -26,7 +26,7 @@ const Template: StoryFn<typeof DynamicForm> = (args) => (
 
 // --- Examples ---
 
-const CustomizedInput = (props) => {
+const CustomizedInput = (props: any) => {
   console.log('propssss', props);
   return <div>null</div>;
 };
@@ -894,7 +894,7 @@ CustomInput.storyName = 'Custom Input (ColorPicker)';
 // Story 8: ComboBox Input
 // Mock data for ComboBox
 const mockComboBoxData = [
-  { id: 'apple', label: 'Apple' },
+  { id: 'apple', label: 'Apple', disabled: true },
   { id: 'banana', label: 'Banana' },
   { id: 'orange', label: 'Orange' },
   { id: 'grape', label: 'Grape' },
@@ -914,7 +914,7 @@ const mockComboBoxData = [
   { id: 'fig', label: 'Fig' },
   { id: 'lime', label: 'Lime' },
   { id: 'lemon', label: 'Lemon' },
-  { id: 'papaya', label: 'Papaya' },
+  { id: 'papaya', label: 'Papaya', disabled: true },
   { id: 'guava', label: 'Guava' },
   { id: 'dragonfruit', label: 'Dragon Fruit' },
   { id: 'pomegranate', label: 'Pomegranate' },
@@ -961,7 +961,7 @@ ComboBoxInput.args = {
         loadingMessage: 'Loading fruits...',
         disabled: false,
         required: true,
-        showDraggableList: false,
+        showDraggableList: true,
       },
       defaultValue: [
         {
