@@ -272,9 +272,14 @@ const ComboBox: React.FC<ComboBoxProps> = ({
 
   const value = selectedItems.map((item) => item.id);
 
+  const required =
+    typeof fieldConfig.validation?.required === 'object'
+      ? fieldConfig.validation?.required?.value
+      : fieldConfig.validation?.required;
+
   return (
     <Container>
-      <InputLabel label={label} htmlFor={id}></InputLabel>
+      <InputLabel label={label} htmlFor={id} required={required}></InputLabel>
       <SortableTagPicker
         {...props}
         value={value}
