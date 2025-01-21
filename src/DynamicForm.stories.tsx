@@ -6,6 +6,7 @@ import { userEvent, within, expect } from '@storybook/test'; // Updated import
 import { FlexLayout } from './features/inputs/registry/components/FlexLayout';
 import { useController, useFormContext } from 'react-hook-form';
 import { SearchParams } from './features/inputs/components/combobox/types';
+import { InputErrorMessage } from '@matthew.ngo/react-form-kit';
 
 export default {
   title: 'DynamicForm',
@@ -25,6 +26,11 @@ const Template: StoryFn<typeof DynamicForm> = (args) => (
 
 // --- Examples ---
 
+const CustomizedInput = (props) => {
+  console.log('propssss', props);
+  return <div>null</div>;
+};
+
 // Story 1: Basic Input Types
 export const BasicInputTypes = Template.bind({});
 BasicInputTypes.args = {
@@ -32,37 +38,53 @@ BasicInputTypes.args = {
   config: {
     firstName: {
       label: 'First Name',
-      type: 'text',
-      defaultValue: 'John',
+      type: 'custom',
+      defaultValue: '',
+      inputComponent: CustomizedInput,
       inputProps: {
         placeholder: 'Enter your first name',
       },
       validation: {
         required: { value: true, message: 'This field is required' },
-        minLength: { value: 3, message: 'Minimum length is 3' },
+        // minLength: { value: 3, message: 'Minimum length is 3' },
+        validate: (value) => {
+          if (!value) {
+            return 'Requireddd';
+          }
+
+          return undefined;
+        },
+      },
+      renderErrorMessage: (error) => {
+        console.log('error', error);
+
+        // return <div>{error?.message}</div>;
+        return (
+          <InputErrorMessage show={!!error} message={error?.message || ''} />
+        );
       },
     },
-    lastName: {
-      label: 'Last Name',
-      type: 'text',
-      // defaultValue: 'Doe',
-    },
-    email: {
-      label: 'Email',
-      type: 'email',
-      // defaultValue: 'john.doe@example.com',
-    },
-    age: {
-      label: 'Age',
-      type: 'number',
-      // defaultValue: 30,
-      inputProps: {},
-    },
-    subscribe: {
-      label: 'Subscribe to newsletter?',
-      type: 'checkbox',
-      // defaultValue: true,
-    },
+    // lastName: {
+    //   label: 'Last Name',
+    //   type: 'text',
+    //   // defaultValue: 'Doe',
+    // },
+    // email: {
+    //   label: 'Email',
+    //   type: 'email',
+    //   // defaultValue: 'john.doe@example.com',
+    // },
+    // age: {
+    //   label: 'Age',
+    //   type: 'number',
+    //   // defaultValue: 30,
+    //   inputProps: {},
+    // },
+    // subscribe: {
+    //   label: 'Subscribe to newsletter?',
+    //   type: 'checkbox',
+    //   // defaultValue: true,
+    // },
   },
   onSubmit: (data) => {
     console.log('🚀 ~ file: DynamicForm.stories.tsx ~ data:', data);
@@ -72,6 +94,7 @@ BasicInputTypes.args = {
       Submit
     </button>
   ),
+  showInlineError: true,
   onFormReady: fn(),
 };
 BasicInputTypes.storyName = 'Basic Input Types';
