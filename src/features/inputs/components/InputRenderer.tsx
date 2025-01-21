@@ -34,7 +34,6 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   horizontalLabel,
   labelWidth,
   customInputs,
-  renderErrorMessage,
 }) => {
   const { id, type, error } = field;
   const fieldConfig = config[id] || {};
@@ -70,8 +69,8 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   };
 
   const errorMessageElement =
-    showInlineError && error && renderErrorMessage
-      ? renderErrorMessage(error, mergedFormClassNameConfig)
+    showInlineError && error && fieldConfig.renderErrorMessage
+      ? fieldConfig.renderErrorMessage(error, mergedFormClassNameConfig)
       : showInlineError && error
         ? React.createElement(ErrorMessage, {
             className: mergedFormClassNameConfig.errorMessage,
