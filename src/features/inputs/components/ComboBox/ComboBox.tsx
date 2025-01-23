@@ -93,6 +93,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     showDraggableList,
     overrideOnMismatchLabel = true,
     disabledItemsPosition = 'top',
+    draggableListDirection = 'vertical',
   } = fieldConfig.inputProps as CustomComboBoxProps;
 
   const { control } = useFormContext();
@@ -300,6 +301,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         onFocus={handleDropdownOpen}
         showDraggableList={showDraggableList}
         disabledItemsPosition={disabledItemsPosition}
+        draggableListDirection={draggableListDirection}
       />
     </Container>
   );
