@@ -1,6 +1,7 @@
 export interface Item {
   id: string;
   label: string;
+  disabled?: boolean;
 }
 
 export interface SearchResponse<T> {
@@ -30,4 +31,5 @@ export interface CustomComboBoxProps {
   required?: boolean;
   showDraggableList?: boolean;
   overrideOnMismatchLabel?: boolean;
+  disabledItemsPosition?: 'top' | 'bottom' | 'none';
 }

@@ -28,6 +28,7 @@ const PAGE_SIZE = 20;
 const defaultTransformResponse = (item: any): Item => ({
   id: item.id || item.value,
   label: item.label,
+  disabled: item.disabled,
 });
 
 const loadAllPagesUntilDefaultsFound = async (
@@ -91,6 +92,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     disabled = false,
     showDraggableList,
     overrideOnMismatchLabel = true,
+    disabledItemsPosition = 'top',
   } = fieldConfig.inputProps as CustomComboBoxProps;
 
   const { control } = useFormContext();
@@ -245,6 +247,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         selectedItems.find((item) => item.id === value) || {
           id: value,
           label: '',
+          disabled: false,
         }
     );
     setSelectedItems(updatedItems);
@@ -268,6 +271,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   const options = combinedOptions.map((item) => ({
     value: item.id,
     label: item.label,
+    disabled: item.disabled,
   }));
 
   const value = selectedItems.map((item) => item.id);
@@ -295,6 +299,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         maxItems={maxItems}
         onFocus={handleDropdownOpen}
         showDraggableList={showDraggableList}
+        disabledItemsPosition={disabledItemsPosition}
       />
     </Container>
   );
