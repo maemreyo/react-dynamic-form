@@ -216,7 +216,14 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     };
 
     initializeData();
-  }, [searchApi, transformResponse]);
+  }, [
+    searchApi,
+    transformResponse,
+    loadInitialItems,
+    fieldConfig.defaultValue,
+    overrideOnMismatchLabel,
+    field,
+  ]);
 
   const handleSearch = async (query: string) => {
     try {
