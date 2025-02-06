@@ -94,6 +94,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     overrideOnMismatchLabel = true,
     disabledItemsPosition = 'top',
     draggableListDirection = 'vertical',
+    loadInitialItems = false,
   } = fieldConfig.inputProps as CustomComboBoxProps;
 
   const { control } = useFormContext();
@@ -122,79 +123,88 @@ const ComboBox: React.FC<ComboBoxProps> = ({
 
       setIsLoading(true);
       try {
-        // First, load initial items for dropdown
-        const response = await searchApi({
-          query: '',
-          pageIndex: 1,
-          pageSize: PAGE_SIZE,
-        });
-        const initialItems = response.data.map(transformResponse);
-        setSearchResults(initialItems);
-        setAllItems(initialItems);
-
-        // Then, if we have default values, load them
         if (
-          fieldConfig.defaultValue &&
-          Array.isArray(fieldConfig.defaultValue) &&
-          fieldConfig.defaultValue.length > 0
+          loadInitialItems ||
+          (fieldConfig.defaultValue &&
+            Array.isArray(fieldConfig.defaultValue) &&
+            fieldConfig.defaultValue.length > 0)
         ) {
-          const defaultIds = fieldConfig.defaultValue.map((item) => item.id);
+          const response = await searchApi({
+            query: '',
+            pageIndex: 1,
+            pageSize: PAGE_SIZE,
+          });
+          const initialItems = response.data.map(transformResponse);
+          setSearchResults(initialItems);
+          setAllItems(initialItems);
 
-          // Check if default items are in initial items
-          const foundInInitial = initialItems.filter((item) =>
-            defaultIds.includes(item.id)
-          );
+          // Then, if we have default values, load them
+          if (
+            fieldConfig.defaultValue &&
+            Array.isArray(fieldConfig.defaultValue) &&
+            fieldConfig.defaultValue.length > 0
+          ) {
+            const defaultIds = fieldConfig.defaultValue.map((item) => item.id);
 
-          // If not all default items were found in initial items, load more pages
-          let allFoundItems = foundInInitial;
-          if (foundInInitial.length < defaultIds.length) {
-            const items = await loadAllPagesUntilDefaultsFound(
-              defaultIds,
-              searchApi,
-              transformResponse
+            // Check if default items are in initial items
+            const foundInInitial = initialItems.filter((item) =>
+              defaultIds.includes(item.id)
             );
-            allFoundItems = items;
-            setAllItems((prevItems) => {
-              const newItems = [...items];
-              prevItems.forEach((item) => {
-                if (!newItems.some((newItem) => newItem.id === item.id)) {
-                  newItems.push(item);
-                }
-              });
-              return newItems;
-            });
-          }
 
-          // Check label mismatch
-          const labelMismatches = fieldConfig.defaultValue.filter(
-            (defaultItem) => {
-              const matchingItem = allFoundItems.find(
+            // If not all default items were found in initial items, load more pages
+            let allFoundItems = foundInInitial;
+            if (foundInInitial.length < defaultIds.length) {
+              const items = await loadAllPagesUntilDefaultsFound(
+                defaultIds,
+                searchApi,
+                transformResponse
+              );
+              allFoundItems = items;
+              setAllItems((prevItems) => {
+                const newItems = [...items];
+                prevItems.forEach((item) => {
+                  if (!newItems.some((newItem) => newItem.id === item.id)) {
+                    newItems.push(item);
+                  }
+                });
+                return newItems;
+              });
+            }
+
+            // Check label mismatch
+            const labelMismatches = fieldConfig.defaultValue.filter(
+              (defaultItem) => {
+                const matchingItem = allFoundItems.find(
+                  (item) => item.id === defaultItem.id
+                );
+                return matchingItem && matchingItem.label !== defaultItem.label;
+              }
+            );
+
+            if (labelMismatches.length > 0) {
+              console.warn(
+                'Label mismatch detected for items:',
+                labelMismatches
+              );
+              setLabelMismatchWarning(
+                `Warning: Some items have different labels in the system. Labels have been updated to match the system values.`
+              );
+            }
+
+            // Set selected items based on found items, maintaining order and using correct labels
+            const defaultItems = fieldConfig.defaultValue.map((defaultItem) => {
+              const foundItem = allFoundItems.find(
                 (item) => item.id === defaultItem.id
               );
-              return matchingItem && matchingItem.label !== defaultItem.label;
+              return foundItem || defaultItem;
+            });
+
+            setSelectedItems(defaultItems);
+
+            if (overrideOnMismatchLabel) {
+              // Update form value with correct labels
+              field.onChange(defaultItems);
             }
-          );
-
-          if (labelMismatches.length > 0) {
-            console.warn('Label mismatch detected for items:', labelMismatches);
-            setLabelMismatchWarning(
-              `Warning: Some items have different labels in the system. Labels have been updated to match the system values.`
-            );
-          }
-
-          // Set selected items based on found items, maintaining order and using correct labels
-          const defaultItems = fieldConfig.defaultValue.map((defaultItem) => {
-            const foundItem = allFoundItems.find(
-              (item) => item.id === defaultItem.id
-            );
-            return foundItem || defaultItem;
-          });
-
-          setSelectedItems(defaultItems);
-
-          if (overrideOnMismatchLabel) {
-            // Update form value with correct labels
-            field.onChange(defaultItems);
           }
         }
       } catch (error) {

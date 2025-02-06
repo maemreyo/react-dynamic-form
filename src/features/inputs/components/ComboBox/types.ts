@@ -33,4 +33,5 @@ export interface CustomComboBoxProps {
   overrideOnMismatchLabel?: boolean;
   disabledItemsPosition?: 'top' | 'bottom' | 'none';
   draggableListDirection?: 'vertical' | 'horizontal';
+  loadInitialItems?: boolean;
 }
