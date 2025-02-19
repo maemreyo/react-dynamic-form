@@ -10,13 +10,37 @@ const useRHFOptions = (
   validateOnSubmit: boolean,
   validateOnChange: boolean,
   validateOnBlur: boolean,
-  globalValidationMessages: ValidationMessages | undefined
+  globalValidationMessages: ValidationMessages | undefined,
+  beforeValidate?: (data: FormValues) => boolean | Promise<boolean>
 ): UseFormProps<FormValues> => {
   return useMemo(() => {
-    // console.log('[useRHFOptions] Creating schema with config:', config);
-
     const schema = createValidationSchema(config, globalValidationMessages);
-    const resolver = yupResolver(schema);
+    const yupResolverInstance = yupResolver(schema);
+
+    const customResolver = async (
+      values: FormValues,
+      context: any,
+      options: any
+    ) => {
+      // Run beforeValidate hook first
+      if (beforeValidate) {
+        const shouldContinue = await beforeValidate(values);
+        if (!shouldContinue) {
+          return {
+            values: {},
+            errors: {
+              root: {
+                type: 'beforeValidate',
+                message: 'Validation stopped by beforeValidate hook',
+              },
+            },
+          };
+        }
+      }
+
+      // If beforeValidate passes or is not provided, proceed with Yup validation
+      return yupResolverInstance(values, context, options);
+    };
 
     return {
       ...formOptions,
@@ -28,7 +52,7 @@ const useRHFOptions = (
             ? 'onBlur'
             : 'onSubmit',
       criteriaMode: 'all',
-      resolver,
+      resolver: customResolver,
     } as UseFormProps<FormValues>;
   }, [
     config,
@@ -37,6 +61,7 @@ const useRHFOptions = (
     validateOnChange,
     validateOnBlur,
     globalValidationMessages,
+    beforeValidate,
   ]);
 };
 

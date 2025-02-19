@@ -994,3 +994,93 @@ ComboBoxInput.args = {
   onFormReady: fn(),
 };
 ComboBoxInput.storyName = 'ComboBox Input';
+
+// Story for Form Lifecycle Hooks
+export const FormLifecycleHooks = Template.bind({});
+FormLifecycleHooks.args = {
+  theme: defaultTheme,
+  config: {
+    username: {
+      label: 'Username',
+      type: 'text',
+      validation: {
+        required: { value: true, message: 'Username is required' },
+        minLength: {
+          value: 3,
+          message: 'Username must be at least 3 characters',
+        },
+      },
+    },
+    email: {
+      label: 'Email',
+      type: 'email',
+      validation: {
+        required: { value: true, message: 'Email is required' },
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+          message: 'Invalid email address',
+        },
+      },
+    },
+  },
+
+  beforeValidate: async (data) => {
+    console.log('Before Validate:', data);
+    if (!data.username) {
+      window.alert('Username cannot empty');
+      return false;
+    }
+    if (data.username && /[^a-zA-Z0-9]/.test(data.username)) {
+      window.alert('Username cannot contain special characters');
+      return false;
+    }
+    return true;
+  },
+  afterValidate: (isValid, errors) => {
+    console.log('After Validate - Is Valid:', isValid);
+    console.log('After Validate - Errors:', errors);
+    if (!isValid) {
+      window.alert('Validation failed! Please check the form.');
+    }
+  },
+  beforeSubmit: async (data) => {
+    console.log('Before Submit:', data);
+    return window.confirm('Are you sure you want to submit?');
+  },
+  afterSubmit: (data, error) => {
+    if (error) {
+      console.log('After Submit - Error:', error);
+      window.alert('Submission failed!');
+    } else {
+      console.log('After Submit - Success:', data);
+      window.alert('Form submitted successfully!');
+    }
+  },
+  onSubmit: async (data) => {
+    console.log('OnSubmit:', data);
+    // Simulate API call with potential error
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (data.email === 'error@test.com') {
+          reject(new Error('Submission failed'));
+        } else {
+          resolve(data);
+        }
+      }, 1000);
+    });
+  },
+  onError: (errors) => {
+    console.log('OnError:', errors);
+  },
+  showInlineError: true,
+  formClassNameConfig: {
+    formContainer: 'p-6 border border-gray-300 rounded-md',
+    inputWrapper: 'mb-4',
+    label: 'block text-gray-700 text-sm font-bold mb-2',
+    input: 'border border-gray-400 p-2 rounded w-full',
+    errorMessage: 'text-red-500 text-xs italic mt-1',
+    button:
+      'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded',
+  },
+};
+FormLifecycleHooks.storyName = 'Form Lifecycle Hooks';

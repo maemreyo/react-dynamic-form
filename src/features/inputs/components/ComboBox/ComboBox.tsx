@@ -240,6 +240,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         const transformedItems = response.data.map(transformResponse);
         setSearchResults(transformedItems);
 
+        // @ts-ignore
         setAllItems((prevItems) => {
           const newItems = [...transformedItems];
           selectedItems.forEach((selectedItem) => {
