@@ -189,6 +189,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
 }) => {
   const { label } = fieldConfig;
   const {
+    onItemsChange,
     searchApi,
     transformResponse = defaultTransformResponse,
     debounceTime = 500,
@@ -273,6 +274,10 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       );
       setSelectedItems(updatedItems);
       field.onChange(updatedItems);
+
+      if (onItemsChange) {
+        onItemsChange(updatedItems);
+      }
     },
     [allItems, selectedItems, field]
   );
