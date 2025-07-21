@@ -34,4 +34,5 @@ export interface CustomComboBoxProps {
   disabledItemsPosition?: 'top' | 'bottom' | 'none';
   draggableListDirection?: 'vertical' | 'horizontal';
   loadInitialItems?: boolean;
+  hideSelectedOptions?: boolean;
 }

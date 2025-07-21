@@ -203,6 +203,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
     disabledItemsPosition = 'top',
     draggableListDirection = 'vertical',
     loadInitialItems = false,
+    hideSelectedOptions = false,
   } = fieldConfig.inputProps as CustomComboBoxProps;
 
   const { control } = useFormContext();
@@ -244,10 +245,14 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         if (!response || !Array.isArray(response.data)) {
           console.error('Invalid API response structure:', response);
           setSearchResults([]);
+          setError('Invalid response format from server');
           return;
         }
 
-        const transformedItems = response.data.map(transformResponse);
+        const transformedItems = response.data
+          .map(transformResponse)
+          .filter((item) => item && item.id && item.label); // Filter out invalid items
+
         setSearchResults(transformedItems);
 
         setAllItems((prevItems) => {
@@ -292,12 +297,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   );
 
   const handleDropdownOpen = useCallback(async () => {
-    console.log('🔽 Dropdown Open:', {
-      searchResultsLength: searchResults.length,
-      isLoading,
-    }); // Debug log
     if (searchResults.length === 0 && !isLoading) {
-      console.log('🔍 Triggering initial search...'); // Debug log
       await handleSearch('');
     }
   }, [searchResults.length, isLoading, handleSearch]);
@@ -309,11 +309,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         (item) => !searchResults.some((sr) => sr.id === item.id)
       ),
     ];
-    console.log('🔗 Combined Options:', {
-      searchResults,
-      selectedItems,
-      combined,
-    }); // Debug log
     return combined;
   }, [searchResults, selectedItems]);
 
@@ -323,7 +318,6 @@ const ComboBox: React.FC<ComboBoxProps> = ({
       label: item.label,
       disabled: item.disabled,
     }));
-    console.log('⚙️ Final Options for SortableTagPicker:', mappedOptions); // Debug log
     return mappedOptions;
   }, [combinedOptions]);
 
@@ -409,6 +403,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         showDraggableList={showDraggableList}
         disabledItemsPosition={disabledItemsPosition}
         draggableListDirection={draggableListDirection}
+        hideSelectedOptions={hideSelectedOptions}
       />
     </Container>
   );
