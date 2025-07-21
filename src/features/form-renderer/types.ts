@@ -11,6 +11,7 @@ import {
   RenderSubmitButtonProps,
   RenderFormFooterProps,
   RenderFormContentProps,
+  RenderErrorMessageProps,
 } from '../dynamic-form/types';
 import { GridFormContainerProps } from '../../styles';
 
@@ -62,6 +63,8 @@ export interface FormContentProps {
   customInputs?: {
     [key: string]: React.ComponentType<any>;
   };
+  /** Optional custom error message renderer. */
+  renderErrorMessage?: RenderErrorMessageProps;
 }
 
 // --- Form Footer ---

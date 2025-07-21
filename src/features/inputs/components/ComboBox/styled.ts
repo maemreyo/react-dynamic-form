@@ -5,8 +5,9 @@ interface ValidationProps {
   $validation?: any;
 }
 
-export const Container = styled.div``;
-
+export const Container = styled.div`
+  width: 100%;
+`;
 export const SearchContainer = styled.div`
   position: relative;
   margin-bottom: ${({ theme }) => theme.space.lg};

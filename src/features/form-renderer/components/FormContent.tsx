@@ -69,7 +69,7 @@ const FormContent: React.FC<FormContentProps> = ({
               showInlineError={showInlineError}
               horizontalLabel={horizontalLabel}
               labelWidth={labelWidth}
-              customInputs={customInputs} // Pass customInputs here
+              customInputs={customInputs}
             />
           );
 

@@ -54,6 +54,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   onError,
   renderErrorSummary,
   validationMessages,
+  beforeSubmit,
+  afterSubmit,
+  beforeValidate,
+  afterValidate,
 }) => {
   const mergedFormOptions = useRHFOptions(
     config,
@@ -61,7 +65,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     validateOnSubmit,
     validateOnChange,
     validateOnBlur,
-    validationMessages
+    validationMessages,
+    beforeValidate
   );
 
   const form = useDynamicForm({
@@ -85,11 +90,45 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     validationMessages
   );
 
-  const onSubmitHandler = (): any => {
+  const onSubmitHandler = async (): Promise<void> => {
+    const formData = form.getValues();
+
+    // Validate form
+    const isValid = await form.trigger();
+
+    // After validation hook
+    if (afterValidate) {
+      afterValidate(isValid, form.formState.errors);
+    }
+
+    if (!isValid) return;
+
+    // Before submit hook
+    if (beforeSubmit) {
+      const shouldContinue = await beforeSubmit(formData);
+      if (!shouldContinue) return;
+    }
+
+    // Submit form
     handleSubmit(
-      (data) => {
-        if (onSubmit) {
-          onSubmit(data);
+      async (data) => {
+        try {
+          if (onSubmit) {
+            await onSubmit(data);
+          }
+          // After submit hook - success
+          if (afterSubmit) {
+            afterSubmit(data);
+          }
+        } catch (error) {
+          // After submit hook - error
+          if (afterSubmit) {
+            afterSubmit(data, error);
+          }
+          // Handle error
+          if (onError) {
+            onError(form.formState.errors);
+          }
         }
       },
       (errors: FieldErrors) => {

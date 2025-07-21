@@ -134,6 +134,17 @@ export interface DynamicFormProps {
   onChange?: (formData: FormValues) => void;
   /** Optional callback function to be called when the form is submitted. */
   onSubmit?: SubmitHandler<FieldValues>;
+  /** Called before form validation starts */
+  beforeValidate?: (data: FormValues) => boolean | Promise<boolean>;
+
+  /** Called after form validation completes */
+  afterValidate?: (isValid: boolean, errors: FieldErrors) => void;
+
+  /** Called before form submission starts */
+  beforeSubmit?: (data: FormValues) => boolean | Promise<boolean>;
+
+  /** Called after form submission completes */
+  afterSubmit?: (data: FormValues, error?: any) => void;
 }
 
 /**
@@ -190,6 +201,8 @@ export interface FieldConfig {
   inputComponent?: React.ComponentType<CustomInputProps>;
   /** Optional custom props for the input. */
   inputProps?: Record<string, any>;
+  /** Optional custom error message renderer. */
+  renderErrorMessage?: RenderErrorMessageProps;
 }
 
 // --- Input Types ---

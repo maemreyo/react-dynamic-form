@@ -69,10 +69,10 @@ function useFormFields(
   );
 
   const fields = useMemo(() => {
-    console.log(
-      '[useFormFields] Generating fields with flattenedConfig:',
-      flattenedConfig
-    );
+    // console.log(
+    //   '[useFormFields] Generating fields with flattenedConfig:',
+    //   flattenedConfig
+    // );
 
     return getFields(flattenedConfig, formState, globalValidationMessages);
   }, [flattenedConfig, formState, globalValidationMessages]);

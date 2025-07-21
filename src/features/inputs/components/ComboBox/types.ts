@@ -1,6 +1,7 @@
 export interface Item {
   id: string;
   label: string;
+  disabled?: boolean;
 }
 
 export interface SearchResponse<T> {
@@ -28,4 +29,9 @@ export interface CustomComboBoxProps {
   enablePagination?: boolean;
   defaultPageSize?: number;
   required?: boolean;
+  showDraggableList?: boolean;
+  overrideOnMismatchLabel?: boolean;
+  disabledItemsPosition?: 'top' | 'bottom' | 'none';
+  draggableListDirection?: 'vertical' | 'horizontal';
+  loadInitialItems?: boolean;
 }

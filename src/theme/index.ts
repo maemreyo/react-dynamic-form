@@ -1,40 +1,15 @@
+import { merge } from 'lodash';
 import { DefaultTheme } from 'styled-components';
 
 /**
- * Default theme for the form.
+ * Base theme with standardized values.
  */
-export const defaultTheme: DefaultTheme = {
+const baseTheme = {
   colors: {
+    // Primary Colors
     primary: '#FF902F',
+    primaryLight: '#FFB97C', // Adjusted based on the provided shades
     'primary-hover': '#e5791e',
-    secondary: '#212529',
-    'secondary-hover': '#0d0f10',
-    success: '#55CE63',
-    'success-hover': '#39b248',
-    info: '#009EFB',
-    'info-hover': '#0075c7',
-    warning: '#FFBC34',
-    'warning-hover': '#e5a62a',
-    danger: '#FC133D',
-    'danger-hover': '#e51037',
-    blue: '#00c5fb',
-    'blue-hover': '#0097c7',
-    maroon: '#f43b48',
-    'maroon-hover': '#dc2734',
-    violet: '#667eea',
-    'violet-hover': '#5063c9',
-    dark: '#29344a',
-    light: '#D5D8DA',
-    white: '#FFF',
-    black: '#000',
-    purple: '#9368E9',
-    pink: '#FC6075',
-    teal: '#02a8b5',
-    cyan: '#299cdb',
-    green: '#35BA67',
-    orange: '#fbc418',
-    indigo: '#4d5ddb',
-    yellow: '#ffd200',
     'primary-100': '#FFF5EC',
     'primary-200': '#FFEBDA',
     'primary-300': '#FFE1C7',
@@ -45,6 +20,11 @@ export const defaultTheme: DefaultTheme = {
     'primary-800': '#FFAF69',
     'primary-900': '#FF8012',
     'primary-1000': '#FF801F',
+
+    // Secondary Colors
+    secondary: '#212529',
+    secondaryLight: '#646669', // Adjusted based on the provided shades
+    'secondary-hover': '#0d0f10',
     'secondary-100': '#E9E9EA',
     'secondary-200': '#D3D3D4',
     'secondary-300': '#BCBEBF',
@@ -54,15 +34,11 @@ export const defaultTheme: DefaultTheme = {
     'secondary-700': '#646669',
     'secondary-800': '#4D5154',
     'secondary-900': '#373B3E',
-    'light-100': '#FCFCFC',
-    'light-200': '#F9F9F9',
-    'light-300': '#F5F6F7',
-    'light-400': '#F2F3F4',
-    'light-500': '#EFF0F1',
-    'light-600': '#ECEDEE',
-    'light-700': '#E9EAEB',
-    'light-800': '#E5E7E9',
-    'light-900': '#E2E4E6',
+
+    // Success Colors
+    success: '#55CE63',
+    successLight: '#88DD92', // Adjusted based on the provided shades
+    'success-hover': '#39b248',
     'success-100': '#EEFAEF',
     'success-200': '#DDF5E0',
     'success-300': '#CCF0D0',
@@ -72,6 +48,11 @@ export const defaultTheme: DefaultTheme = {
     'success-700': '#88DD92',
     'success-800': '#77D882',
     'success-900': '#66D373',
+
+    // Danger Colors
+    danger: '#FC133D',
+    dangerLight: '#F96C85', // Adjusted based on the provided shades
+    'danger-hover': '#e51037',
     'danger-100': '#FEEAEE',
     'danger-200': '#FDD5DC',
     'danger-300': '#FCC0CB',
@@ -81,6 +62,11 @@ export const defaultTheme: DefaultTheme = {
     'danger-700': '#F96C85',
     'danger-800': '#F85774',
     'danger-900': '#F74262',
+
+    // Info Colors
+    info: '#009EFB',
+    infoLight: '#4DBBFC', // Adjusted based on the provided shades
+    'info-hover': '#0075c7',
     'info-100': '#E6F5FF',
     'info-200': '#CCECFE',
     'info-300': '#B3E2FE',
@@ -90,6 +76,11 @@ export const defaultTheme: DefaultTheme = {
     'info-700': '#4DBBFC',
     'info-800': '#33B1FC',
     'info-900': '#1AA8FB',
+
+    // Warning Colors
+    warning: '#FFBC34',
+    warningLight: '#FFD071', // Adjusted based on the provided shades
+    'warning-hover': '#e5a62a',
     'warning-100': '#FFF8EB',
     'warning-200': '#FFF2D6',
     'warning-300': '#FFEBC2',
@@ -99,6 +90,21 @@ export const defaultTheme: DefaultTheme = {
     'warning-700': '#FFD071',
     'warning-800': '#FFC95D',
     'warning-900': '#FFC348',
+
+    // Other Colors
+    blue: '#00c5fb',
+    'blue-hover': '#0097c7',
+    maroon: '#f43b48',
+    'maroon-hover': '#dc2734',
+    violet: '#667eea',
+    'violet-hover': '#5063c9',
+    dark: '#29344a',
+    light: '#D5D8DA',
+    white: '#FFF',
+    black: '#000',
+
+    // Additional Colors
+    purple: '#9368E9',
     'purple-100': '#F4F0FD',
     'purple-200': '#E9E1FB',
     'purple-300': '#DFD2F8',
@@ -108,6 +114,8 @@ export const defaultTheme: DefaultTheme = {
     'purple-700': '#B395F0',
     'purple-800': '#A986ED',
     'purple-900': '#9E77EB',
+
+    pink: '#FC6075',
     'pink-100': '#FFEFF1',
     'pink-200': '#FEDFE3',
     'pink-300': '#FECFD6',
@@ -117,19 +125,42 @@ export const defaultTheme: DefaultTheme = {
     'pink-700': '#FD909E',
     'pink-800': '#FD8091',
     'pink-900': '#FF445D',
+    teal: '#02a8b5',
+    cyan: '#299cdb',
+    green: '#35BA67',
+    orange: '#fbc418',
+    indigo: '#4d5ddb',
+    yellow: '#ffd200',
+
+    'light-100': '#FCFCFC',
+    'light-200': '#F9F9F9',
+    'light-300': '#F5F6F7',
+    'light-400': '#F2F3F4',
+    'light-500': '#EFF0F1',
+    'light-600': '#ECEDEE',
+    'light-700': '#E9EAEB',
+    'light-800': '#E5E7E9',
+    'light-900': '#E2E4E6',
+
+    // Text Colors
     text: '#5B6670',
     'title-color': '#373B3E',
     'sub-title': '#4D5154',
+    'text-muted': '#9595b5',
+
+    // Background Colors
     background: '#f7f7f7',
     'body-dark-bg': '#263238',
     'wrapper-bg': '#f1f5f6',
-    'text-muted': '#9595b5',
+    'default-background': '#f7f8f9',
     'black-bg': '#16191c',
+
+    // Other Theming Colors
     'theme-title': '#97A2D2',
     'input-bg': '#2c2c50',
     'form-control-bg': '#FFF',
-    'default-background': '#f7f8f9',
-    // Social Icons Colors
+
+    // Social Media Colors
     facebook: '#3B5998',
     twitter: '#00ACEE',
     google: '#DD4B39',
@@ -154,97 +185,227 @@ export const defaultTheme: DefaultTheme = {
     yahoo: '#720E9E',
     gplus: '#DD4B39',
     appstore: '#000',
-    // Gradient Variables
+
+    // Gradient Colors
     'primary-gradient':
       'linear-gradient(90.31deg, #FF902F -1.02%, #FF2D3D 132.59%)',
     'blue-gradient': 'linear-gradient(to right, #00c5fb 0%, #0253cc 100%)',
     'maroon-gradient': 'linear-gradient(to right, #f43b48 0%, #453a94 100%)',
     'violet-gradient': 'linear-gradient(to right, #667eea 0%, #764ba2 100%)',
+
+    // Border Colors
     border: '#D3D3D4',
     'default-border': '#A6A8A9',
     'dark-border': '#2e3840',
     'input-border': '#C6C6C6',
     error: '#dc3545',
   },
-  space: {
-    xs: '2px',
-    sm: '4px',
-    md: '6.5px',
-    lg: '12px',
-    xl: '16px',
-    '2xl': '24px',
-    '3xl': '32px',
-    '4xl': '40px',
-    '5xl': '48px',
-    '6xl': '52px',
-    '7xl': '64px',
-    '8xl': '72px',
-    '9xl': '80px',
+  spacing: {
+    gridUnit: 4, // Define the base grid unit
+    spacingXXS: 2, // Added XXS spacing
+    spacingXS: 4,
+    spacingSM: 8,
+    spacingMD: 16,
+    spacingLG: 24,
+    spacingXL: 32,
+    spacingXXL: 48,
+    spacing3XL: 64,
+    spacing4XL: 80,
+    // Add more spacing if necessary
   },
-  fontSizes: {
-    '8': '8px',
-    '9': '9px',
-    '10': '10px',
-    '11': '11px',
-    '12': '12px',
-    '13': '13px',
-    '14': '14px',
-    small: '13px',
-    medium: '15px',
-    '17': '17px',
-    '18': '18px',
-    '19': '19px',
-    large: '20px',
-    '22': '22px',
-    '23': '23px',
-    '24': '24px',
-    '26': '26px',
-    '28': '28px',
-    '30': '30px',
-    '32': '32px',
-    '34': '34px',
-    '36': '36px',
-    '40': '40px',
-    '42': '42px',
-    '48': '48px',
-    '50': '50px',
-    '54': '54px',
-    '60': '60px',
-    h1: '2rem',
+  typography: {
+    primaryFont: 'Helvetica Neue, Arial, sans-serif', // Added a generic font family
+    // Define font sizes based on the grid unit
+    fontSizeXXS: 8, // Added XXS font size
+    fontSizeXS: 10, // Added XS font size
+    fontSizeSM: 13,
+    fontSizeMD: 15,
+    fontSizeLG: 20,
+    fontSizeXL: 24,
+    fontSizeXXL: 30,
+    fontSize3XL: 36,
+    fontSize4XL: 48,
+
+    // Define font weights
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightBold: 700,
+
+    // Define headings
+    h1: '2rem', // Relative to the base font size
     h2: '1.75rem',
     h3: '1.5rem',
     h4: '1.25rem',
     h5: '1.15rem',
     h6: '1rem',
   },
+  borders: {
+    // Define border widths
+    borderWidth: 1,
+    borderWidthSM: 1,
+    borderWidthMD: 2,
+    borderWidthLG: 4,
+    // Define border radius
+    borderRadiusSM: 4,
+    borderRadiusMD: 6,
+    borderRadiusLG: 8,
+    borderRadiusXL: 10,
+    borderRadius2XL: 12,
+    borderRadiusRounded: '50%',
+    borderRadiusPill: '1.5rem',
+  },
+  breakpoints: {
+    // Define breakpoints based on common screen sizes
+    breakpointXS: '0px',
+    breakpointSM: '576px',
+    breakpointMD: '768px',
+    breakpointLG: '992px',
+    breakpointXL: '1200px',
+    breakpointXXL: '1400px',
+  },
+  shadows: {
+    // Define shadows
+    shadowSM: '0px 4px 8px 0px rgba(255, 255, 255, 0.15)', // Added light color for better visibility
+    shadowMD: '0px 4px 16px 0px rgba(255, 255, 255, 0.7)', // Added light color for better visibility
+    shadowLG: '0px 4px 24px 0px #BCBCBC40',
+  },
+  transitions: {
+    // Define transitions
+    transitionXS: '0.1s',
+    transitionSM: '0.2s',
+    transitionMD: '0.3s', // Default transition
+    transitionLG: '0.4s',
+    transitionXL: '0.5s',
+    transitionEase: 'ease',
+    transitionEaseIn: 'ease-in',
+    transitionEaseOut: 'ease-out',
+    transitionEaseInOut: 'ease-in-out',
+    transitionLinear: 'linear',
+    // Predefined transition effects
+    transitionNormal: 'all 0.3s ease',
+    transitionFast: 'all 0.2s ease-in-out',
+    transitionSlow: 'all 0.4s ease',
+    transitionButton:
+      'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease',
+    transitionInput: 'border-color 0.2s ease, box-shadow 0.2s ease',
+  },
+  componentDefaults: {
+    // Define component defaults
+    buttonPadding: '12px 24px', // Using spacingMD
+    inputPadding: '12px',
+    inputBorder: '1px solid #C6C6C6',
+    inputBorderFocus: '1px solid #FF902F',
+    buttonPrimaryBackground: '#FF902F',
+    buttonPrimaryColor: '#FFF',
+  },
+  darkMode: {
+    // Define dark mode colors
+    darkBackground: '#333',
+    darkText: '#FFF',
+    darkBorder: '#666',
+    // Add more dark mode colors if necessary
+  },
+};
+
+/**
+ * Default theme for the form.
+ * Inherits from baseTheme and overrides specific values.
+ */
+export const defaultTheme: DefaultTheme = {
+  ...baseTheme,
+  colors: {
+    ...baseTheme.colors,
+    // Override any specific colors here if needed
+  },
+  space: {
+    ...baseTheme.spacing,
+    xs: `${baseTheme.spacing.spacingXS}px`,
+    sm: `${baseTheme.spacing.spacingSM}px`,
+    md: `${baseTheme.spacing.spacingMD}px`,
+    lg: `${baseTheme.spacing.spacingLG}px`,
+    xl: `${baseTheme.spacing.spacingXL}px`,
+    '2xl': `${baseTheme.spacing.spacingXXL}px`,
+    '3xl': `${baseTheme.spacing.spacing3XL}px`,
+    '4xl': `${baseTheme.spacing.spacing4XL}px`,
+    '5xl': `${baseTheme.spacing.spacingXXL * 1.5}px`, // Example of calculated value
+    '6xl': `${baseTheme.spacing.spacingXXL * 2}px`,
+    '7xl': `${baseTheme.spacing.spacing3XL * 1.5}px`,
+    '8xl': `${baseTheme.spacing.spacing3XL * 2}px`,
+    '9xl': `${baseTheme.spacing.spacing4XL * 1.5}px`,
+    // Add more custom spacing if necessary
+  },
+  fontSizes: {
+    ...baseTheme.typography,
+    '8': `${baseTheme.typography.fontSizeXXS}px`,
+    '9': `${baseTheme.typography.fontSizeXS}px`,
+    '10': `${baseTheme.typography.fontSizeXS + 2}px`,
+    '11': `${baseTheme.typography.fontSizeXS + 3}px`,
+    '12': `${baseTheme.typography.fontSizeSM - 1}px`,
+    '13': `${baseTheme.typography.fontSizeSM}px`,
+    '14': `${baseTheme.typography.fontSizeSM + 1}px`,
+    small: `${baseTheme.typography.fontSizeSM}px`,
+    medium: `${baseTheme.typography.fontSizeMD}px`,
+    '17': `${baseTheme.typography.fontSizeMD + 2}px`,
+    '18': `${baseTheme.typography.fontSizeMD + 3}px`,
+    '19': `${baseTheme.typography.fontSizeMD + 4}px`,
+    large: `${baseTheme.typography.fontSizeLG}px`,
+    '22': `${baseTheme.typography.fontSizeLG + 2}px`,
+    '23': `${baseTheme.typography.fontSizeLG + 3}px`,
+    '24': `${baseTheme.typography.fontSizeXL}px`,
+    '26': `${baseTheme.typography.fontSizeXL + 2}px`,
+    '28': `${baseTheme.typography.fontSizeXL + 4}px`,
+    '30': `${baseTheme.typography.fontSizeXXL}px`,
+    '32': `${baseTheme.typography.fontSizeXXL + 2}px`,
+    '34': `${baseTheme.typography.fontSizeXXL + 4}px`,
+    '36': `${baseTheme.typography.fontSize3XL}px`,
+    '40': `${baseTheme.typography.fontSize3XL + 4}px`,
+    '42': `${baseTheme.typography.fontSize3XL + 6}px`,
+    '48': `${baseTheme.typography.fontSize4XL}px`,
+    '50': `${baseTheme.typography.fontSize4XL + 2}px`,
+    '54': `${baseTheme.typography.fontSize4XL + 6}px`,
+    '60': `${baseTheme.typography.fontSize4XL + 12}px`,
+    h1: baseTheme.typography.h1,
+    h2: baseTheme.typography.h2,
+    h3: baseTheme.typography.h3,
+    h4: baseTheme.typography.h4,
+    h5: baseTheme.typography.h5,
+    h6: baseTheme.typography.h6,
+  },
   fontWeights: {
+    ...baseTheme.typography,
     lighter: 'lighter',
-    light: 300,
-    normal: 400,
-    medium: 500,
-    semibold: 600,
-    bold: 700,
+    light: baseTheme.typography.fontWeightLight,
+    normal: baseTheme.typography.fontWeightRegular,
+    medium: baseTheme.typography.fontWeightMedium,
+    semibold: baseTheme.typography.fontWeightBold - 100,
+    bold: baseTheme.typography.fontWeightBold,
     bolder: 'bolder',
   },
   radius: {
-    sm: '4px',
-    md: '6px',
-    lg: '8px',
-    xl: '10px',
-    '2xl': '12px',
-    rounded: '50%',
-    pill: '1.5rem',
+    ...baseTheme.borders,
+    sm: `${baseTheme.borders.borderRadiusSM}px`,
+    md: `${baseTheme.borders.borderRadiusMD}px`,
+    lg: `${baseTheme.borders.borderRadiusLG}px`,
+    xl: `${baseTheme.borders.borderRadiusXL}px`,
+    '2xl': `${baseTheme.borders.borderRadius2XL}px`,
+    rounded: `${baseTheme.borders.borderRadiusRounded}`,
+    pill: `${baseTheme.borders.borderRadiusPill}`,
   },
   breakpoints: {
-    sm: '576px',
-    md: '768px',
-    lg: '992px',
-    xl: '1200px',
+    ...baseTheme.breakpoints,
+    // Use the same values as baseTheme
+    sm: baseTheme.breakpoints.breakpointSM,
+    md: baseTheme.breakpoints.breakpointMD,
+    lg: baseTheme.breakpoints.breakpointLG,
+    xl: baseTheme.breakpoints.breakpointXL,
   },
   shadows: {
-    sm: '0px 4px 8px 0px rgba(255, 255, 255, 0.15)',
-    md: '0px 4px 16px 0px rgba(255, 255, 255, 0.7)',
-    lg: '0px 4px 24px 0px #BCBCBC40',
+    ...baseTheme.shadows,
+    // Use the same values as baseTheme
+    sm: baseTheme.shadows.shadowSM,
+    md: baseTheme.shadows.shadowMD,
+    lg: baseTheme.shadows.shadowLG,
   },
 };
 
@@ -254,33 +415,10 @@ export const defaultTheme: DefaultTheme = {
  * @param customTheme - The custom theme object.
  * @returns The merged theme object.
  */
-export const createTheme = (customTheme: any): DefaultTheme => {
-  return {
-    ...defaultTheme,
-    ...customTheme,
-    colors: {
-      ...defaultTheme.colors,
-      ...(customTheme.colors || {}),
-    },
-    space: {
-      ...defaultTheme.space,
-      ...(customTheme.space || {}),
-    },
-    fontSizes: {
-      ...defaultTheme.fontSizes,
-      ...(customTheme.fontSizes || {}),
-    },
-    fontWeights: {
-      ...defaultTheme.fontWeights,
-      ...(customTheme.fontWeights || {}),
-    },
-    radius: {
-      ...defaultTheme.radius,
-      ...(customTheme.radius || {}),
-    },
-    breakpoints: {
-      ...defaultTheme.breakpoints,
-      ...(customTheme.breakpoints || {}),
-    },
-  };
+export const createTheme = <T extends Partial<DefaultTheme>>(
+  customTheme: T
+): DefaultTheme => {
+  return merge({}, defaultTheme, customTheme);
 };
+
+export default createTheme<any>({});

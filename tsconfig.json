@@ -33,11 +33,12 @@
     "outDir": "./dist",
     "emitDeclarationOnly": false,
     "noEmit": false, // Changed to false to emit output files,
-    // "paths": {
-    //   "@/*": ["./src/*"],
-    //   "features/*": ["./src/features/*"],
-    //   "components/*": ["./src/components/*"],
-    //   "theme/*": ["./src/theme/*"]
-    // }
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"],
+      "features/*": ["./src/features/*"],
+      "components/*": ["./src/components/*"],
+      "theme/*": ["./src/theme/*"]
+    }
   }
 }
