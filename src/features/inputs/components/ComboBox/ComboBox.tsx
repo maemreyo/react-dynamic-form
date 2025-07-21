@@ -227,38 +227,47 @@ const ComboBox: React.FC<ComboBoxProps> = ({
 
   const handleSearch = useCallback(
     async (query: string) => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        setCurrentPage(1);
+      if (!searchApi) {
+        return;
+      }
 
+      setIsLoading(true);
+      setError(null);
+      try {
+        setCurrentPage(1);
         const response = await searchApi({
           query,
           pageIndex: 1,
           pageSize: PAGE_SIZE,
         });
 
+        if (!response || !Array.isArray(response.data)) {
+          console.error('Invalid API response structure:', response);
+          setSearchResults([]);
+          return;
+        }
+
         const transformedItems = response.data.map(transformResponse);
         setSearchResults(transformedItems);
 
-        // @ts-ignore
         setAllItems((prevItems) => {
-          const newItems = [...transformedItems];
-          selectedItems.forEach((selectedItem) => {
-            if (!newItems.some((item) => item.id === selectedItem.id)) {
-              newItems.push(selectedItem);
+          const newItemsMap = new Map(prevItems.map((i) => [i.id, i]));
+          transformedItems.forEach((item) => {
+            if (item && item.id) {
+              newItemsMap.set(item.id, item);
             }
           });
-          return newItems;
+          return Array.from(newItemsMap.values());
         });
       } catch (err) {
+        console.error('Failed to fetch search results:', err);
         setError('Failed to fetch search results');
         setSearchResults([]);
       } finally {
         setIsLoading(false);
       }
     },
-    [searchApi, transformResponse, selectedItems]
+    [searchApi, transformResponse]
   );
 
   const handleOnChange = useCallback(
@@ -283,30 +292,40 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   );
 
   const handleDropdownOpen = useCallback(async () => {
+    console.log('🔽 Dropdown Open:', {
+      searchResultsLength: searchResults.length,
+      isLoading,
+    }); // Debug log
     if (searchResults.length === 0 && !isLoading) {
+      console.log('🔍 Triggering initial search...'); // Debug log
       await handleSearch('');
     }
   }, [searchResults.length, isLoading, handleSearch]);
 
-  const combinedOptions = useMemo(
-    () => [
+  const combinedOptions = useMemo(() => {
+    const combined = [
       ...searchResults,
       ...selectedItems.filter(
         (item) => !searchResults.some((sr) => sr.id === item.id)
       ),
-    ],
-    [searchResults, selectedItems]
-  );
+    ];
+    console.log('🔗 Combined Options:', {
+      searchResults,
+      selectedItems,
+      combined,
+    }); // Debug log
+    return combined;
+  }, [searchResults, selectedItems]);
 
-  const options = useMemo(
-    () =>
-      combinedOptions.map((item) => ({
-        value: item.id,
-        label: item.label,
-        disabled: item.disabled,
-      })),
-    [combinedOptions]
-  );
+  const options = useMemo(() => {
+    const mappedOptions = combinedOptions.map((item) => ({
+      value: item.id,
+      label: item.label,
+      disabled: item.disabled,
+    }));
+    console.log('⚙️ Final Options for SortableTagPicker:', mappedOptions); // Debug log
+    return mappedOptions;
+  }, [combinedOptions]);
 
   const value = useMemo(
     () => selectedItems.map((item) => item.id),
