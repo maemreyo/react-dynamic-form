@@ -226,6 +226,7 @@ export type InputType =
   | 'time'
   | 'datetime-local'
   | 'combobox'
+  | 'reactSelectComboBox'
   | 'custom';
 
 // --- Validation ---

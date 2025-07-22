@@ -431,6 +431,38 @@ export const WithFormValidation: Story = {
   },
 };
 
+export const WithCustomWidth: Story = {
+  args: {
+    id: 'fruits',
+    fieldConfig: {
+      label: 'Custom Width (100%)',
+      inputProps: {
+        searchApi: mockSearchApi,
+        placeholder: 'This combobox has 100% width...',
+        showDraggableList: true,
+        loadInitialItems: true,
+        controlWidth: '100%',
+      },
+    },
+  },
+};
+
+export const FixedWidth: Story = {
+  args: {
+    id: 'fruits',
+    fieldConfig: {
+      label: 'Fixed Width (400px)',
+      inputProps: {
+        searchApi: mockSearchApi,
+        placeholder: 'This combobox has a fixed width of 400px...',
+        showDraggableList: true,
+        loadInitialItems: true,
+        controlWidth: '400px',
+      },
+    },
+  },
+};
+
 export const RealWorldExample: Story = {
   args: {
     id: 'fruits',

@@ -30,6 +30,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
+  min-width: 200px;
 `;
 
 const SortableList = styled.div<{ $direction: 'horizontal' | 'vertical' }>`
@@ -181,6 +183,8 @@ const ReactSelectComboBox: React.FC<ReactSelectComboBoxProps> = ({
     draggableListDirection = 'vertical',
     loadInitialItems = false,
     hideSelectedOptions = false,
+    controlWidth,
+    minControlWidth,
   } = fieldConfig.inputProps || {};
 
   const { control } = useFormContext();
@@ -364,6 +368,8 @@ const ReactSelectComboBox: React.FC<ReactSelectComboBoxProps> = ({
         styles={{
           control: (base, state) => ({
             ...base,
+            width: controlWidth || 'auto',
+            minWidth: minControlWidth || '200px', // Default min-width to 200px if not provided
             borderColor:
               error || errorState
                 ? '#f44336'

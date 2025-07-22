@@ -43,4 +43,6 @@ export interface ReactSelectComboBoxProps {
   draggableListDirection?: 'horizontal' | 'vertical';
   loadInitialItems?: boolean;
   hideSelectedOptions?: boolean;
+  controlWidth?: string | number;
+  minControlWidth?: string | number;
 }
