@@ -23,7 +23,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { InputLabel } from '@matthew.ngo/react-form-kit';
 import styled from 'styled-components';
 
-import { ReactSelectComboBoxProps, Item, SearchParams } from './types';
+import { ReactSelectComboBoxProps, Item } from './types';
 
 // Styled Components
 const Container = styled.div`
@@ -167,21 +167,16 @@ const defaultTransformResponse = (item: any): Item => ({
 const ReactSelectComboBox: React.FC<ReactSelectComboBoxProps> = ({
   id,
   fieldConfig,
-  formClassNameConfig = {},
   error,
-  ...props
 }) => {
   const { label } = fieldConfig;
   const {
     searchApi,
     transformResponse = defaultTransformResponse,
     onItemsChange,
-    debounceTime = 500,
-    maxItems,
     placeholder = 'Search and select items...',
     disabled = false,
     showDraggableList = true,
-    overrideOnMismatchLabel = true,
     disabledItemsPosition = 'top',
     draggableListDirection = 'vertical',
     loadInitialItems = false,
@@ -238,9 +233,9 @@ const ReactSelectComboBox: React.FC<ReactSelectComboBoxProps> = ({
 
         const transformedItems = response.data
           .map(transformResponse)
-          .filter((item) => item && item.id && item.label);
+          .filter((item: any) => item && item.id && item.label);
 
-        return transformedItems.map((item) => ({
+        return transformedItems.map((item: any) => ({
           value: item.id,
           label: item.label,
           isDisabled: item.disabled,
