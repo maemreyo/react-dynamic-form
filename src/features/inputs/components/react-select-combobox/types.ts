@@ -45,4 +45,7 @@ export interface ReactSelectComboBoxProps {
   hideSelectedOptions?: boolean;
   controlWidth?: string | number;
   minControlWidth?: string | number;
+  containerWidth?: string | number;
+  minContainerWidth?: string | number;
+  maxContainerWidth?: string | number;
 }

@@ -25,13 +25,47 @@ import styled from 'styled-components';
 
 import { ReactSelectComboBoxProps, Item } from './types';
 
+// Deep Saffron Color Palette
+const deepSaffron = {
+  0: '#FFF5EC', // Lightest
+  1: '#FFEBDA',
+  2: '#FFE1C7',
+  3: '#FFD7B4',
+  4: '#FFCDA2',
+  5: '#FFC38F',
+  6: '#FFB97C',
+  7: '#FFAF69',
+  8: '#FF8012', // Primary
+  9: '#FF843F', // Darkest
+};
+
 // Styled Components
-const Container = styled.div`
+const Container = styled.div<{
+  $width?: string | number;
+  $minWidth?: string | number;
+  $maxWidth?: string | number;
+}>`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 100%;
-  min-width: 200px;
+  width: ${(props) =>
+    props.$width
+      ? typeof props.$width === 'number'
+        ? `${props.$width}px`
+        : props.$width
+      : '100%'};
+  min-width: ${(props) =>
+    props.$minWidth
+      ? typeof props.$minWidth === 'number'
+        ? `${props.$minWidth}px`
+        : props.$minWidth
+      : '200px'};
+  max-width: ${(props) =>
+    props.$maxWidth
+      ? typeof props.$maxWidth === 'number'
+        ? `${props.$maxWidth}px`
+        : props.$maxWidth
+      : 'none'};
 `;
 
 const SortableList = styled.div<{ $direction: 'horizontal' | 'vertical' }>`
@@ -49,11 +83,14 @@ const SortableItem = styled.div<{ $isDragging: boolean; $disabled?: boolean }>`
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 120px;
   background: ${(props) =>
     props.$disabled
       ? '#f8f9fa'
-      : '#e9f5ff'}; /* Lighter background for disabled, new light blue for enabled */
-  border: 1px solid ${(props) => (props.$disabled ? '#dee2e6' : '#007bff')}; /* Softer border for disabled, primary blue for enabled */
+      : deepSaffron[1]}; /* Light saffron background for enabled items */
+  border: 1px solid ${(props) => (props.$disabled ? '#dee2e6' : deepSaffron[6])}; /* Saffron border for enabled items */
   border-radius: 4px;
   cursor: ${(props) => (props.$disabled ? 'not-allowed' : 'grab')};
   opacity: ${(props) =>
@@ -64,25 +101,34 @@ const SortableItem = styled.div<{ $isDragging: boolean; $disabled?: boolean }>`
       : 'none'}; /* Subtle scale instead of rotate */
   box-shadow: ${(props) =>
     props.$isDragging
-      ? '0 4px 8px rgba(0, 0, 0, 0.1)'
-      : 'none'}; /* Add shadow when dragging */
+      ? '0 4px 8px rgba(255, 128, 18, 0.2)'
+      : 'none'}; /* Saffron shadow when dragging */
   transition: all 0.2s ease;
 
   &:hover {
     background: ${(props) =>
       props.$disabled
         ? '#f8f9fa'
-        : '#cfe2ff'}; /* Slightly darker light blue on hover */
+        : deepSaffron[2]}; /* Slightly darker saffron on hover */
     box-shadow: ${(props) =>
       props.$disabled
         ? 'none'
-        : '0 2px 4px rgba(0, 0, 0, 0.05)'}; /* Subtle shadow on hover */
+        : '0 2px 4px rgba(255, 128, 18, 0.1)'}; /* Subtle saffron shadow on hover */
+  }
+
+  /* Text label styling */
+  span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
   }
 `;
 
 const RemoveButton = styled.button`
   background: transparent; /* Transparent background */
-  color: #6c757d; /* Darker grey for icon */
+  color: ${deepSaffron[7]}; /* Saffron color for icon */
   border: none;
   border-radius: 50%;
   width: 20px;
@@ -95,7 +141,7 @@ const RemoveButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    background: #dc3545; /* Error red on hover */
+    background: ${deepSaffron[8]}; /* Primary saffron on hover */
     color: white;
   }
 
@@ -107,7 +153,7 @@ const RemoveButton = styled.button`
 `;
 
 const ErrorMessage = styled.div`
-  color: #dc3545; /* Softer error red */
+  color: ${deepSaffron[8]}; /* Primary saffron for errors */
   font-size: 12px;
   margin-top: 4px;
 `;
@@ -139,13 +185,13 @@ const SortableItemComponent: React.FC<{
       $isDragging={isDragging}
       $disabled={item.disabled}
       {...attributes}
-      {...listeners}
     >
-      <span>{item.label}</span>
+      <span {...listeners}>{item.label}</span>
       {!item.disabled && (
         <RemoveButton
           onClick={(e) => {
             e.stopPropagation();
+            e.preventDefault();
             onRemove(item.id);
           }}
           disabled={disabled}
@@ -185,6 +231,9 @@ const ReactSelectComboBox: React.FC<ReactSelectComboBoxProps> = ({
     hideSelectedOptions = false,
     controlWidth,
     minControlWidth,
+    containerWidth,
+    minContainerWidth,
+    maxContainerWidth,
   } = fieldConfig.inputProps || {};
 
   const { control } = useFormContext();
@@ -285,6 +334,7 @@ const ReactSelectComboBox: React.FC<ReactSelectComboBoxProps> = ({
   // Handle item removal
   const handleRemoveItem = useCallback(
     (itemId: string) => {
+      console.log(`Removing item with ID ${itemId}`);
       const newItems = selectedItems.filter((item) => item.id !== itemId);
       setSelectedItems(newItems);
       field.onChange(newItems);
@@ -347,7 +397,11 @@ const ReactSelectComboBox: React.FC<ReactSelectComboBoxProps> = ({
   );
 
   return (
-    <Container>
+    <Container
+      $width={containerWidth}
+      $minWidth={minContainerWidth}
+      $maxWidth={maxContainerWidth}
+    >
       <InputLabel label={label} htmlFor={id} required={required} />
 
       <AsyncSelect
@@ -372,27 +426,72 @@ const ReactSelectComboBox: React.FC<ReactSelectComboBoxProps> = ({
             minWidth: minControlWidth || '200px', // Default min-width to 200px if not provided
             borderColor:
               error || errorState
-                ? '#f44336'
+                ? deepSaffron[8]
                 : state.isFocused
-                  ? '#2196f3'
+                  ? deepSaffron[6]
                   : '#ddd',
             '&:hover': {
-              borderColor: error || errorState ? '#f44336' : '#2196f3',
+              borderColor:
+                error || errorState ? deepSaffron[8] : deepSaffron[6],
+            },
+          }),
+          menu: (base) => ({
+            ...base,
+            borderColor: deepSaffron[6],
+            boxShadow: `0 4px 8px rgba(255, 128, 18, 0.1)`, // Saffron shadow
+          }),
+          menuList: (base) => ({
+            ...base,
+            // Custom scrollbar styling
+            '&::-webkit-scrollbar': {
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-track': {
+              background: deepSaffron[0], // Lightest saffron
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: deepSaffron[5], // Medium saffron
+              borderRadius: '4px',
+              border: `1px solid ${deepSaffron[1]}`, // Light border
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              background: deepSaffron[6], // Darker on hover
+            },
+            // Firefox scrollbar
+            scrollbarWidth: 'thin',
+            scrollbarColor: `${deepSaffron[5]} ${deepSaffron[0]}`,
+          }),
+          option: (base, state) => ({
+            ...base,
+            backgroundColor: state.isSelected
+              ? deepSaffron[8] // Primary saffron for selected
+              : state.isFocused
+                ? deepSaffron[1] // Light saffron for focused
+                : 'white',
+            color: state.isSelected
+              ? 'white'
+              : state.isFocused
+                ? deepSaffron[8]
+                : '#333',
+            '&:hover': {
+              backgroundColor: deepSaffron[1],
+              color: deepSaffron[8],
             },
           }),
           multiValue: (base) => ({
             ...base,
-            backgroundColor: '#e3f2fd',
+            backgroundColor: deepSaffron[1], // Light saffron background
           }),
           multiValueLabel: (base) => ({
             ...base,
-            color: '#1976d2',
+            color: deepSaffron[8], // Primary saffron text
           }),
           multiValueRemove: (base) => ({
             ...base,
-            color: '#1976d2',
+            color: deepSaffron[7],
             '&:hover': {
-              backgroundColor: '#f44336',
+              backgroundColor: deepSaffron[8],
               color: 'white',
             },
           }),
