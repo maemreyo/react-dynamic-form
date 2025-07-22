@@ -313,13 +313,20 @@ const ComboBox: React.FC<ComboBoxProps> = ({
   }, [searchResults, selectedItems]);
 
   const options = useMemo(() => {
-    const mappedOptions = combinedOptions.map((item) => ({
-      value: item.id,
-      label: item.label,
-      disabled: item.disabled,
-    }));
+    const selectedIds = selectedItems.map((item) => item.id);
+
+    const mappedOptions = combinedOptions.map((item) => {
+      const isSelected = selectedIds.includes(item.id);
+
+      return {
+        value: item.id,
+        label: isSelected ? `✓ ${item.label}` : item.label,
+        disabled:
+          item.disabled || (hideSelectedOptions === false && isSelected),
+      };
+    });
     return mappedOptions;
-  }, [combinedOptions]);
+  }, [combinedOptions, selectedItems, hideSelectedOptions]);
 
   const value = useMemo(
     () => selectedItems.map((item) => item.id),
@@ -403,7 +410,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
         showDraggableList={showDraggableList}
         disabledItemsPosition={disabledItemsPosition}
         draggableListDirection={draggableListDirection}
-        hideSelectedOptions={hideSelectedOptions}
+        hideSelectedOptions={false}
       />
     </Container>
   );
