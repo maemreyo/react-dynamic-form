@@ -149,10 +149,14 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^3.9.1",
     "@matthew.ngo/react-form-kit": "^0.0.15",
     "lodash": "^4.17.21",
     "react-hook-form": "^7.49.3",
+    "react-select": "^5.10.2",
     "styled-components": "^6.1.13",
     "yup": "^1.6.1"
   },
