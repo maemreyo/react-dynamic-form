@@ -10,3 +10,4 @@ export { default as TimePicker } from './time/TimePicker';
 export { default as DateTimePicker } from './dateTime/DateTimePicker';
 export { default as ColorPicker } from './color/ColorPicker';
 export { default as ComboBox } from './combobox/ComboBox';
+export { default as ReactSelectComboBox } from './react-select-combobox/ReactSelectComboBox';

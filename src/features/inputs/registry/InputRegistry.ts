@@ -11,6 +11,7 @@ import {
   TimePicker,
   DateTimePicker,
   ComboBox,
+  ReactSelectComboBox,
 } from '../components';
 import { InputType } from '../../dynamic-form/types';
 
@@ -34,6 +35,7 @@ const inputRegistry: Record<
   time: TimePicker,
   'datetime-local': DateTimePicker,
   combobox: ComboBox,
+  reactSelectComboBox: ReactSelectComboBox,
 };
 
 /**

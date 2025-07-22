@@ -47,22 +47,40 @@ const SortableItem = styled.div<{ $isDragging: boolean; $disabled?: boolean }>`
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: ${(props) => (props.$disabled ? '#f5f5f5' : '#e3f2fd')};
-  border: 1px solid ${(props) => (props.$disabled ? '#ddd' : '#2196f3')};
+  background: ${(props) =>
+    props.$disabled
+      ? '#f8f9fa'
+      : '#e9f5ff'}; /* Lighter background for disabled, new light blue for enabled */
+  border: 1px solid ${(props) => (props.$disabled ? '#dee2e6' : '#007bff')}; /* Softer border for disabled, primary blue for enabled */
   border-radius: 4px;
   cursor: ${(props) => (props.$disabled ? 'not-allowed' : 'grab')};
-  opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
-  transform: ${(props) => (props.$isDragging ? 'rotate(5deg)' : 'none')};
+  opacity: ${(props) =>
+    props.$isDragging ? 0.7 : 1}; /* Slightly less opacity change */
+  transform: ${(props) =>
+    props.$isDragging
+      ? 'scale(1.02)'
+      : 'none'}; /* Subtle scale instead of rotate */
+  box-shadow: ${(props) =>
+    props.$isDragging
+      ? '0 4px 8px rgba(0, 0, 0, 0.1)'
+      : 'none'}; /* Add shadow when dragging */
   transition: all 0.2s ease;
 
   &:hover {
-    background: ${(props) => (props.$disabled ? '#f5f5f5' : '#bbdefb')};
+    background: ${(props) =>
+      props.$disabled
+        ? '#f8f9fa'
+        : '#cfe2ff'}; /* Slightly darker light blue on hover */
+    box-shadow: ${(props) =>
+      props.$disabled
+        ? 'none'
+        : '0 2px 4px rgba(0, 0, 0, 0.05)'}; /* Subtle shadow on hover */
   }
 `;
 
 const RemoveButton = styled.button`
-  background: #f44336;
-  color: white;
+  background: transparent; /* Transparent background */
+  color: #6c757d; /* Darker grey for icon */
   border: none;
   border-radius: 50%;
   width: 20px;
@@ -72,19 +90,22 @@ const RemoveButton = styled.button`
   justify-content: center;
   cursor: pointer;
   font-size: 12px;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: #d32f2f;
+    background: #dc3545; /* Error red on hover */
+    color: white;
   }
 
   &:disabled {
-    background: #ccc;
+    background: #e9ecef; /* Lighter grey for disabled background */
+    color: #adb5bd; /* Lighter grey for disabled icon */
     cursor: not-allowed;
   }
 `;
 
 const ErrorMessage = styled.div`
-  color: #f44336;
+  color: #dc3545; /* Softer error red */
   font-size: 12px;
   margin-top: 4px;
 `;
